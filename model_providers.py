@@ -31,10 +31,12 @@ class ModelConfig:
     top_p: float = 0.9
     max_tokens: int = 2048
     extra_params: Dict[str, Any] = None
-    context_window: int = 4096
+    context_window: Optional[int] = 4096
     num_gpu: Optional[int] = None
     num_thread: Optional[int] = None
     repeat_penalty: Optional[float] = None
+    frequency_penalty: Optional[float] = None
+    presence_penalty: Optional[float] = None
     stop: Optional[List[str]] = None
 
     @classmethod
@@ -47,10 +49,12 @@ class ModelConfig:
             temperature=data.get('temperature', 0.7),
             top_p=data.get('top_p', 0.9),
             max_tokens=data.get('max_tokens', 2048),
-            context_window=data.get('context_window', 4096),
+            context_window=data.get('context_window'),
             num_gpu=data.get('num_gpu'),
             num_thread=data.get('num_thread'),
             repeat_penalty=data.get('repeat_penalty'),
+            frequency_penalty=data.get('frequency_penalty'),
+            presence_penalty=data.get('presence_penalty'),
             stop=data.get('stop'),
             extra_params=data.get('extra_params', {})
         )
@@ -112,25 +116,38 @@ class LMStudioProvider(BaseLLMProvider):
     
     def create_model(self, config: ModelConfig) -> BaseLanguageModel:
         """Create an LM Studio model instance using OpenAI compatibility."""
+        # Base parameters that are directly supported by OpenAI
         model_params = {
             "model_name": config.model_name,
             "base_url": config.base_url or DEFAULT_LMSTUDIO_URL,
             "temperature": config.temperature,
             "top_p": config.top_p,
             "max_tokens": config.max_tokens,
-            "openai_api_key": "not-needed"
+            "openai_api_key": "not-needed"  # LM Studio doesn't require API key
         }
         
-        # Add context window and any extra parameters to model_kwargs
-        model_kwargs = {
-            "context_window": config.context_window,
-            "stop": config.stop
-        }
-        
+        # Handle special parameters that need to be at the top level
         if config.extra_params:
-            model_kwargs.update(config.extra_params)
+            # Extract frequency_penalty and presence_penalty if they exist
+            if 'frequency_penalty' in config.extra_params:
+                model_params['frequency_penalty'] = config.extra_params.pop('frequency_penalty')
+            if 'presence_penalty' in config.extra_params:
+                model_params['presence_penalty'] = config.extra_params.pop('presence_penalty')
         
-        model_params["model_kwargs"] = model_kwargs
+        # Add remaining extra parameters to model_kwargs, excluding unsupported ones
+        model_kwargs = {}
+        if config.stop:
+            model_kwargs["stop"] = config.stop
+        
+        # Add any remaining extra parameters
+        if config.extra_params:
+            # Filter out context_window as it's not supported
+            extra_params = {k: v for k, v in config.extra_params.items() 
+                          if k not in ['context_window']}
+            model_kwargs.update(extra_params)
+        
+        if model_kwargs:
+            model_params["model_kwargs"] = model_kwargs
         
         return OpenAI(**model_params)
     
@@ -217,15 +234,22 @@ class ModelManager:
                     'temperature': 0.7,
                     'top_p': 0.9,
                     'max_tokens': 2048,
-                    'context_window': 8192,
+                    # Removed context_window as it's not supported
                     'stop': ["Human:", "Assistant:"],
+                    # Move frequency_penalty and presence_penalty to top level
+                    'frequency_penalty': 0.1,
+                    'presence_penalty': 0.1,
                     'extra_params': {
-                        'frequency_penalty': 0.1,
-                        'presence_penalty': 0.1
+                        # Add any other LM Studio specific parameters here
                     }
                 }
             }
         }
+        
+        import os
+        os.makedirs(os.path.dirname(self.config_path), exist_ok=True)
+        with open(self.config_path, 'w') as f:
+            yaml.dump(default_config, f)
         
         import os
         os.makedirs(os.path.dirname(self.config_path), exist_ok=True)
