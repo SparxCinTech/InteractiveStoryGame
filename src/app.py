@@ -1,21 +1,21 @@
 import streamlit as st
 from typing import Dict, Any
-import json
 from datetime import datetime
 from story_save_manager import StorySaveManager
-from game import Character, NarrativeEngine, GameState
+from game import GameState, Character, NarrativeEngine, GameConfig
 from model_providers import ModelManager
 import time
 
 # Initialize session state
 if 'game_state' not in st.session_state:
-    st.session_state.game_state = GameState()
+    st.session_state.game_state = None
     st.session_state.story_history = []
     st.session_state.save_manager = StorySaveManager()
     st.session_state.model_manager = ModelManager()
     st.session_state.current_developments = None
     st.session_state.story_started = False
     st.session_state.selected_model = None
+    st.session_state.config = GameConfig.load()
 
 def get_available_models():
     """Get list of available models"""
@@ -25,49 +25,33 @@ def get_available_models():
 
 def initialize_game():
     """Initialize or reset the game state"""
-    game = st.session_state.game_state
-    model_manager = st.session_state.model_manager
-    
     try:
-        # Get selected model
-        # print(st.session_state.selected_model)
-        model = model_manager.get_model(st.session_state.selected_model)
+        # Create game state with config
+        st.session_state.game_state = GameState(st.session_state.config)
+        game = st.session_state.game_state
         
-        # Initialize characters if not already done
-        if not game.characters:
-            game.characters["Sarah"] = Character(
-                name="Sarah Chen",
-                personality="Determined, analytical, but carries emotional wounds from past failures",
-                background="Former tech CEO, now investigating mysterious AI phenomena",
-                model=model
-            )
-            
-            game.characters["Dr. Webb"] = Character(
-                name="Dr. Marcus Webb",
-                personality="Brilliant but morally ambiguous, believes the ends justify the means",
-                background="AI researcher working on consciousness transfer",
-                model=model
-            )
+        # Get model
+        model = st.session_state.model_manager.get_model(st.session_state.selected_model)
         
         # Initialize narrative engine
-        if not game.narrative:
-            game.narrative = NarrativeEngine(model=model)
+        game.narrative = NarrativeEngine(model=model, config=st.session_state.config)
         
-        # Set initial story state if not set
-        if not game.story_state:
-            game.story_state = """
-            Location: Abandoned AI research facility
-            Time: Night
-            Current situation: Sarah has discovered evidence of illegal AI experiments
-            """
+        # Initialize characters
+        for char_id, char_config in st.session_state.config.characters.items():
+            game.characters[char_config['name']] = Character(
+                name=char_config['name'],
+                personality=char_config['personality'],
+                background=char_config['background'],
+                model=model,
+                config=st.session_state.config
+            )
         
         st.session_state.story_started = True
+        return True
         
     except Exception as e:
         st.error(f"Error initializing game: {str(e)}")
         return False
-    
-    return True
 
 def save_game(save_type: str = "manual"):
     """Save current game state"""
@@ -105,6 +89,9 @@ def load_game(save_id: str):
         # Load the model used in the save
         if "metadata" in save_data and "model" in save_data["metadata"]:
             st.session_state.selected_model = save_data["metadata"]["model"]
+        
+        if not st.session_state.game_state:
+            initialize_game()
             
         st.session_state.game_state.load_save_data(save_data)
         st.success("Game loaded successfully!")
@@ -119,14 +106,15 @@ def load_game(save_id: str):
 def display_story_developments():
     """Display current story developments and choices"""
     game = st.session_state.game_state
+    config = st.session_state.config
     
     # Generate new developments if needed
     if not st.session_state.current_developments:
         with st.spinner("Generating story developments..."):
             st.session_state.current_developments = game.narrative.generate_developments(
                 story_state=game.story_state,
-                character_actions="Sarah examining computer records, Dr. Webb lurking in shadows",
-                theme="The ethical limits of scientific progress"
+                character_actions=config.initial_state['character_actions'],
+                theme=config.game_settings['default_theme']
             )
     
     # Display choices
@@ -152,11 +140,11 @@ def process_choice(choice_index: int):
     
     # Generate character responses
     with st.spinner("Generating character responses..."):
-        sarah_response = game.characters["Sarah"].respond(
+        sarah_response = game.characters["Sarah Chen"].respond(
             game.story_state, 
             chosen_development["description"]
         )
-        webb_response = game.characters["Dr. Webb"].respond(
+        webb_response = game.characters["Dr. Marcus Webb"].respond(
             game.story_state, 
             sarah_response
         )
