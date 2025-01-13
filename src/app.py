@@ -2,9 +2,9 @@ import streamlit as st
 from typing import Dict, Any
 import json
 from datetime import datetime
-from src.story_save_manager import StorySaveManager
-from src.game import Character, NarrativeEngine, GameState
-from src.model_providers import ModelManager
+from story_save_manager import StorySaveManager
+from game import Character, NarrativeEngine, GameState
+from model_providers import ModelManager
 import time
 
 # Initialize session state
