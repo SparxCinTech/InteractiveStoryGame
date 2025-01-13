@@ -2,6 +2,8 @@
 
 An interactive storytelling engine powered by AI that creates dynamic narratives with branching storylines and character interactions.
 
+![app_image](docs/app.png)
+
 ## Overview
 
 This project implements an AI-driven interactive storytelling system where:
@@ -10,7 +12,14 @@ This project implements an AI-driven interactive storytelling system where:
 - Multiple possible story developments are generated at each step
 - The narrative maintains consistency with themes and previous events
 
-## Key Components
+## Key Features
+
+### Web Interface
+- Interactive Streamlit-based UI
+- Story progression visualization
+- Game state tracking and display
+- Save/Load functionality
+- Real-time character interactions
 
 ### Character System
 - Dynamic character responses using AI
@@ -25,10 +34,10 @@ This project implements an AI-driven interactive storytelling system where:
 - Provides meaningful choice consequences
 
 ### Story Management
-- Tracks story state and progression
-- Manages character interactions
-- Handles narrative branching
-- Maintains conversation history
+- State tracking and progression
+- Character interactions management
+- Save/Load system with autosave
+- Conversation history tracking
 
 ## Installation
 
@@ -60,6 +69,7 @@ Core dependencies:
 - langchain-community==0.0.13
 - langchain-core==0.1.12
 - langchain-ollama==0.0.5
+- streamlit==1.32.0
 - aiohttp==3.9.1
 - pydantic==2.5.3
 
@@ -67,48 +77,92 @@ See requirements.txt for the complete list.
 
 ## Usage
 
-Run the interactive story:
+### Web Interface
+Run the Streamlit app:
 ```bash
-python main.py
+streamlit run app.py
 ```
 
-The story will present:
-1. Multiple possible story developments
-2. Character responses to your choices
-3. Options to continue or end the story
+### Command Line Interface
+Run the interactive story:
+```bash
+python game.py
+```
+
+## Features
+
+### Story Engine
+- Dynamic narrative generation
+- Character-driven responses
+- Theme consistency
+- Multiple choice paths
+
+### Save System
+- Quick save/load functionality
+- Autosave system
+- Save file management
+- State persistence
+
+### Web Interface
+- Interactive story display
+- Choice visualization
+- Game state tracking
+- Save/Load management
 
 ## Technical Details
 
 ### Technologies Used
 - LangChain v0.1.5+ for AI integration
 - Ollama for local LLM execution
+- Streamlit for web interface
 - uv for dependency management
-- Custom prompt templates for story generation
-- Conversation memory for context retention
-
-### Key Features
-- Structured story development generation
-- Dynamic character response system
-- Memory-based conversation tracking
-- Error handling and recovery
-- Theme consistency maintenance
+- Custom prompt templates
+- State management system
 
 ### Architecture
-- Character class for managing individual characters
-- NarrativeEngine class for story progression
-- Prompt templates for consistent AI responses
-- Memory systems for tracking context
+- Component-based design
+- State management system
+- Event-driven story progression
+- Memory-based context retention
 
-## Example Story
+## Current Story
 
-The current implementation features a sci-fi narrative about:
+The implementation features a sci-fi narrative about:
 - Sarah Chen: A former tech CEO investigating AI phenomena
 - Dr. Marcus Webb: An AI researcher working on consciousness transfer
 - Setting: An abandoned AI research facility
 - Theme: The ethical limits of scientific progress
 
-## Example Output
-![app_image](docs/app.png)
+## Project Structure
+```
+AIStoryTelling/
+├── app.py           # Streamlit web interface
+├── game.py          # Core game logic and CLI
+├── story_save_manager.py  # Save/Load system
+├── requirements.txt # Project dependencies
+├── README.md        # Documentation
+├── TODOS.md         # Development roadmap
+└── saves/           # Save file directory
+```
+
+## Development Status
+
+### Completed Features ✅
+- Basic story engine
+- Character response system
+- Save/Load functionality
+- Web interface
+- State management
+- Error handling
+
+### In Progress 🚧
+- Emotion tracking system
+- Enhanced memory management
+- Story analytics
+- Character portraits
+- Theme customization
+
+See TODOS.md for detailed development roadmap.
 
 ## Contributing
 
