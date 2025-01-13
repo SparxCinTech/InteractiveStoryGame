@@ -110,7 +110,10 @@ def generate_character_responses(development: Dict[str, Any]) -> Dict[str, str]:
 def process_choice(choice_index: int) -> None:
     game = st.session_state.game_state
     chosen_development = st.session_state.current_developments["developments"][choice_index]
-    game.story_state = chosen_development["new_situation"]
+    
+    # Only update story state if it's not a custom choice
+    if "possible_actions" in chosen_development and chosen_development["possible_actions"]:
+        game.story_state = chosen_development["new_situation"]
     
     with st.spinner("Generating character responses..."):
         character_responses = generate_character_responses(chosen_development)
@@ -118,7 +121,8 @@ def process_choice(choice_index: int) -> None:
     st.session_state.story_history.append({
         "development": chosen_development["description"],
         "responses": character_responses,
-        "timestamp": datetime.now().isoformat()
+        "timestamp": datetime.now().isoformat(),
+        "is_custom": not bool(chosen_development.get("possible_actions", []))
     })
     
     st.session_state.current_developments = None
@@ -141,15 +145,47 @@ def display_story_developments() -> None:
     developments = st.session_state.current_developments["developments"]
     max_choices = config.game_settings['max_choices']
     
-    choice = st.radio(
-        "Choose your next action:",
-        options=range(len(developments[:max_choices])),
-        format_func=lambda x: developments[x]["description"],
-        key="choice_radio"
-    )
+    # Initialize custom choice in session state if not present
+    if 'custom_choice' not in st.session_state:
+        st.session_state.custom_choice = ""
+    
+    # Create columns for layout
+    col1, col2 = st.columns([2, 1])
+    
+    with col1:
+        choice = st.radio(
+            "Choose a default action:",
+            options=range(len(developments[:max_choices])),
+            format_func=lambda x: developments[x]["description"],
+            key="choice_radio"
+        )
+    
+    with col2:
+        st.markdown("### Or write your own:")
+        custom_text = st.text_area(
+            "Custom action",
+            value=st.session_state.custom_choice,
+            height=100,
+            placeholder="Write your own action here...",
+            key="custom_choice_input"
+        )
+        st.session_state.custom_choice = custom_text
     
     if st.button("Make Choice"):
-        process_choice(choice)
+        if st.session_state.custom_choice.strip():
+            # Create a custom development with user's text
+            custom_development = {
+                "description": st.session_state.custom_choice,
+                "new_situation": game.story_state,  # Keep current situation
+                "possible_actions": []  # No predefined actions for custom choice
+            }
+            # Insert custom development at chosen index
+            developments.insert(choice, custom_development)
+            process_choice(choice)
+            # Clear custom choice after using it
+            st.session_state.custom_choice = ""
+        else:
+            process_choice(choice)
 
 def display_story_history() -> None:
     st.markdown("### Story So Far")
