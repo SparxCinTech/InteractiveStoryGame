@@ -1,5 +1,6 @@
 from typing import Dict, Any, List, Union
 import uuid
+from langchain.llms import BaseLLM
 from langchain_ollama import OllamaLLM as Ollama
 from langchain_core.prompts import PromptTemplate
 from langchain_core.messages import HumanMessage, AIMessage
@@ -68,11 +69,11 @@ class GameState:
             }
 
 class Character:
-    def __init__(self, name: str, personality: str, background: str, model: str = "llama3.2"):
+    def __init__(self, name: str, personality: str, background: str, model: BaseLLM = None):
         self.name = name
         self.personality = personality
         self.background = background
-        self.llm = Ollama(model=model)
+        self.llm = model
         
         # Character response template
         self.response_template = PromptTemplate(
@@ -145,8 +146,8 @@ class Character:
         return response
 
 class NarrativeEngine:
-    def __init__(self, model: str = "llama3.2"):
-        self.llm = Ollama(model=model)
+    def __init__(self, model: BaseLLM = None):
+        self.llm = model
         
         # Story progression template
         self.progression_template = PromptTemplate(
