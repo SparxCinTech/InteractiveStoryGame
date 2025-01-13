@@ -12,162 +12,134 @@ This project implements an AI-driven interactive storytelling system where:
 - Multiple possible story developments are generated at each step
 - The narrative maintains consistency with themes and previous events
 
-## Key Features
+## Project Structure
 
-### AI Integration
-- Multiple LLM support (Ollama, LM Studio)
-- Model switching and configuration
-- Local model execution
-- Automatic model availability detection
+```
+AIStoryTelling/
+├── src/               # Source code
+│   ├── app.py        # Streamlit interface
+│   ├── game.py       # Core game logic
+│   ├── model_providers.py  # LLM integration
+│   └── story_save_manager.py  # Save/Load system
+├── config/           # Configuration files
+│   ├── game_config.yml  # Game settings and templates
+│   └── models.yml    # LLM configurations
+├── saves/           # Save files directory
+└── requirements.txt
+```
+
+## Features
+
+### Local LLM Support
+- Ollama integration (default)
+- LM Studio compatibility
+- Model hot-switching
+- Configurable parameters
+
+### Game Engine
+- Config-driven templating
+- Dynamic narrative generation
+- Character persona management
+- State persistence
+
+### Save System
+- Quick save/load
+- Auto-saving
+- Save metadata tracking
+- State restoration
 
 ### Web Interface
-- Interactive Streamlit-based UI
-- Story progression visualization
-- Game state tracking and display
-- Save/Load functionality with metadata
-- Model selection and management
-- Real-time character interactions
-
-### Character System
-- Dynamic character responses using AI
-- Personality and background influence responses
-- Conversation memory for contextual interactions
-- Character-specific dialogue generation
-- Model-specific response tuning
-
-### Narrative Engine
-- Multi-model story generation
-- Branching narratives with choices
-- Theme consistency maintenance
-- Progress tracking and state management
-- Automatic save points
+- Model selection
+- Story progression
+- Choice visualization
+- Save management
 
 ## Installation
 
-1. Ensure you have Python 3.10+ installed
-2. Clone this repository
-3. Install uv :
+1. Install Python 3.10+
+2. Install dependencies:
 ```bash
 pip install uv
-```
-4. Create and activate virtual environment using uv:
-```bash
 uv venv
-source .venv/bin/activate  # On Unix/macOS
-.venv\Scripts\activate     # On Windows
-```
-5. Install project dependencies using uv:
-```bash
 uv pip install -r requirements.txt
 ```
-6. Install and configure one or both LLM backends:
-   - Ollama: Install from https://ollama.ai
-     ```bash
-     ollama pull mistral
-     ```
-   - LM Studio: Install from https://lmstudio.ai
-     ```bash
-     # Start LM Studio and load your chosen model
-     ```
 
-## Dependencies
-Core dependencies:
-- langchain==0.1.5
-- langchain-community==0.0.13
-- langchain-core==0.1.12
-- langchain-ollama==0.0.5
-- streamlit==1.32.0
-- pydantic==2.5.3
+3. Install LLM backend(s):
+```bash
+# Ollama
+ollama pull mistral  # Default model
 
-See requirements.txt for complete list.
+# LM Studio
+# Install from https://lmstudio.ai
+```
 
 ## Usage
 
 ### Starting the Interface
-Run the Streamlit app:
 ```bash
-streamlit run app.py
+streamlit run src/app.py
 ```
 
-### Model Selection
-1. Choose your preferred AI model:
-   - Mistral (Ollama)
-   - Mixtral (LM Studio)
-2. Configure model parameters (optional)
-3. Start new game or load saved game
+### Configuration
+1. LLM Settings: `config/models.yml`
+2. Game Settings: `config/game_config.yml`
 
-### Playing the Story
-1. Read the current situation
-2. Choose from available actions
-3. See character responses
-4. Save progress or continue
-
-### Save/Load Features
-- Quick save/load
-- Auto-save
-- Manual saves with descriptions
-- Model persistence in saves
-
-## Components
-
-### Model Providers
-- Ollama support for local models
-- LM Studio integration for additional models
-- Model switching and fallbacks
-- Parameter optimization
-
-### Story Engine
-- Dynamic narrative generation
-- Character-driven responses
-- Theme consistency
-- Multiple choice paths
-- State tracking
-
-### Interface Features
-- Model status monitoring
-- Progress indicators
-- Game state visualization
-- Save management
-- Error handling
-
-## Project Structure
-```
-AIStoryTelling/
-├── app.py              # Streamlit interface
-├── game.py             # Core game logic
-├── model_providers.py  # LLM integration
-├── story_save_manager.py  # Save system
-├── config/
-│   └── models.yml      # Model configurations
-├── saves/              # Save files
-└── requirements.txt
+### Command Line Version
+```bash
+python src/game.py
 ```
 
-## Development Status
+## Configuration
 
-### Completed Features ✅
-- Multiple model support (Ollama, LM Studio)
-- Model selection and configuration
-- Save/Load system with model persistence
-- Web interface with model monitoring
-- Basic error handling and fallbacks
+### LLM Setup (models.yml)
+```yaml
+models:
+  mistral-ollama:     # Default model
+    provider: ollama
+    model_name: mistral
+    temperature: 0.7
+    # See models.yml for full options
 
-### In Progress 🚧
-- Advanced model parameter tuning
-- Response caching and optimization
-- Extended model compatibility
-- Analytics and metrics
+  mixtral-lmstudio:   # Alternative model
+    provider: lmstudio
+    model_name: mixtral-8x7b-instruct
+    # See models.yml for full options
+```
 
-See TODOS.md for detailed development roadmap.
+### Game Setup (game_config.yml)
+```yaml
+templates:          # Prompt templates
+  character_response:
+    # Character dialogue generation
+  story_progression:
+    # Story development
+  development:
+    # Choice generation
+
+game_settings:
+  autosave_interval: 15
+  max_choices: 3
+  default_theme: "The ethical limits of scientific progress"
+
+characters:
+  sarah:
+    name: "Sarah Chen"
+    personality: "..."
+  webb:
+    name: "Dr. Marcus Webb"
+    personality: "..."
+
+# See game_config.yml for full options
+```
 
 ## Contributing
 
-Feel free to contribute by:
-1. Opening issues for bugs or suggestions
-2. Submitting pull requests with improvements
-3. Adding new model integrations
-4. Improving prompts and configurations
+1. Fork repository
+2. Create feature branch
+3. Submit pull request
+
+See TODOS.md for current priorities.
 
 ## License
 
-This project is open source and available under the MIT License.
+MIT License
