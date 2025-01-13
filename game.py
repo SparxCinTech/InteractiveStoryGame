@@ -12,6 +12,79 @@ import json
 from story_save_manager import StorySaveManager
 from datetime import datetime
 
+CHARACTER_RESPONSE_TEMPLATE = PromptTemplate(
+    input_variables=["character_info", "situation", "input"],
+    template="""
+    You are playing the role of a character with the following traits:
+    {character_info}
+    
+    Current situation: {situation}
+    
+    Respond to: {input}
+    
+    Respond in character, expressing emotions and staying true to your personality.
+    """
+)
+
+PROGRESSION_TEMPLATE = PromptTemplate(
+    input_variables=["story_state", "character_actions", "theme"],
+    template="""
+    You are a master storyteller crafting an interactive narrative.
+
+    Current story state:
+    {story_state}
+    
+    Recent character actions:
+    {character_actions}
+    
+    Story theme: {theme}
+    
+    Respond ONLY with a JSON object in this exact format (no other text):
+    {{"developments":[{{"description":"First dramatic event","new_situation":"Resulting scenario","possible_actions":["Specific action 1","Specific action 2","Specific action 3"]}},{{"description":"Second dramatic event","new_situation":"Resulting scenario","possible_actions":["Specific action 1","Specific action 2","Specific action 3"]}},{{"description":"Third dramatic event","new_situation":"Resulting scenario","possible_actions":["Specific action 1","Specific action 2","Specific action 3"]}}]}}
+
+    Rules:
+    - Generate exactly 3 developments
+    - Make events dramatic and engaging
+    - Keep consistent with theme: {theme}
+    - Use only double quotes
+    - No line breaks in JSON
+    """
+)
+
+DEVELOPMENT_PROMPT_TEMPLATE = PromptTemplate(
+    input_variables=["story_state", "character_actions", "theme", "number"],
+    template="""
+    Based on:
+    Story state: {story_state}
+    Character actions: {character_actions}
+    Theme: {theme}
+    
+    Generate development #{number} with:
+    1. A description of what happens next
+    2. The new situation that results
+    3. Three possible actions characters could take
+    
+    Respond in this exact format (no other text):
+    DESCRIPTION: [your description]
+    SITUATION: [your situation]
+    ACTION1: [first action]
+    ACTION2: [second action]
+    ACTION3: [third action]
+    """
+)
+
+DEVELOPMENT_FALLBACK = {
+    "developments": [{
+        "description": "As Sarah delves deeper into the facility's records, she uncovers a series of encrypted files that could hold crucial information about the AI experiments.",
+        "new_situation": "Sarah finds herself in a dimly lit server room, surrounded by humming machines and blinking lights. The encrypted files beckon, but accessing them could trigger security systems.",
+        "possible_actions": [
+            "Attempt to decrypt the files carefully",
+            "Search for physical evidence in the room",
+            "Try to locate Dr. Webb for answers"
+        ]
+    }]
+}
+
 class GameState:
     def __init__(self):
         self.save_manager = StorySaveManager()
@@ -76,19 +149,7 @@ class Character:
         self.llm = model
         
         # Character response template
-        self.response_template = PromptTemplate(
-            input_variables=["character_info", "situation", "input"],
-            template="""
-            You are playing the role of a character with the following traits:
-            {character_info}
-            
-            Current situation: {situation}
-            
-            Respond to: {input}
-            
-            Respond in character, expressing emotions and staying true to your personality.
-            """
-        )
+        self.response_template = CHARACTER_RESPONSE_TEMPLATE
         
         # Create graph for character dialogue
         self.workflow = StateGraph(state_schema=MessagesState)
@@ -150,30 +211,7 @@ class NarrativeEngine:
         self.llm = model
         
         # Story progression template
-        self.progression_template = PromptTemplate(
-            input_variables=["story_state", "character_actions", "theme"],
-            template="""
-            You are a master storyteller crafting an interactive narrative.
-
-            Current story state:
-            {story_state}
-            
-            Recent character actions:
-            {character_actions}
-            
-            Story theme: {theme}
-            
-            Respond ONLY with a JSON object in this exact format (no other text):
-            {{"developments":[{{"description":"First dramatic event","new_situation":"Resulting scenario","possible_actions":["Specific action 1","Specific action 2","Specific action 3"]}},{{"description":"Second dramatic event","new_situation":"Resulting scenario","possible_actions":["Specific action 1","Specific action 2","Specific action 3"]}},{{"description":"Third dramatic event","new_situation":"Resulting scenario","possible_actions":["Specific action 1","Specific action 2","Specific action 3"]}}]}}
-
-            Rules:
-            - Generate exactly 3 developments
-            - Make events dramatic and engaging
-            - Keep consistent with theme: {theme}
-            - Use only double quotes
-            - No line breaks in JSON
-            """
-        )
+        self.progression_template = PROGRESSION_TEMPLATE
         
         # Create LCEL chain with JSON output parser
         self.json_parser = JsonOutputParser()
@@ -184,27 +222,7 @@ class NarrativeEngine:
             # Create a structured prompt for each development
             developments = []
             for i in range(3):
-                development_prompt = PromptTemplate(
-                    input_variables=["story_state", "character_actions", "theme", "number"],
-                    template="""
-                    Based on:
-                    Story state: {story_state}
-                    Character actions: {character_actions}
-                    Theme: {theme}
-                    
-                    Generate development #{number} with:
-                    1. A description of what happens next
-                    2. The new situation that results
-                    3. Three possible actions characters could take
-                    
-                    Respond in this exact format (no other text):
-                    DESCRIPTION: [your description]
-                    SITUATION: [your situation]
-                    ACTION1: [first action]
-                    ACTION2: [second action]
-                    ACTION3: [third action]
-                    """
-                )
+                development_prompt = DEVELOPMENT_PROMPT_TEMPLATE
                 
                 # Get response for this development
                 response = development_prompt.format_prompt(
@@ -238,17 +256,7 @@ class NarrativeEngine:
         except Exception as e:
             print(f"Error details: {str(e)}")  # Log the actual error for debugging
             # Return a more informative development option
-            return {
-                "developments": [{
-                    "description": "As Sarah delves deeper into the facility's records, she uncovers a series of encrypted files that could hold crucial information about the AI experiments.",
-                    "new_situation": "Sarah finds herself in a dimly lit server room, surrounded by humming machines and blinking lights. The encrypted files beckon, but accessing them could trigger security systems.",
-                    "possible_actions": [
-                        "Attempt to decrypt the files carefully",
-                        "Search for physical evidence in the room",
-                        "Try to locate Dr. Webb for answers"
-                    ]
-                }]
-            }
+            return DEVELOPMENT_FALLBACK
 
 def create_story_scene():
     # Initialize game state
