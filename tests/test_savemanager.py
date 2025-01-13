@@ -1,5 +1,5 @@
 import pytest
-from story_save_manager import StorySaveManager
+from src.story_save_manager import StorySaveManager
 import os
 import shutil
 
