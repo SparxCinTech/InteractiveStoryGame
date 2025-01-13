@@ -10,11 +10,12 @@ from pydantic import BaseModel, Field
 # LangChain imports
 from langchain_core.language_models.base import BaseLanguageModel
 from langchain_core.messages import HumanMessage
-from langchain_core.prompts import PromptTemplate
-from langchain_ollama import OllamaLLM as Ollama
-from langchain_openai import OpenAI
 from langchain_core.callbacks import CallbackManagerForLLMRun
 from langchain_core.outputs import LLMResult
+
+# Import specific model implementations
+from langchain_ollama import OllamaLLM
+from langchain_openai import OpenAI
 
 # Define constants
 DEFAULT_OLLAMA_URL = "http://localhost:11434"
@@ -30,7 +31,11 @@ class ModelConfig:
     top_p: float = 0.9
     max_tokens: int = 2048
     extra_params: Dict[str, Any] = None
-    context_window: int = 4096  # Added for better context management
+    context_window: int = 4096
+    num_gpu: Optional[int] = None
+    num_thread: Optional[int] = None
+    repeat_penalty: Optional[float] = None
+    stop: Optional[List[str]] = None
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'ModelConfig':
@@ -43,6 +48,10 @@ class ModelConfig:
             top_p=data.get('top_p', 0.9),
             max_tokens=data.get('max_tokens', 2048),
             context_window=data.get('context_window', 4096),
+            num_gpu=data.get('num_gpu'),
+            num_thread=data.get('num_thread'),
+            repeat_penalty=data.get('repeat_penalty'),
+            stop=data.get('stop'),
             extra_params=data.get('extra_params', {})
         )
 
@@ -59,42 +68,41 @@ class BaseLLMProvider(ABC):
         """Check if the provider is available with given config."""
         pass
 
-    def get_model_config(self) -> Dict[str, Any]:
-        """Get model configuration parameters."""
-        return {
-            "temperature": self.temperature,
-            "top_p": self.top_p,
-            "max_tokens": self.max_tokens,
-        }
-
 class OllamaProvider(BaseLLMProvider):
     """Ollama provider implementation using newer LangChain integration."""
     
     def create_model(self, config: ModelConfig) -> BaseLanguageModel:
         """Create an Ollama model instance."""
-        # Prepare parameters
         model_params = {
-            "base_url": config.base_url or DEFAULT_OLLAMA_URL,
             "model": config.model_name,
+            "base_url": config.base_url or DEFAULT_OLLAMA_URL,
             "temperature": config.temperature,
             "top_p": config.top_p,
+            "num_predict": config.max_tokens,  # max_tokens in Ollama is num_predict
             "num_ctx": config.context_window,
+            "num_gpu": config.num_gpu,
+            "num_thread": config.num_thread,
+            "repeat_penalty": config.repeat_penalty,
+            "stop": config.stop,
         }
         
-        # Add extra parameters if provided
+        # Remove None values
+        model_params = {k: v for k, v in model_params.items() if v is not None}
+        
+        # Add any extra parameters
         if config.extra_params:
             model_params.update(config.extra_params)
             
-        return Ollama(**model_params)
+        return OllamaLLM(**model_params)
     
     def check_availability(self, config: ModelConfig) -> bool:
         """Check if Ollama model is available."""
         try:
             url = f"{config.base_url or DEFAULT_OLLAMA_URL}/api/tags"
-            response = requests.get(url)
+            response = requests.get(url, timeout=5)  # Add timeout
             if response.status_code == 200:
                 models = response.json().get('models', [])
-                return any(model['name'] == config.model_name for model in models)
+                return any( config.model_name in model.get('name') for model in models)
             return False
         except Exception:
             return False
@@ -104,18 +112,21 @@ class LMStudioProvider(BaseLLMProvider):
     
     def create_model(self, config: ModelConfig) -> BaseLanguageModel:
         """Create an LM Studio model instance using OpenAI compatibility."""
-        # Prepare parameters
         model_params = {
-            "base_url": config.base_url or DEFAULT_LMSTUDIO_URL,
             "model_name": config.model_name,
+            "base_url": config.base_url or DEFAULT_LMSTUDIO_URL,
             "temperature": config.temperature,
             "top_p": config.top_p,
             "max_tokens": config.max_tokens,
-            "openai_api_key": "not-needed"  # LM Studio doesn't require API key
+            "openai_api_key": "not-needed"
         }
         
         # Add context window and any extra parameters to model_kwargs
-        model_kwargs = {"context_window": config.context_window}
+        model_kwargs = {
+            "context_window": config.context_window,
+            "stop": config.stop
+        }
+        
         if config.extra_params:
             model_kwargs.update(config.extra_params)
         
@@ -126,7 +137,10 @@ class LMStudioProvider(BaseLLMProvider):
     def check_availability(self, config: ModelConfig) -> bool:
         """Check if LM Studio server is available."""
         try:
-            response = requests.get(f"{config.base_url or DEFAULT_LMSTUDIO_URL}/health")
+            response = requests.get(
+                f"{config.base_url or DEFAULT_LMSTUDIO_URL}/health",
+                timeout=5
+            )
             return response.status_code == 200
         except Exception:
             return False
@@ -147,7 +161,10 @@ class ModelFactory:
             raise ValueError(f"Unsupported provider: {config.provider}")
         
         if not provider.check_availability(config):
-            raise RuntimeError(f"Provider {config.provider} is not available")
+            raise RuntimeError(
+                f"Provider {config.provider} is not available. "
+                f"Please check if the service is running at {config.base_url}"
+            )
         
         return provider.create_model(config)
 
@@ -177,18 +194,20 @@ class ModelManager:
         """Create default configuration file."""
         default_config = {
             'models': {
-                'llama3.2-ollama': {
+                'mistral-ollama': {
                     'provider': 'ollama',
-                    'model_name': 'llama3.2',
+                    'model_name': 'mistral',
                     'base_url': DEFAULT_OLLAMA_URL,
                     'temperature': 0.7,
                     'top_p': 0.9,
                     'max_tokens': 2048,
                     'context_window': 4096,
                     'default': True,
+                    'num_gpu': 1,
+                    'repeat_penalty': 1.1,
+                    'stop': ["Human:", "Assistant:"],
                     'extra_params': {
-                        'repeat_penalty': 1.1,
-                        'num_predict': 256
+                        'num_predict': 2048
                     }
                 },
                 'mixtral-lmstudio': {
@@ -199,6 +218,7 @@ class ModelManager:
                     'top_p': 0.9,
                     'max_tokens': 2048,
                     'context_window': 8192,
+                    'stop': ["Human:", "Assistant:"],
                     'extra_params': {
                         'frequency_penalty': 0.1,
                         'presence_penalty': 0.1
