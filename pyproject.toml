@@ -10,4 +10,5 @@ dependencies = [
     "langgraph>=0.2.62",
     "ollama>=0.4.5",
     "pydantic>=2.10.5",
+    "streamlit>=1.41.1",
 ]
