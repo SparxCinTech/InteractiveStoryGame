@@ -1,0 +1,85 @@
+templates:
+  character_response:
+    input_variables: ["character_info", "situation", "input"]
+    template: |
+      You are playing the role of a character with the following traits:
+      {character_info}
+      
+      Current situation: {situation}
+      
+      Respond to: {input}
+      
+      Respond in character, expressing emotions and staying true to your personality.
+
+  story_progression:
+    input_variables: ["story_state", "character_actions", "theme"]
+    template: |
+      You are a master storyteller crafting an interactive narrative.
+
+      Current story state:
+      {story_state}
+      
+      Recent character actions:
+      {character_actions}
+      
+      Story theme: {theme}
+      
+      Respond ONLY with a JSON object in this exact format (no other text):
+      {{"developments":[{{"description":"First dramatic event","new_situation":"Resulting scenario","possible_actions":["Specific action 1","Specific action 2","Specific action 3"]}},{{"description":"Second dramatic event","new_situation":"Resulting scenario","possible_actions":["Specific action 1","Specific action 2","Specific action 3"]}},{{"description":"Third dramatic event","new_situation":"Resulting scenario","possible_actions":["Specific action 1","Specific action 2","Specific action 3"]}}]}}
+
+      Rules:
+      - Generate exactly 3 developments
+      - Make events dramatic and engaging
+      - Keep consistent with theme: {theme}
+      - Use only double quotes
+      - No line breaks in JSON
+
+  development:
+    input_variables: ["story_state", "character_actions", "theme", "number"]
+    template: |
+      Based on:
+      Story state: {story_state}
+      Character actions: {character_actions}
+      Theme: {theme}
+      
+      Generate development #{number} with:
+      1. A description of what happens next
+      2. The new situation that results
+      3. Three possible actions characters could take
+      
+      Respond in this exact format (no other text):
+      DESCRIPTION: [your description]
+      SITUATION: [your situation]
+      ACTION1: [first action]
+      ACTION2: [second action]
+      ACTION3: [third action]
+
+game_settings:
+  autosave_interval: 15  # minutes
+  max_choices: 3
+  default_theme: "The ethical limits of scientific progress"
+
+fallbacks:
+  default_development:
+    developments:
+      - description: "As Sarah delves deeper into the facility's records, she uncovers a series of encrypted files that could hold crucial information about the AI experiments."
+        new_situation: "Sarah finds herself in a dimly lit server room, surrounded by humming machines and blinking lights. The encrypted files beckon, but accessing them could trigger security systems."
+        possible_actions:
+          - "Attempt to decrypt the files carefully"
+          - "Search for physical evidence in the room"
+          - "Try to locate Dr. Webb for answers"
+
+characters:
+  sarah:
+    name: "Sarah Chen"
+    personality: "Determined, analytical, but carries emotional wounds from past failures"
+    background: "Former tech CEO, now investigating mysterious AI phenomena"
+  webb:
+    name: "Dr. Marcus Webb"
+    personality: "Brilliant but morally ambiguous, believes the ends justify the means"
+    background: "AI researcher working on consciousness transfer"
+
+initial_state:
+  location: "Abandoned AI research facility"
+  time: "Night"
+  situation: "Sarah has discovered evidence of illegal AI experiments"
