@@ -83,3 +83,4 @@ initial_state:
   location: "Abandoned AI research facility"
   time: "Night"
   situation: "Sarah has discovered evidence of illegal AI experiments"
+  character_actions: "Sarah examining computer records; Dr. Webb lurking in shadows,waiting for moment to strike her down"
