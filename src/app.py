@@ -1,13 +1,13 @@
 import streamlit as st
-from typing import Dict, Any
+from typing import Dict, Any, List
 from datetime import datetime
 from story_save_manager import StorySaveManager
 from game import GameState, Character, NarrativeEngine, GameConfig
 from model_providers import ModelManager
-import time
 
 # Initialize session state
-if 'game_state' not in st.session_state:
+if 'config' not in st.session_state:
+    st.session_state.config = GameConfig.load()
     st.session_state.game_state = None
     st.session_state.story_history = []
     st.session_state.save_manager = StorySaveManager()
@@ -15,29 +15,20 @@ if 'game_state' not in st.session_state:
     st.session_state.current_developments = None
     st.session_state.story_started = False
     st.session_state.selected_model = None
-    st.session_state.config = GameConfig.load()
 
-def get_available_models():
-    """Get list of available models"""
-    model_manager = st.session_state.model_manager
-    available_models = model_manager.list_available_models()
-    return {name: available for name, available in available_models.items() if available}
+def get_available_models() -> Dict[str, bool]:
+    return {name: available 
+            for name, available in st.session_state.model_manager.list_available_models().items() 
+            if available}
 
-def initialize_game():
-    """Initialize or reset the game state"""
+def initialize_game() -> bool:
     try:
-        # Create game state with config
         st.session_state.game_state = GameState(st.session_state.config)
         game = st.session_state.game_state
-        
-        # Get model
         model = st.session_state.model_manager.get_model(st.session_state.selected_model)
-        
-        # Initialize narrative engine
         game.narrative = NarrativeEngine(model=model, config=st.session_state.config)
         
-        # Initialize characters
-        for char_id, char_config in st.session_state.config.characters.items():
+        for char_config in st.session_state.config.characters.values():
             game.characters[char_config['name']] = Character(
                 name=char_config['name'],
                 personality=char_config['personality'],
@@ -53,11 +44,8 @@ def initialize_game():
         st.error(f"Error initializing game: {str(e)}")
         return False
 
-def save_game(save_type: str = "manual"):
-    """Save current game state"""
+def save_game(save_type: str = "manual") -> None:
     game = st.session_state.game_state
-    save_manager = st.session_state.save_manager
-    
     game_state = game.prepare_save_data()
     metadata = {
         "playtime": game.get_playtime(),
@@ -66,27 +54,28 @@ def save_game(save_type: str = "manual"):
         "model": st.session_state.selected_model
     }
     
-    if save_type == "quick":
-        save_id = save_manager.quick_save(game_state)
-        st.success("Game quick saved!")
-    elif save_type == "auto":
-        save_id = save_manager.create_autosave(game_state)
-        st.info("Game auto-saved.")
-    else:
-        save_id = save_manager.save_game(
-            story_state=game_state["story_state"],
-            character_states=game_state["character_states"],
-            narrative_state=game_state["narrative_state"],
-            metadata=metadata
-        )
-        st.success(f"Game saved! Save ID: {save_id}")
+    try:
+        if save_type == "quick":
+            save_id = st.session_state.save_manager.quick_save(game_state)
+            st.success("Game quick saved!")
+        elif save_type == "auto":
+            save_id = st.session_state.save_manager.create_autosave(game_state)
+            st.info("Game auto-saved.")
+        else:
+            save_id = st.session_state.save_manager.save_game(
+                story_state=game_state["story_state"],
+                character_states=game_state["character_states"],
+                narrative_state=game_state["narrative_state"],
+                metadata=metadata
+            )
+            st.success(f"Game saved! Save ID: {save_id}")
+    except Exception as e:
+        st.error(f"Error saving game: {str(e)}")
 
-def load_game(save_id: str):
-    """Load game state from save"""
+def load_game(save_id: str) -> bool:
     try:
         save_data = st.session_state.save_manager.load_game(save_id)
         
-        # Load the model used in the save
         if "metadata" in save_data and "model" in save_data["metadata"]:
             st.session_state.selected_model = save_data["metadata"]["model"]
         
@@ -103,12 +92,10 @@ def load_game(save_id: str):
         st.error(f"Error loading save: {str(e)}")
         return False
 
-def display_story_developments():
-    """Display current story developments and choices"""
+def display_story_developments() -> None:
     game = st.session_state.game_state
     config = st.session_state.config
     
-    # Generate new developments if needed
     if not st.session_state.current_developments:
         with st.spinner("Generating story developments..."):
             st.session_state.current_developments = game.narrative.generate_developments(
@@ -117,7 +104,6 @@ def display_story_developments():
                 theme=config.game_settings['default_theme']
             )
     
-    # Display choices
     st.markdown("### What happens next?")
     developments = st.session_state.current_developments["developments"]
     choice = st.radio(
@@ -130,70 +116,61 @@ def display_story_developments():
     if st.button("Make Choice"):
         process_choice(choice)
 
-def process_choice(choice_index: int):
-    """Process player's choice and update game state"""
+def process_choice(choice_index: int) -> None:
     game = st.session_state.game_state
     chosen_development = st.session_state.current_developments["developments"][choice_index]
-    
-    # Update story state
     game.story_state = chosen_development["new_situation"]
     
-    # Generate character responses
+    characters = list(st.session_state.config.characters.values())
+    protagonist = characters[0]
+    antagonist = characters[1]
+    
     with st.spinner("Generating character responses..."):
-        sarah_response = game.characters["Sarah Chen"].respond(
+        protagonist_response = game.characters[protagonist['name']].respond(
             game.story_state, 
             chosen_development["description"]
         )
-        webb_response = game.characters["Dr. Marcus Webb"].respond(
+        antagonist_response = game.characters[antagonist['name']].respond(
             game.story_state, 
-            sarah_response
+            protagonist_response
         )
     
-    # Add to story history
     st.session_state.story_history.append({
         "development": chosen_development["description"],
-        "sarah": sarah_response,
-        "webb": webb_response,
+        "protagonist": protagonist_response,
+        "antagonist": antagonist_response,
         "timestamp": datetime.now().isoformat()
     })
     
-    # Clear current developments
     st.session_state.current_developments = None
-    
-    # Autosave
     save_game("auto")
-    
-    # Rerun to update UI
     st.rerun()
 
-def display_story_history():
-    """Display the story history"""
+def display_story_history() -> None:
     st.markdown("### Story So Far")
+    characters = list(st.session_state.config.characters.values())
     
     for i, event in enumerate(st.session_state.story_history):
         with st.expander(f"Scene {i+1}", expanded=(i == len(st.session_state.story_history)-1)):
             st.write("**Event:**", event["development"])
-            st.write("**Sarah:**", event["sarah"])
-            st.write("**Dr. Webb:**", event["webb"])
+            st.write(f"**{characters[0]['name']}:**", event["protagonist"])
+            st.write(f"**{characters[1]['name']}:**", event["antagonist"])
 
-def render_sidebar():
-    """Render the sidebar with game controls"""
+def render_sidebar() -> None:
     with st.sidebar:
         st.markdown("### Game Controls")
         
-        # Model selection
         if not st.session_state.story_started:
             available_models = get_available_models()
             if available_models:
                 model_options = list(available_models.keys())
                 default_model = next((model for model in model_options if "mistral" in model.lower()), model_options[0])
-                selected_model = st.selectbox(
+                st.session_state.selected_model = st.selectbox(
                     "Select AI Model:",
                     options=model_options,
                     index=model_options.index(default_model),
                     format_func=lambda x: f"{x} ({x.split('-')[1].upper()})"
                 )
-                st.session_state.selected_model = selected_model
                 
                 if st.button("Start New Game"):
                     if initialize_game():
@@ -201,19 +178,13 @@ def render_sidebar():
             else:
                 st.error("No AI models available. Please ensure Ollama or LM Studio is running.")
         
-        # Save/Load controls
         if st.session_state.story_started:
-            if st.button("Quick Save"):
-                save_game("quick")
+            st.button("Quick Save", on_click=lambda: save_game("quick"))
+            st.button("Save Game", on_click=lambda: save_game("manual"))
             
-            if st.button("Save Game"):
-                save_game("manual")
-            
-            # Model info
             st.markdown("### Current Model")
             st.info(f"Using: {st.session_state.selected_model}")
             
-            # Load game section
             st.markdown("### Load Game")
             saves = st.session_state.save_manager.list_saves()
             if saves:
@@ -226,47 +197,33 @@ def render_sidebar():
                         f"({saves[x]['timestamp']})"
                     )
                 )
-                if st.button("Load Selected Save"):
-                    if load_game(selected_save):
-                        st.rerun()
+                st.button("Load Selected Save", on_click=lambda: load_game(selected_save))
             else:
                 st.info("No saves available")
 
 def main():
     st.title("AI Interactive Storytelling")
-    
-    # Sidebar
     render_sidebar()
     
-    # Main content
     if not st.session_state.story_started:
         st.markdown("""
         ### Welcome to the AI Interactive Story
         
         You are about to enter a dynamic narrative where your choices shape the story.
-        The tale follows Sarah Chen, a former tech CEO, as she investigates mysterious
-        AI phenomena in an abandoned research facility.
-        
         Select an AI model and start a new game using the controls in the sidebar.
         """)
         
-        # Model status
         st.markdown("### Available AI Models")
         available_models = get_available_models()
         if available_models:
-            for name, available in available_models.items():
+            for name in available_models:
                 st.success(f"{name}: Available")
         else:
             st.error("No AI models available. Please ensure Ollama or LM Studio is running.")
-            
     else:
-        # Display story history
         display_story_history()
-        
-        # Display current choices
         display_story_developments()
         
-        # Display game state info
         with st.expander("Game Info"):
             st.write("Model:", st.session_state.selected_model)
             st.write("Playtime:", st.session_state.game_state.get_playtime())
