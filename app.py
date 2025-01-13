@@ -3,7 +3,7 @@ from typing import Dict, Any
 import json
 from datetime import datetime
 from story_save_manager import StorySaveManager
-from main import Character, NarrativeEngine, GameState
+from game import Character, NarrativeEngine, GameState
 import time
 
 # Initialize session state
@@ -145,7 +145,7 @@ def process_choice(choice_index: int):
     save_game("auto")
     
     # Rerun to update UI
-    st.experimental_rerun()
+    st.rerun()
 
 def display_story_history():
     """Display the story history"""
@@ -165,7 +165,7 @@ def render_sidebar():
         if not st.session_state.story_started:
             if st.button("Start New Game"):
                 initialize_game()
-                st.experimental_rerun()
+                st.rerun()
         
         # Save/Load controls
         if st.session_state.story_started:
@@ -186,7 +186,7 @@ def render_sidebar():
                 )
                 if st.button("Load Selected Save"):
                     if load_game(selected_save):
-                        st.experimental_rerun()
+                        st.rerun()
             else:
                 st.info("No saves available")
 
