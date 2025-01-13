@@ -269,7 +269,7 @@ def create_story_scene():
         else:
             game.current_developments = game.narrative.generate_developments(
                 story_state=game.story_state,
-                character_actions="Sarah examining computer records, Dr. Webb lurking in shadows",
+                character_actions=config.initial_state['character_actions'],
                 theme=config.game_settings['default_theme']
             )
             
