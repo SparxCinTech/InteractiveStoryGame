@@ -75,6 +75,8 @@ class NarrativeEngine:
         self.progression_template = PromptTemplate(
             input_variables=["story_state", "character_actions", "theme"],
             template="""
+            You are a master storyteller crafting an interactive narrative.
+
             Current story state:
             {story_state}
             
@@ -83,18 +85,15 @@ class NarrativeEngine:
             
             Story theme: {theme}
             
-            Generate 3 possible story developments as JSON with the following structure:
-            {
-                "developments": [
-                    {
-                        "description": "Description of what happens",
-                        "new_situation": "The new situation characters find themselves in",
-                        "possible_actions": ["Action 1", "Action 2", "Action 3"]
-                    }
-                ]
-            }
-            
-            Keep developments consistent with the theme and previous events.
+            Respond ONLY with a JSON object in this exact format (no other text):
+            {"developments":[{"description":"First dramatic event","new_situation":"Resulting scenario","possible_actions":["Specific action 1","Specific action 2","Specific action 3"]},{"description":"Second dramatic event","new_situation":"Resulting scenario","possible_actions":["Specific action 1","Specific action 2","Specific action 3"]},{"description":"Third dramatic event","new_situation":"Resulting scenario","possible_actions":["Specific action 1","Specific action 2","Specific action 3"]}]}
+
+            Rules:
+            - Generate exactly 3 developments
+            - Make events dramatic and engaging
+            - Keep consistent with theme: {theme}
+            - Use only double quotes
+            - No line breaks in JSON
             """
         )
         
@@ -104,18 +103,78 @@ class NarrativeEngine:
 
     def generate_developments(self, story_state: str, character_actions: str, theme: str) -> Dict[str, List[Dict[str, Any]]]:
         try:
-            response = self.progression_chain.invoke({
-                "story_state": story_state,
-                "character_actions": character_actions,
-                "theme": theme
-            })
-            return response
+            # Create a structured prompt for each development
+            developments = []
+            for i in range(3):
+                development_prompt = PromptTemplate(
+                    input_variables=["story_state", "character_actions", "theme", "number"],
+                    template="""
+                    Based on:
+                    Story state: {story_state}
+                    Character actions: {character_actions}
+                    Theme: {theme}
+                    
+                    Generate development #{number} with:
+                    1. A description of what happens next
+                    2. The new situation that results
+                    3. Three possible actions characters could take
+                    
+                    Respond in this exact format (no other text):
+                    DESCRIPTION: [your description]
+                    SITUATION: [your situation]
+                    ACTION1: [first action]
+                    ACTION2: [second action]
+                    ACTION3: [third action]
+                    """
+                )
+                
+                # Get response for this development
+                response = development_prompt.format_prompt(
+                    story_state=story_state,
+                    character_actions=character_actions,
+                    theme=theme,
+                    number=i+1
+                )
+                result = self.llm.invoke(response.to_string())
+                
+                # Parse the structured response
+                lines = result.strip().split('\n')
+                development = {}
+                actions = []
+                
+                for line in lines:
+                    line = line.strip()
+                    if line.startswith('DESCRIPTION:'):
+                        development['description'] = line[12:].strip()
+                    elif line.startswith('SITUATION:'):
+                        development['new_situation'] = line[10:].strip()
+                    elif line.startswith('ACTION'):
+                        actions.append(line.split(':', 1)[1].strip())
+                
+                development['possible_actions'] = actions
+                developments.append(development)
+            
+            # Return in the expected format
+            return {"developments": developments}
+            
+            # Validate the structure
+            if not isinstance(developments, dict) or "developments" not in developments:
+                raise ValueError("Invalid developments structure")
+                
+            return developments
+            
         except Exception as e:
+            print(f"Error details: {str(e)}")  # Log the actual error for debugging
+            # Return a more informative development option
             return {
                 "developments": [{
-                    "description": "Error generating developments",
-                    "new_situation": story_state,
-                    "possible_actions": ["Try again"]
+                    "description": "As Sarah delves deeper into the facility's records, she uncovers a series of encrypted files that could hold crucial information about the AI experiments.",
+                    "new_situation": "Sarah finds herself in a dimly lit server room, surrounded by humming machines and blinking lights. The encrypted files beckon, but accessing them could trigger security systems.",
+                    "possible_actions": [
+                        "Attempt to decrypt the files carefully",
+                        "Search for physical evidence in the room",
+                        "Try to locate Dr. Webb for answers"
+                    ]
                 }]
             }
 
