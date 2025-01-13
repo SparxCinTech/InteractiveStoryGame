@@ -4,4 +4,10 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = []
+dependencies = [
+    "langchain-community>=0.3.14",
+    "langchain-ollama>=0.2.2",
+    "langgraph>=0.2.62",
+    "ollama>=0.4.5",
+    "pydantic>=2.10.5",
+]
