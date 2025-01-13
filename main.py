@@ -1,10 +1,12 @@
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Union
+import uuid
 from langchain_ollama import OllamaLLM as Ollama
 from langchain_core.prompts import PromptTemplate
 from langchain_core.messages import HumanMessage, AIMessage
 from langchain_core.output_parsers import JsonOutputParser
-from langchain.memory import ConversationBufferMemory
-from langchain_core.runnables import RunnablePassthrough, RunnableWithMessageHistory
+from langchain_core.runnables import RunnablePassthrough
+from langgraph.graph import START, MessagesState, StateGraph
+from langgraph.checkpoint.memory import MemorySaver
 import json
 
 class Character:
@@ -12,24 +14,16 @@ class Character:
         self.name = name
         self.personality = personality
         self.background = background
-        self.memory = ConversationBufferMemory(
-            return_messages=True
-        )
-        
-        # Character-specific LLM
         self.llm = Ollama(model=model)
         
         # Character response template
         self.response_template = PromptTemplate(
-            input_variables=["character_info", "situation", "input", "history"],
+            input_variables=["character_info", "situation", "input"],
             template="""
             You are playing the role of a character with the following traits:
             {character_info}
             
             Current situation: {situation}
-            
-            Previous conversation:
-            {history}
             
             Respond to: {input}
             
@@ -37,34 +31,59 @@ class Character:
             """
         )
         
-        # Create chain without message history wrapper
-        self.chain = (
-            RunnablePassthrough.assign(
-                history=lambda x: self.memory.load_memory_variables({})["history"]
+        # Create graph for character dialogue
+        self.workflow = StateGraph(state_schema=MessagesState)
+        
+        # Define the function that generates character response
+        def generate_response(state: MessagesState):
+            messages = state["messages"]
+            latest_message = messages[-1]
+            
+            character_info = f"""
+            Name: {self.name}
+            Personality: {self.personality}
+            Background: {self.background}
+            """
+            
+            # Format prompt with character info and latest message
+            response = self.llm.invoke(
+                self.response_template.format(
+                    character_info=character_info,
+                    situation=state.get("situation", ""),
+                    input=latest_message.content
+                )
             )
-            | self.response_template
-            | self.llm
-        )
+            
+            # Return AI message
+            return {"messages": [AIMessage(content=response)]}
+        
+        # Add nodes and edges to graph
+        self.workflow.add_edge(START, "respond")
+        self.workflow.add_node("respond", generate_response)
+        
+        # Add memory
+        self.memory = MemorySaver()
+        
+        # Compile graph
+        self.app = self.workflow.compile(checkpointer=self.memory)
+        
+        # Create unique thread ID for this character
+        self.thread_id = uuid.uuid4()
 
     def respond(self, situation: str, input_text: str) -> str:
-        character_info = f"""
-        Name: {self.name}
-        Personality: {self.personality}
-        Background: {self.background}
-        """
+        # Create config with thread ID
+        config = {"configurable": {"thread_id": self.thread_id}}
         
-        response = self.chain.invoke({
-            "character_info": character_info,
-            "situation": situation,
-            "input": input_text
-        })
+        # Create input state with situation and message
+        input_state = {
+            "messages": [HumanMessage(content=input_text)],
+            "situation": situation
+        }
         
-        # Save the interaction to memory
-        self.memory.save_context(
-            {"input": input_text},
-            {"output": response}
-        )
-        
+        # Get response using graph
+        for event in self.app.stream(input_state, config, stream_mode="values"):
+            response = event["messages"][-1].content
+            
         return response
 
 class NarrativeEngine:
@@ -86,7 +105,7 @@ class NarrativeEngine:
             Story theme: {theme}
             
             Respond ONLY with a JSON object in this exact format (no other text):
-            {"developments":[{"description":"First dramatic event","new_situation":"Resulting scenario","possible_actions":["Specific action 1","Specific action 2","Specific action 3"]},{"description":"Second dramatic event","new_situation":"Resulting scenario","possible_actions":["Specific action 1","Specific action 2","Specific action 3"]},{"description":"Third dramatic event","new_situation":"Resulting scenario","possible_actions":["Specific action 1","Specific action 2","Specific action 3"]}]}
+            {{"developments":[{{"description":"First dramatic event","new_situation":"Resulting scenario","possible_actions":["Specific action 1","Specific action 2","Specific action 3"]}},{{"description":"Second dramatic event","new_situation":"Resulting scenario","possible_actions":["Specific action 1","Specific action 2","Specific action 3"]}},{{"description":"Third dramatic event","new_situation":"Resulting scenario","possible_actions":["Specific action 1","Specific action 2","Specific action 3"]}}]}}
 
             Rules:
             - Generate exactly 3 developments
@@ -156,12 +175,6 @@ class NarrativeEngine:
             
             # Return in the expected format
             return {"developments": developments}
-            
-            # Validate the structure
-            if not isinstance(developments, dict) or "developments" not in developments:
-                raise ValueError("Invalid developments structure")
-                
-            return developments
             
         except Exception as e:
             print(f"Error details: {str(e)}")  # Log the actual error for debugging
