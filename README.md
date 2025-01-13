@@ -8,17 +8,24 @@ An interactive storytelling engine powered by AI that creates dynamic narratives
 
 This project implements an AI-driven interactive storytelling system where:
 - Stories evolve based on player choices
-- Characters respond dynamically to situations
+- Characters respond dynamically using local LLMs
 - Multiple possible story developments are generated at each step
 - The narrative maintains consistency with themes and previous events
 
 ## Key Features
 
+### AI Integration
+- Multiple LLM support (Ollama, LM Studio)
+- Model switching and configuration
+- Local model execution
+- Automatic model availability detection
+
 ### Web Interface
 - Interactive Streamlit-based UI
 - Story progression visualization
 - Game state tracking and display
-- Save/Load functionality
+- Save/Load functionality with metadata
+- Model selection and management
 - Real-time character interactions
 
 ### Character System
@@ -26,24 +33,20 @@ This project implements an AI-driven interactive storytelling system where:
 - Personality and background influence responses
 - Conversation memory for contextual interactions
 - Character-specific dialogue generation
+- Model-specific response tuning
 
 ### Narrative Engine
-- Generates multiple possible story developments
-- Creates branching narratives based on player choices
-- Maintains story consistency and theme
-- Provides meaningful choice consequences
-
-### Story Management
-- State tracking and progression
-- Character interactions management
-- Save/Load system with autosave
-- Conversation history tracking
+- Multi-model story generation
+- Branching narratives with choices
+- Theme consistency maintenance
+- Progress tracking and state management
+- Automatic save points
 
 ## Installation
 
 1. Ensure you have Python 3.10+ installed
 2. Clone this repository
-3. Install uv (next-generation Python package installer):
+3. Install uv :
 ```bash
 pip install uv
 ```
@@ -57,11 +60,15 @@ source .venv/bin/activate  # On Unix/macOS
 ```bash
 uv pip install -r requirements.txt
 ```
-6. Install Ollama from https://ollama.ai
-7. Pull required model:
-```bash
-ollama pull mistral
-```
+6. Install and configure one or both LLM backends:
+   - Ollama: Install from https://ollama.ai
+     ```bash
+     ollama pull mistral
+     ```
+   - LM Studio: Install from https://lmstudio.ai
+     ```bash
+     # Start LM Studio and load your chosen model
+     ```
 
 ## Dependencies
 Core dependencies:
@@ -70,97 +77,86 @@ Core dependencies:
 - langchain-core==0.1.12
 - langchain-ollama==0.0.5
 - streamlit==1.32.0
-- aiohttp==3.9.1
 - pydantic==2.5.3
 
-See requirements.txt for the complete list.
+See requirements.txt for complete list.
 
 ## Usage
 
-### Web Interface
+### Starting the Interface
 Run the Streamlit app:
 ```bash
 streamlit run app.py
 ```
 
-### Command Line Interface
-Run the interactive story:
-```bash
-python game.py
-```
+### Model Selection
+1. Choose your preferred AI model:
+   - Mistral (Ollama)
+   - Mixtral (LM Studio)
+2. Configure model parameters (optional)
+3. Start new game or load saved game
 
-## Features
+### Playing the Story
+1. Read the current situation
+2. Choose from available actions
+3. See character responses
+4. Save progress or continue
+
+### Save/Load Features
+- Quick save/load
+- Auto-save
+- Manual saves with descriptions
+- Model persistence in saves
+
+## Components
+
+### Model Providers
+- Ollama support for local models
+- LM Studio integration for additional models
+- Model switching and fallbacks
+- Parameter optimization
 
 ### Story Engine
 - Dynamic narrative generation
 - Character-driven responses
 - Theme consistency
 - Multiple choice paths
+- State tracking
 
-### Save System
-- Quick save/load functionality
-- Autosave system
-- Save file management
-- State persistence
-
-### Web Interface
-- Interactive story display
-- Choice visualization
-- Game state tracking
-- Save/Load management
-
-## Technical Details
-
-### Technologies Used
-- LangChain v0.1.5+ for AI integration
-- Ollama for local LLM execution
-- Streamlit for web interface
-- uv for dependency management
-- Custom prompt templates
-- State management system
-
-### Architecture
-- Component-based design
-- State management system
-- Event-driven story progression
-- Memory-based context retention
-
-## Current Story
-
-The implementation features a sci-fi narrative about:
-- Sarah Chen: A former tech CEO investigating AI phenomena
-- Dr. Marcus Webb: An AI researcher working on consciousness transfer
-- Setting: An abandoned AI research facility
-- Theme: The ethical limits of scientific progress
+### Interface Features
+- Model status monitoring
+- Progress indicators
+- Game state visualization
+- Save management
+- Error handling
 
 ## Project Structure
 ```
 AIStoryTelling/
-├── app.py           # Streamlit web interface
-├── game.py          # Core game logic and CLI
-├── story_save_manager.py  # Save/Load system
-├── requirements.txt # Project dependencies
-├── README.md        # Documentation
-├── TODOS.md         # Development roadmap
-└── saves/           # Save file directory
+├── app.py              # Streamlit interface
+├── game.py             # Core game logic
+├── model_providers.py  # LLM integration
+├── story_save_manager.py  # Save system
+├── config/
+│   └── models.yml      # Model configurations
+├── saves/              # Save files
+└── requirements.txt
 ```
 
 ## Development Status
 
 ### Completed Features ✅
-- Basic story engine
-- Character response system
-- Save/Load functionality
-- Web interface
-- State management
-- Error handling
+- Multiple model support (Ollama, LM Studio)
+- Model selection and configuration
+- Save/Load system with model persistence
+- Web interface with model monitoring
+- Basic error handling and fallbacks
 
 ### In Progress 🚧
-- Emotion tracking system
-- Enhanced memory management
-- Story analytics
-- Character portraits
-- Theme customization
+- Advanced model parameter tuning
+- Response caching and optimization
+- Extended model compatibility
+- Analytics and metrics
 
 See TODOS.md for detailed development roadmap.
 
@@ -169,8 +165,8 @@ See TODOS.md for detailed development roadmap.
 Feel free to contribute by:
 1. Opening issues for bugs or suggestions
 2. Submitting pull requests with improvements
-3. Adding new story scenarios or characters
-4. Improving prompt templates
+3. Adding new model integrations
+4. Improving prompts and configurations
 
 ## License
 
