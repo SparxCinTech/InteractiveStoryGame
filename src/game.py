@@ -8,7 +8,7 @@ from langchain_core.messages import HumanMessage, AIMessage
 from langchain_core.output_parsers import JsonOutputParser
 from langgraph.graph import START, MessagesState, StateGraph
 from langgraph.checkpoint.memory import MemorySaver
-from src.story_save_manager import StorySaveManager
+from story_save_manager import StorySaveManager
 from datetime import datetime
 
 @dataclass
@@ -198,7 +198,7 @@ class NarrativeEngine:
             return self.config.fallbacks['default_development']
 
 def create_story_scene():
-    from src.model_providers import ModelManager
+    from model_providers import ModelManager
     config = GameConfig.load()
     game = GameState(config)
     model_manager = ModelManager()
