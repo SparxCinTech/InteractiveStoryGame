@@ -7,6 +7,7 @@ from game import GameState, Character, NarrativeEngine, GameConfig
 from model_providers import ModelManager
 from speech_manager import SpeechManager
 from drama_manager import DramaManager
+import hashlib
 
 async def init_speech_manager():
     try:
@@ -26,18 +27,18 @@ def init_session_state():
         st.session_state.current_developments = None
         st.session_state.story_started = False
         st.session_state.selected_model = None
-        st.session_state.speech_enabled = False
+        st.session_state.speech_enabled = True
         st.session_state.speech_manager = None
         st.session_state.drama_manager = None
         st.session_state.audio_cache = {}
         st.session_state.playing_audio = None
         st.session_state.custom_choice = ""
         
-        # Initialize speech manager
-        if 'speech_manager' not in st.session_state:
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
-            st.session_state.speech_manager = loop.run_until_complete(init_speech_manager())
+        # # Initialize speech manager
+        # if 'speech_manager' not in st.session_state:
+        #     loop = asyncio.new_event_loop()
+        #     asyncio.set_event_loop(loop)
+        #     st.session_state.speech_manager = loop.run_until_complete(init_speech_manager())
 
 def get_available_models() -> Dict[str, bool]:
     return {name: available 
@@ -64,7 +65,7 @@ def initialize_game() -> bool:
             )
         
         if st.session_state.speech_enabled:
-            init_speech_manager()
+            st.session_state.speech_manager = asyncio.run(init_speech_manager())
             
         st.session_state.story_started = True
         return True
@@ -121,6 +122,32 @@ def load_game(save_id: str) -> bool:
         st.error(f"Error loading save: {str(e)}")
         return False
 
+async def generate_audio(text: str, character_name: str = None) -> str:
+    if not st.session_state.speech_enabled:
+        return None
+        
+    try:
+        cache_key = f"{character_name}_{text}" if character_name else f"narrator_{text}"
+        cache_key = hashlib.md5(cache_key.encode()).hexdigest()
+        if cache_key in st.session_state.audio_cache:
+            return st.session_state.audio_cache[cache_key]
+        
+        audio, rate = await st.session_state.speech_manager.generate_speech(
+            text=text,
+            character_name=character_name
+        )
+        
+        temp_path = f"temp_{cache_key}.wav"
+        import soundfile as sf
+        sf.write(temp_path, audio, rate)
+        
+        st.session_state.audio_cache[cache_key] = temp_path
+        return temp_path
+        
+    except Exception as e:
+        st.error(f"Error generating audio: {str(e)}")
+        return None
+
 async def generate_speech_for_response(text: str, character_name: str) -> None:
     if st.session_state.speech_manager:
         try:
@@ -150,12 +177,12 @@ async def generate_character_responses(development: Dict[str, Any]) -> Dict[str,
             development["description"]
         )
         responses[char_name] = response
-    
     # Use DramaManager to enhance responses if available
+    dramatic_result = False
     if st.session_state.drama_manager:
         try:
-            dramatic_result = await st.session_state.drama_manager.generate_dramatic_story(
-                character_responses=responses,
+            dramatic_result = st.session_state.drama_manager.generate_dramatic_story(
+                character_responses= responses,
                 current_state=game.story_state,
                 narrative_engine=game.narrative
             )
@@ -171,9 +198,10 @@ async def generate_character_responses(development: Dict[str, Any]) -> Dict[str,
             # Add dramatic analysis
             enhanced_responses['_dramatic_analysis'] = dramatic_result['analysis']
             responses = enhanced_responses
+            dramatic_result = True
         except Exception as e:
             st.warning(f"Drama enhancement failed: {str(e)}")
-    else:
+    if not dramatic_result:
         # Convert basic responses to enhanced format
         enhanced_responses = {}
         for char_name, response in responses.items():
@@ -184,15 +212,7 @@ async def generate_character_responses(development: Dict[str, Any]) -> Dict[str,
             }
         responses = enhanced_responses
     
-    # Generate audio if enabled
-    if st.session_state.speech_enabled:
-        for char_name, response_data in responses.items():
-            if char_name != '_dramatic_analysis':  # Skip analysis data
-                audio_path = await generate_speech_for_response(
-                    text=response_data['text'],
-                    character_name=char_name
-                )
-                responses[char_name]['audio_path'] = audio_path
+    print("Generated character responses:", responses)
     
     return responses
 
@@ -209,7 +229,17 @@ def process_choice(choice_index: int) -> None:
     
     development_audio = None
     if st.session_state.speech_enabled:
-        development_audio = asyncio.run(generate_speech_for_response(chosen_development["description"]))
+        development_audio = asyncio.run(generate_audio(chosen_development["description"]))
+
+        # Generate audio if enabled
+        if st.session_state.speech_enabled:
+            for char_name, response_data in character_responses.items():
+                if char_name != '_dramatic_analysis':  # Skip analysis data
+                    audio_path = asyncio.run(generate_audio(
+                        text=response_data['text'],
+                        character_name=char_name
+                    ))
+                    character_responses[char_name]['audio_path'] = audio_path
     
     st.session_state.story_history.append({
         "development": chosen_development["description"],
@@ -298,17 +328,17 @@ def display_story_history() -> None:
             # Display dramatic analysis if available
             responses = event.get("responses", {})
             if isinstance(responses, dict) and '_dramatic_analysis' in responses:
-                with st.expander("Dramatic Analysis"):
-                    analysis = responses["_dramatic_analysis"]["analysis"]
-                    col1, col2 = st.columns(2)
-                    with col1:
-                        st.write("**Conflicts:**")
-                        for conflict in analysis["conflicts"]:
-                            st.write(f"- {conflict}")
-                    with col2:
-                        st.write("**Themes:**")
-                        for theme in analysis["themes"]:
-                            st.write(f"- {theme}")
+                st.markdown("#### Dramatic Analysis")
+                analysis = responses["_dramatic_analysis"]["analysis"]
+                col1, col2 = st.columns(2)
+                with col1:
+                    st.write("**Conflicts:**")
+                    for conflict in analysis["conflicts"]:
+                        st.write(f"- {conflict}")
+                with col2:
+                    st.write("**Themes:**")
+                    for theme in analysis["themes"]:
+                        st.write(f"- {theme}")
             
             # Display character responses
             if isinstance(responses, dict):
