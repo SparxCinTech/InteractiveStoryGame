@@ -240,7 +240,12 @@ def display_story_history() -> None:
         with st.expander(f"Scene {i+1}", expanded=(i == len(st.session_state.story_history)-1)):
             st.write("**Event:**", event["development"])
             for char_name, response in event["responses"].items():
-                st.write(f"**{char_name}:**", response)
+                col1, col2 = st.columns([4, 1])
+                with col1:
+                    st.write(f"**{char_name}:**", response["text"])
+                with col2:
+                    if response.get("audio"):
+                        st.audio(response["audio"], format="audio/wav")
 
 def render_model_selection() -> None:
     available_models = get_available_models()
