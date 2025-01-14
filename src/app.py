@@ -1,13 +1,12 @@
 import streamlit as st
+import asyncio
 from typing import Dict, Any, List
 from datetime import datetime
 from story_save_manager import StorySaveManager
 from game import GameState, Character, NarrativeEngine, GameConfig
 from model_providers import ModelManager
-from speech_manager import SpeechManager, VoiceConfig
+from speech_manager import SpeechManager
 from drama_manager import DramaManager
-import asyncio
-import os
 
 async def init_speech_manager():
     try:
@@ -33,7 +32,7 @@ def init_session_state():
         st.session_state.audio_cache = {}
         st.session_state.playing_audio = None
         st.session_state.custom_choice = ""
-
+        
         # Initialize speech manager
         if 'speech_manager' not in st.session_state:
             loop = asyncio.new_event_loop()
@@ -45,46 +44,6 @@ def get_available_models() -> Dict[str, bool]:
             for name, available in st.session_state.model_manager.list_available_models().items() 
             if available}
 
-async def generate_character_responses(development: Dict[str, Any]) -> Dict[str, Any]:
-    responses = {}
-    game = st.session_state.game_state
-    prev_response = development["description"]
-    
-    # First generate basic responses
-    for char_config in st.session_state.config.characters.values():
-        response = game.characters[char_config['name']].respond(
-            game.story_state, 
-            prev_response
-        )
-        responses[char_config['name']] = response
-    
-    # Use DramaManager to enhance responses
-    dramatic_result = st.session_state.drama_manager.generate_dramatic_story(
-        character_responses=responses,
-        current_state=game.story_state
-    )
-    
-    enhanced_responses = {}
-    # Process enhanced responses and generate audio if enabled
-    for char_name, response in dramatic_result['enhanced_responses'].items():
-        enhanced_responses[char_name] = {
-            'text': response,
-            'audio_path': None,
-            'emotional_state': dramatic_result['analysis']['analysis']['emotions'].get(char_name, 'neutral')
-        }
-        
-        if st.session_state.speech_enabled:
-            audio_path = await generate_speech_for_response(
-                text=response,
-                character_name=char_name
-            )
-            enhanced_responses[char_name]['audio_path'] = audio_path
-    
-    # Add analysis data
-    enhanced_responses['_dramatic_analysis'] = dramatic_result['analysis']
-    
-    return enhanced_responses
-
 def initialize_game() -> bool:
     try:
         st.session_state.game_state = GameState(st.session_state.config)
@@ -92,7 +51,7 @@ def initialize_game() -> bool:
         model = st.session_state.model_manager.get_model(st.session_state.selected_model)
         game.narrative = NarrativeEngine(model=model, config=st.session_state.config)
         
-        # Initialize DramaManager
+        # Initialize DramaManager with same model
         st.session_state.drama_manager = DramaManager(model=model)
         
         for char_config in st.session_state.config.characters.values():
@@ -104,7 +63,7 @@ def initialize_game() -> bool:
                 config=st.session_state.config
             )
         
-        if not st.session_state.speech_manager and st.session_state.speech_enabled:
+        if st.session_state.speech_enabled:
             init_speech_manager()
             
         st.session_state.story_started = True
@@ -179,49 +138,82 @@ async def generate_speech_for_response(text: str, character_name: str) -> None:
             return None
     return None
 
-
-
-def generate_individual_character_responses(development: Dict[str, Any]) -> Dict[str, Dict[str, str]]:
+async def generate_character_responses(development: Dict[str, Any]) -> Dict[str, Dict[str, Any]]:
     responses = {}
     game = st.session_state.game_state
-    prev_response = development["description"]
     
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    
+    # First get base responses
     for char_config in st.session_state.config.characters.values():
-        response = game.characters[char_config['name']].respond(
-            game.story_state,
-            prev_response
+        char_name = char_config['name']
+        response = game.characters[char_name].respond(
+            game.story_state, 
+            development["description"]
         )
-        
-        # Generate speech for the response
-        audio_file = loop.run_until_complete(
-            generate_speech_for_response(response, char_config['name'])
-        )
-        
-        responses[char_config['name']] = {
-            "text": response,
-            "audio": audio_file
-        }
-        prev_response = response
+        responses[char_name] = response
     
-    loop.close()
+    # Use DramaManager to enhance responses if available
+    if st.session_state.drama_manager:
+        try:
+            dramatic_result = await st.session_state.drama_manager.generate_dramatic_story(
+                character_responses=responses,
+                current_state=game.story_state,
+                narrative_engine=game.narrative
+            )
+            
+            enhanced_responses = {}
+            for char_name, response in dramatic_result['enhanced_responses'].items():
+                enhanced_responses[char_name] = {
+                    'text': response,
+                    'audio_path': None,
+                    'emotional_state': dramatic_result['analysis']['analysis']['emotions'].get(char_name, 'neutral')
+                }
+            
+            # Add dramatic analysis
+            enhanced_responses['_dramatic_analysis'] = dramatic_result['analysis']
+            responses = enhanced_responses
+        except Exception as e:
+            st.warning(f"Drama enhancement failed: {str(e)}")
+    else:
+        # Convert basic responses to enhanced format
+        enhanced_responses = {}
+        for char_name, response in responses.items():
+            enhanced_responses[char_name] = {
+                'text': response,
+                'audio_path': None,
+                'emotional_state': 'neutral'
+            }
+        responses = enhanced_responses
+    
+    # Generate audio if enabled
+    if st.session_state.speech_enabled:
+        for char_name, response_data in responses.items():
+            if char_name != '_dramatic_analysis':  # Skip analysis data
+                audio_path = await generate_speech_for_response(
+                    text=response_data['text'],
+                    character_name=char_name
+                )
+                responses[char_name]['audio_path'] = audio_path
+    
     return responses
 
 def process_choice(choice_index: int) -> None:
     game = st.session_state.game_state
     chosen_development = st.session_state.current_developments["developments"][choice_index]
     
-    # Only update story state if it's not a custom choice
     if "possible_actions" in chosen_development and chosen_development["possible_actions"]:
         game.story_state = chosen_development["new_situation"]
     
     with st.spinner("Generating character responses..."):
-        character_responses = generate_character_responses(chosen_development)
+        # Use asyncio.run() to handle coroutine
+        character_responses = asyncio.run(generate_character_responses(chosen_development))
+    
+    development_audio = None
+    if st.session_state.speech_enabled:
+        development_audio = asyncio.run(generate_speech_for_response(chosen_development["description"]))
     
     st.session_state.story_history.append({
         "development": chosen_development["description"],
+        "audio": development_audio,
         "responses": character_responses,
         "timestamp": datetime.now().isoformat(),
         "is_custom": not bool(chosen_development.get("possible_actions", []))
@@ -294,32 +286,48 @@ def display_story_history() -> None:
     
     for i, event in enumerate(st.session_state.story_history):
         with st.expander(f"Scene {i+1}", expanded=(i == len(st.session_state.story_history)-1)):
-            # Display development
+            # Display development text and audio button
             col1, col2 = st.columns([8, 2])
             with col1:
-                st.write("**Event:**", event["development"]["text"])
+                st.write("**Event:**", event["development"])
             with col2:
-                if event["development"]["audio_path"]:
+                if event.get("audio"):
                     if st.button("🔊 Play", key=f"play_dev_{i}"):
-                        st.session_state.playing_audio = event["development"]["audio_path"]
+                        st.session_state.playing_audio = event["audio"]
             
-            # Display dramatic elements if available
-            if '_dramatic_analysis' in event["responses"]:
-                with st.expander("Dramatic Elements"):
-                    analysis = event["responses"].pop('_dramatic_analysis')
-                    st.write("**Conflicts:**", ", ".join(analysis['analysis']['conflicts']))
-                    st.write("**Themes:**", ", ".join(analysis['analysis']['themes']))
+            # Display dramatic analysis if available
+            responses = event.get("responses", {})
+            if isinstance(responses, dict) and '_dramatic_analysis' in responses:
+                with st.expander("Dramatic Analysis"):
+                    analysis = responses["_dramatic_analysis"]["analysis"]
+                    col1, col2 = st.columns(2)
+                    with col1:
+                        st.write("**Conflicts:**")
+                        for conflict in analysis["conflicts"]:
+                            st.write(f"- {conflict}")
+                    with col2:
+                        st.write("**Themes:**")
+                        for theme in analysis["themes"]:
+                            st.write(f"- {theme}")
             
-            # Display character responses with emotions
-            for char_name, response in event["responses"].items():
-                col1, col2, col3 = st.columns([7, 2, 1])
-                with col1:
-                    st.write(f"**{char_name}** ({response.get('emotional_state', 'neutral')}):")
-                    st.write(response["text"])
-                with col2:
-                    if response["audio_path"]:
-                        if st.button("🔊 Play", key=f"play_{char_name}_{i}"):
-                            st.session_state.playing_audio = response["audio_path"]
+            # Display character responses
+            if isinstance(responses, dict):
+                for char_name, response in responses.items():
+                    if char_name != '_dramatic_analysis':  # Skip analysis data
+                        col1, col2 = st.columns([8, 2])
+                        with col1:
+                            if isinstance(response, dict):
+                                emotion = f" ({response.get('emotional_state', 'neutral')})"
+                                st.write(f"**{char_name}**{emotion}:")
+                                st.write(response['text'])
+                            else:
+                                st.write(f"**{char_name}:**", response)
+                        
+                        with col2:
+                            audio_path = response.get('audio_path') if isinstance(response, dict) else None
+                            if audio_path:
+                                if st.button("🔊 Play", key=f"play_{char_name}_{i}"):
+                                    st.session_state.playing_audio = audio_path
             
             # Display audio player if something is playing
             if st.session_state.playing_audio:
@@ -402,9 +410,6 @@ def render_game_screen() -> None:
         st.write("Playtime:", st.session_state.game_state.get_playtime())
         st.write("Scenes:", len(st.session_state.story_history))
         st.write("Current Location:", st.session_state.game_state.story_state.strip())
-        st.write("TTS Status:", "Enabled" if st.session_state.speech_enabled else "Disabled")
-        if st.session_state.drama_manager:
-            st.success("Drama Manager: Active")
 
 def main():
     st.title("AI Interactive Storytelling")
