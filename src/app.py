@@ -1,9 +1,19 @@
 import streamlit as st
+import asyncio
 from typing import Dict, Any, List
 from datetime import datetime
 from story_save_manager import StorySaveManager
 from game import GameState, Character, NarrativeEngine, GameConfig
 from model_providers import ModelManager
+from speech_manager import SpeechManager
+
+async def init_speech_manager():
+    try:
+        speech_mgr = SpeechManager()
+        return speech_mgr
+    except Exception as e:
+        st.error(f"Error initializing speech: {str(e)}")
+        return None
 
 def init_session_state():
     if 'config' not in st.session_state:
@@ -15,6 +25,12 @@ def init_session_state():
         st.session_state.current_developments = None
         st.session_state.story_started = False
         st.session_state.selected_model = None
+        
+        # Initialize speech manager
+        if 'speech_manager' not in st.session_state:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            st.session_state.speech_manager = loop.run_until_complete(init_speech_manager())
 
 def get_available_models() -> Dict[str, bool]:
     return {name: available 
@@ -92,19 +108,49 @@ def load_game(save_id: str) -> bool:
         st.error(f"Error loading save: {str(e)}")
         return False
 
-def generate_character_responses(development: Dict[str, Any]) -> Dict[str, str]:
+async def generate_speech_for_response(text: str, character_name: str) -> None:
+    if st.session_state.speech_manager:
+        try:
+            audio, rate = await st.session_state.speech_manager.generate_speech(
+                text=text,
+                character_name=character_name
+            )
+            # Create unique filename for this response
+            filename = f"cache/audio/response_{datetime.now().strftime('%Y%m%d_%H%M%S')}_{character_name.replace(' ', '_')}.wav"
+            import soundfile as sf
+            sf.write(filename, audio, rate)
+            return filename
+        except Exception as e:
+            st.error(f"Error generating speech: {str(e)}")
+            return None
+    return None
+
+def generate_character_responses(development: Dict[str, Any]) -> Dict[str, Dict[str, str]]:
     responses = {}
     game = st.session_state.game_state
     prev_response = development["description"]
     
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    
     for char_config in st.session_state.config.characters.values():
         response = game.characters[char_config['name']].respond(
-            game.story_state, 
+            game.story_state,
             prev_response
         )
-        responses[char_config['name']] = response
-        prev_response = response
         
+        # Generate speech for the response
+        audio_file = loop.run_until_complete(
+            generate_speech_for_response(response, char_config['name'])
+        )
+        
+        responses[char_config['name']] = {
+            "text": response,
+            "audio": audio_file
+        }
+        prev_response = response
+    
+    loop.close()
     return responses
 
 def process_choice(choice_index: int) -> None:
