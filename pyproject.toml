@@ -15,3 +15,8 @@ dependencies = [
     "soundfile>=0.13.0",
     "streamlit>=1.41.1",
 ]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.4",
+]
