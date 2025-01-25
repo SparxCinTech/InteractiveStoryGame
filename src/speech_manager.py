@@ -61,16 +61,25 @@ class SpeechManager:
 
     async def _cleanup_cache(self) -> None:
         """Periodically clean up expired cache files."""
-        while True:
-            try:
-                now = datetime.now()
-                for cache_file in self.cache_dir.glob("*.wav"):
-                    file_time = datetime.fromtimestamp(cache_file.stat().st_mtime)
-                    if now - file_time > self.cache_expiry:
-                        cache_file.unlink()
-            except Exception as e:
-                print(f"Error during cache cleanup: {e}")
-            await asyncio.sleep(3600)
+        try:
+            while True:
+                try:
+                    now = datetime.now()
+                    for cache_file in self.cache_dir.glob("*.wav"):
+                        file_time = datetime.fromtimestamp(cache_file.stat().st_mtime)
+                        if now - file_time > self.cache_expiry:
+                            cache_file.unlink()
+                except Exception as e:
+                    print(f"Error during cache cleanup: {e}")
+                
+                # Use get_running_loop() instead of sleep() to maintain event loop connection
+                await asyncio.get_running_loop().run_in_executor(
+                    None,
+                    lambda: time.sleep(3600)
+                )
+        except asyncio.CancelledError:
+            print("Cache cleanup task cancelled")
+            raise
 
     def _get_cache_path(self, text: str, voice_config: VoiceConfig) -> Path:
         """Generate cache file path for given text and voice configuration."""

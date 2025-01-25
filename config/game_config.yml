@@ -24,6 +24,7 @@ templates:
       
       Story theme: {theme}
       
+      DO NOT OUPUT THOUGHT OR REASONING. ONLY NARRATIVE DEVELOPMENTS.
       Respond ONLY with a JSON object in this exact format (no other text):
       {{"developments":[{{"description":"First dramatic event","new_situation":"Resulting scenario","possible_actions":["Specific action 1","Specific action 2","Specific action 3"]}},{{"description":"Second dramatic event","new_situation":"Resulting scenario","possible_actions":["Specific action 1","Specific action 2","Specific action 3"]}},{{"description":"Third dramatic event","new_situation":"Resulting scenario","possible_actions":["Specific action 1","Specific action 2","Specific action 3"]}}]}}
 
@@ -33,6 +34,8 @@ templates:
       - Keep consistent with theme: {theme}
       - Use only double quotes
       - No line breaks in JSON
+
+      
 
   development:
     input_variables: ["story_state", "character_actions", "theme", "number"]
@@ -89,4 +92,10 @@ initial_state:
   location: "Abandoned AI research facility"
   time: "Night"
   situation: "Sarah has discovered evidence of illegal AI experiments"
-  character_actions: "Sarah examining computer records; Dr. Webb lurking in shadows,waiting for moment to strike her down"
+  character_actions:
+    sarah:
+      action: "Examining computer records"
+      goal: "Find evidence of illegal experiments"
+    webb:
+      action: "Lurking in shadows"
+      goal: "Monitor Sarah's progress and protect secrets"
