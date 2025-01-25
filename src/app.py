@@ -65,6 +65,9 @@ def initialize_game() -> bool:
                 name=char_config['name'],
                 personality=char_config['personality'],
                 background=char_config['background'],
+                conflict=char_config.get('conflict', ''),
+                motivation=char_config.get('motivation', ''),
+                secret=char_config.get('secret', ''),
                 model=model,
                 config=st.session_state.config
             )
