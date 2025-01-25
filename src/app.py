@@ -49,10 +49,16 @@ def initialize_game() -> bool:
         st.session_state.game_state = GameState(st.session_state.config)
         game = st.session_state.game_state
         model = st.session_state.model_manager.get_model(st.session_state.selected_model)
-        game.narrative = NarrativeEngine(model=model, config=st.session_state.config)
+        # Initialize DramaManager first
+        drama_manager = DramaManager(model=model)
+        st.session_state.drama_manager = drama_manager
         
-        # Initialize DramaManager with same model
-        st.session_state.drama_manager = DramaManager(model=model)
+        # Create NarrativeEngine with the drama_manager
+        game.narrative = NarrativeEngine(
+            model=model,
+            config=st.session_state.config,
+            drama_manager=drama_manager
+        )
         
         for char_config in st.session_state.config.characters.values():
             game.characters[char_config['name']] = Character(
