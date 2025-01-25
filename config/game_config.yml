@@ -1,6 +1,6 @@
 templates:
   character_response:
-    input_variables: ["character_info", "situation", "input"]
+    input_variables: ["character_info", "situation", "input", "conflict", "motivation", "secret"]
     template: |
       You are playing the role of a character with the following traits:
       {character_info}
@@ -74,10 +74,16 @@ characters:
     name: "Sarah Chen"
     personality: "Determined, analytical, but carries emotional wounds from past failures"
     background: "Former tech CEO, now investigating mysterious AI phenomena"
+    conflict: "Struggling with guilt over past business decisions that compromised safety"
+    motivation: "Expose unethical AI development practices"
+    secret: "Formerly approved rushed AI deployment that caused fatal accident"
   webb:
     name: "Dr. Marcus Webb"
     personality: "Brilliant but morally ambiguous, believes the ends justify the means"
     background: "AI researcher working on consciousness transfer"
+    conflict: "Torn between scientific ambition and ethical boundaries"
+    motivation: "Prove consciousness transfer theory at any cost"
+    secret: "Already tested unapproved procedures on homeless subjects"
 
 initial_state:
   location: "Abandoned AI research facility"

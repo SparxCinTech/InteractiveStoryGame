@@ -1,46 +1,64 @@
-from typing import Dict, Any, List, Optional
+from __future__ import annotations
+import logging
+from typing import Any, TypedDict
+from traceback import format_exc
+from typing import Any
 from langchain.llms import BaseLLM
 from langchain_core.prompts import PromptTemplate
-from langchain_core.messages import HumanMessage, AIMessage
 from langchain_core.output_parsers import JsonOutputParser
+from langchain_core.runnables import RunnableSerializable
+
+class DramaticAnalysis(TypedDict):
+    conflicts: list[str]
+    emotions: dict[str, str]
+    plot_opportunities: list[str]
+    themes: list[str]
 
 class DramaManager:
     """Manages dramatic story progression and dialogue generation."""
     
-    def __init__(self, model: BaseLLM = None):
+    def __init__(self, model: BaseLLM, logger: logging.Logger | None = None):
         """Initialize the drama manager.
         
         Args:
             model: Language model to use for generation
         """
         self.llm = model
-        
-        # Template for analyzing dramatic elements
-        self.drama_analysis_template = PromptTemplate(
+        self.logger = logger or logging.getLogger(__name__)
+        self.json_parser = JsonOutputParser()
+
+        # Configure chains with type hints
+        self.drama_analysis_chain: RunnableSerializable = self._create_analysis_chain()
+
+    def _create_analysis_chain(self) -> RunnableSerializable:
+        """Create the dramatic analysis chain with validation."""
+        return (
+            self._create_analysis_template()
+            | self.llm
+            | self.json_parser
+        )
+
+    def _create_analysis_template(self) -> PromptTemplate:
+        """Create and validate the drama analysis prompt template."""
+        return PromptTemplate(
             input_variables=["responses", "current_state"],
-            template="""
-            Analyze the following character responses in the current story state for dramatic elements:
-            
-            Current State:
-            {current_state}
-            
-            Character Responses:
-            {responses}
-            
-            Identify:
-            1. Key conflicts and tensions
-            2. Character motivations and emotions
-            3. Potential plot twists
-            4. Dramatic themes
-            
-            Respond in JSON format:
-            {{"analysis": {{
-                "conflicts": ["list of conflicts"],
-                "emotions": {{"character_name": "emotional_state"}},
-                "plot_opportunities": ["potential developments"],
-                "themes": ["dramatic themes"]
-            }}}}
-            """
+            template=(
+                "Analyze character responses for dramatic elements:\n\n"
+                "Current State:\n{current_state}\n\n"
+                "Character Responses:\n{responses}\n\n"
+                "Identify:\n"
+                "1. Key conflicts and tensions\n"
+                "2. Character motivations/emotions\n"
+                "3. Potential plot twists\n"
+                "4. Dramatic themes\n\n"
+                "Respond with JSON:\n"
+                '{"analysis": {\n'
+                '  "conflicts": ["..."],\n'
+                '  "emotions": {"...": "..."},\n'
+                '  "plot_opportunities": ["..."],\n'
+                '  "themes": ["..."]\n}}\n'
+            ),
+            template_format="f-string"
         )
         
         # Template for enhancing drama in responses
@@ -68,9 +86,9 @@ class DramaManager:
     
     def analyze_dramatic_elements(
         self,
-        character_responses: Dict[str, str],
+        character_responses: dict[str, str],
         current_state: str
-    ) -> Dict[str, Any]:
+    ) -> dict[str, DramaticAnalysis]:
         """Analyze responses for dramatic elements.
         
         Args:
@@ -186,6 +204,7 @@ class DramaManager:
         context: str,
         num_exchanges: int = 3
     ) -> List[Dict[str, str]]:
+        """Generate dialogue with narrative-aware dramatic enhancements"""
         """Generate dramatic dialogue between characters.
         
         Args:

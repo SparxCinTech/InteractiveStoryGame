@@ -8,22 +8,13 @@ from langchain_core.messages import HumanMessage, AIMessage
 from langchain_core.output_parsers import JsonOutputParser
 from langgraph.graph import START, MessagesState, StateGraph
 from langgraph.checkpoint.memory import MemorySaver
-from story_save_manager import StorySaveManager
+from .story_save_manager import StorySaveManager
+from .character import Character
+from .narrative_engine import NarrativeEngine
+from .drama_manager import DramaManager
+from .config import GameConfig
 from datetime import datetime
 
-@dataclass
-class GameConfig:
-    templates: Dict[str, Any]
-    game_settings: Dict[str, Any]
-    fallbacks: Dict[str, Any]
-    characters: Dict[str, Any]
-    initial_state: Dict[str, Any]
-
-    @classmethod
-    def load(cls, path: str = "config/game_config.yml") -> 'GameConfig':
-        with open(path, 'r') as f:
-            data = yaml.safe_load(f)
-            return cls(**data)
 
 class GameState:
     def __init__(self, config: GameConfig):
@@ -77,6 +68,9 @@ class GameState:
                     name=state.get('name', char_config.get('name')),
                     personality=state.get('personality', char_config.get('personality')),
                     background=state.get('background', char_config.get('background')),
+                    conflict=char_config.get('conflict', ''),
+                    motivation=char_config.get('motivation', ''),
+                    secret=char_config.get('secret', ''),
                     model=self.narrative.llm,
                     config=self.config
                 )
@@ -88,114 +82,7 @@ class GameState:
                 "developments": save_data["narrative_state"]["developments"]
             }
 
-class Character:
-    def __init__(self, name: str, personality: str, background: str, model: BaseLLM = None, config: GameConfig = None):
-        self.name = name
-        self.personality = personality
-        self.background = background
-        self.llm = model
-        self.config = config
-        
-        template_config = config.templates['character_response']
-        self.response_template = PromptTemplate(
-            input_variables=template_config['input_variables'],
-            template=template_config['template']
-        )
-        
-        self.workflow = StateGraph(state_schema=MessagesState)
-        self.memory = MemorySaver()
-        self.thread_id = uuid.uuid4()
-        
-        def generate_response(state: MessagesState):
-            messages = state["messages"]
-            latest_message = messages[-1]
-            
-            character_info = "\n".join([
-                f"Name: {self.name}",
-                f"Personality: {self.personality}",
-                f"Background: {self.background}"
-            ])
-            
-            response = self.llm.invoke(
-                self.response_template.format(
-                    character_info=character_info,
-                    situation=state.get("situation", ""),
-                    input=latest_message.content
-                )
-            )
-            
-            return {"messages": [AIMessage(content=response)]}
-        
-        self.workflow.add_edge(START, "respond")
-        self.workflow.add_node("respond", generate_response)
-        self.app = self.workflow.compile(checkpointer=self.memory)
 
-    def respond(self, situation: str, input_text: str) -> str:
-        input_state = {
-            "messages": [HumanMessage(content=input_text)],
-            "situation": situation
-        }
-        config = {"configurable": {"thread_id": self.thread_id}}
-        
-        for event in self.app.stream(input_state, config, stream_mode="values"):
-            response = event["messages"][-1].content
-            
-        return response
-
-class NarrativeEngine:
-    def __init__(self, model: BaseLLM = None, config: GameConfig = None):
-        self.llm = model
-        self.config = config
-        
-        template_config = config.templates['story_progression']
-        self.progression_template = PromptTemplate(
-            input_variables=template_config['input_variables'],
-            template=template_config['template']
-        )
-        
-        dev_config = config.templates['development']
-        self.development_template = PromptTemplate(
-            input_variables=dev_config['input_variables'],
-            template=dev_config['template']
-        )
-        
-        self.json_parser = JsonOutputParser()
-        self.progression_chain = self.progression_template.pipe(self.llm).pipe(self.json_parser)
-
-    def generate_developments(self, story_state: str, character_actions: str, theme: str) -> Dict[str, List[Dict[str, Any]]]:
-        try:
-            developments = []
-            max_choices = self.config.game_settings.get('max_choices', 3)
-            
-            for i in range(max_choices):
-                response = self.development_template.format_prompt(
-                    story_state=story_state,
-                    character_actions=character_actions,
-                    theme=theme,
-                    number=i+1
-                )
-                result = self.llm.invoke(response.to_string())
-                
-                development = {}
-                actions = []
-                
-                for line in result.strip().split('\n'):
-                    line = line.strip()
-                    if line.startswith('DESCRIPTION:'):
-                        development['description'] = line[12:].strip()
-                    elif line.startswith('SITUATION:'):
-                        development['new_situation'] = line[10:].strip()
-                    elif line.startswith('ACTION'):
-                        actions.append(line.split(':', 1)[1].strip())
-                
-                development['possible_actions'] = actions
-                developments.append(development)
-            
-            return {"developments": developments}
-            
-        except Exception as e:
-            print(f"Error generating developments: {str(e)}")
-            return self.config.fallbacks['default_development']
 
 def create_story_scene():
     from model_providers import ModelManager
@@ -210,6 +97,9 @@ def create_story_scene():
             name=char_config['name'],
             personality=char_config['personality'],
             background=char_config['background'],
+            conflict=char_config.get('conflict', ''),
+            motivation=char_config.get('motivation', ''),
+            secret=char_config.get('secret', ''),
             model=base_model,
             config=config
         )

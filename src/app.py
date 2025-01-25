@@ -3,10 +3,9 @@ import asyncio
 from typing import Dict, Any, List
 from datetime import datetime
 from story_save_manager import StorySaveManager
-from game import GameState, Character, NarrativeEngine, GameConfig
+from game import GameState, Character, NarrativeEngine, GameConfig, DramaManager
 from model_providers import ModelManager
 from speech_manager import SpeechManager
-from drama_manager import DramaManager
 import hashlib
 
 async def init_speech_manager():

@@ -1,7 +1,5 @@
 # AI Interactive Storytelling Engine
 
-An interactive storytelling engine powered by AI that creates dynamic narratives with branching storylines and character interactions.
-
 ![app_image](docs/app.png)
 
 ## Overview
@@ -12,134 +10,107 @@ This project implements an AI-driven interactive storytelling system where:
 - Multiple possible story developments are generated at each step
 - The narrative maintains consistency with themes and previous events
 
-## Project Structure
+## Features ▶️
+- **Dynamic Story Generation** using local LLMs (Ollama/LM Studio)
+- **Character Memory System** with personality persistence
+- **Multi-Model Support** with hot-switching
+- **Voice Synthesis** integration
+- **Auto-Save System** with metadata tracking
 
-```
-AIStoryTelling/
-├── src/               # Source code
-│   ├── app.py        # Streamlit interface
-│   ├── game.py       # Core game logic
-│   ├── model_providers.py  # LLM integration
-│   └── story_save_manager.py  # Save/Load system
-├── config/           # Configuration files
-│   ├── game_config.yml  # Game settings and templates
-│   └── models.yml    # LLM configurations
-├── saves/           # Save files directory
-└── requirements.txt
-```
-
-## Features
-
-### Local LLM Support
-- Ollama integration (default)
-- LM Studio compatibility
-- Model hot-switching
-- Configurable parameters
-
-### Game Engine
-- Config-driven templating
-- Dynamic narrative generation
-- Character persona management
-- State persistence
-
-### Save System
-- Quick save/load
-- Auto-saving
-- Save metadata tracking
-- State restoration
-
-### Web Interface
-- Model selection
-- Story progression
-- Choice visualization
-- Save management
-
-## Installation
-
-1. Install Python 3.10+
-2. Install dependencies:
+## Quick Start 🚀
 ```bash
-pip install uv
 uv venv
 uv pip install -r requirements.txt
+ollama pull mistral  # Core model
+uv run streamlit run src/app.py
 ```
 
-3. Install LLM backend(s):
+## Architecture Overview 🏛️
+```mermaid
+graph TD
+    A[Player] --> B[Web Interface]
+    B --> C[Game Engine]
+    C --> D[LLM Backend]
+    C --> E[Drama Manager]
+    C --> F[Save System]
+    D --> G[(Ollama)]
+    D --> H[(LM Studio)]
+```
+
+## Development Guide 👩💻
+
+### Key Components
+| Component | Purpose | Tech Stack |
+|-----------|---------|------------|
+| `app.py` | Web interface | Streamlit |
+| `game.py` | Core game logic | LangChain, LangGraph |
+| `model_providers.py` | LLM integration | Ollama, LM Studio |
+| `drama_manager.py` | Story analysis | Custom prompts |
+
+### Workflow
+1. Set up models:
 ```bash
-# Ollama
-ollama pull mistral  # Default model
-
-# LM Studio
-# Install from https://lmstudio.ai
+# For testing multiple models
+ollama pull llama2
+ollama pull neural-chat
 ```
 
-## Usage
-
-### Starting the Interface
+2. Run with debug mode:
 ```bash
-streamlit run src/app.py
+DEBUG=true streamlit run src/app.py
 ```
 
-### Configuration
-1. LLM Settings: `config/models.yml`
-2. Game Settings: `config/game_config.yml`
-
-### Command Line Version
-```bash
-python src/game.py
+3. Test components:
+```python
+python -m pytest tests/ -v
 ```
 
-## Configuration
+## Configuration Guide ⚙️
 
-### LLM Setup (models.yml)
+### Model Setup (`config/models.yml`)
 ```yaml
-models:
-  mistral-ollama:     # Default model
-    provider: ollama
-    model_name: mistral
-    temperature: 0.7
-    # See models.yml for full options
-
-  mixtral-lmstudio:   # Alternative model
-    provider: lmstudio
-    model_name: mixtral-8x7b-instruct
-    # See models.yml for full options
+# Example production config
+production_model:
+  provider: ollama
+  model_name: llama2
+  temperature: 0.65
+  max_tokens: 4096
+  system_prompt: "You are a professional novelist..."
+  
+# Example testing config  
+testing_model:
+  provider: lmstudio
+  model_name: codellama-7b
+  temperature: 0.9
 ```
 
-### Game Setup (game_config.yml)
+### Game Templates (`config/game_config.yml`)
 ```yaml
-templates:          # Prompt templates
-  character_response:
-    # Character dialogue generation
-  story_progression:
-    # Story development
-  development:
-    # Choice generation
-
-game_settings:
-  autosave_interval: 15
-  max_choices: 3
-  default_theme: "The ethical limits of scientific progress"
-
-characters:
-  sarah:
-    name: "Sarah Chen"
-    personality: "..."
-  webb:
-    name: "Dr. Marcus Webb"
-    personality: "..."
-
-# See game_config.yml for full options
+# Add versioning
+template_version: 1.2
+schema: 
+  - name: character_response
+    required_vars: [character_info, situation]
 ```
 
-## Contributing
+## Contribution Guidelines 🤝
+1. Create feature branch
+2. Add tests for new features
+3. Update documentation
+4. Submit PR with:
+   - Implementation details
+   - Performance metrics
+   - Example outputs
 
-1. Fork repository
-2. Create feature branch
-3. Submit pull request
+## Troubleshooting 🔧
+| Issue | Solution |
+|-------|----------|
+| Model not responding | Check `ollama serve` status |
+| Low response quality | Adjust temperature (0.7-1.0) |
+| Save file corruption | Use `save_repair_tool.py` |
 
-See TODOS.md for current priorities.
-
-## License
-
-MIT License
+## Roadmap 🗺️
+- [ ] Multiplayer support
+- [ ] Plugin system
+- [ ] Localization
+- [ ] Modding API
