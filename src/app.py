@@ -73,8 +73,9 @@ def initialize_game() -> bool:
             )
         
         if st.session_state.speech_enabled:
-            # Use existing event loop for async initialization
-            loop = asyncio.get_event_loop()
+            # Create a new event loop for async initialization
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
             st.session_state.speech_manager = loop.run_until_complete(init_speech_manager())
             
         st.session_state.story_started = True
@@ -186,41 +187,15 @@ async def generate_character_responses(development: Dict[str, Any]) -> Dict[str,
             game.story_state, 
             development["description"]
         )
-        responses[char_name] = response
-    # Use DramaManager to enhance responses if available
-    dramatic_result = False
-    if st.session_state.drama_manager:
-        try:
-            dramatic_result = st.session_state.drama_manager.generate_dramatic_story(
-                character_responses= responses,
-                current_state=game.story_state,
-                narrative_engine=game.narrative
-            )
-            
-            enhanced_responses = {}
-            for char_name, response in dramatic_result['enhanced_responses'].items():
-                enhanced_responses[char_name] = {
-                    'text': response,
-                    'audio_path': None,
-                    'emotional_state': dramatic_result['analysis']['analysis']['emotions'].get(char_name, 'neutral')
-                }
-            
-            # Add dramatic analysis
-            enhanced_responses['_dramatic_analysis'] = dramatic_result['analysis']
-            responses = enhanced_responses
-            dramatic_result = True
-        except Exception as e:
-            st.warning(f"Drama enhancement failed: {str(e)}")
-    if not dramatic_result:
-        # Convert basic responses to enhanced format
-        enhanced_responses = {}
-        for char_name, response in responses.items():
-            enhanced_responses[char_name] = {
-                'text': response,
-                'audio_path': None,
-                'emotional_state': 'neutral'
-            }
-        responses = enhanced_responses
+    responses[char_name] = response
+    enhanced_responses = {}
+    for char_name, response in responses.items():
+        enhanced_responses[char_name] = {
+            'text': response,
+            'audio_path': None,
+            'emotional_state': 'neutral'
+        }
+    responses = enhanced_responses
     
     print("Generated character responses:", responses)
     
@@ -235,7 +210,11 @@ def process_choice(choice_index: int) -> None:
     
     with st.spinner("Generating character responses..."):
         # Use proper async context management
-        loop = asyncio.get_event_loop()
+        try:
+            loop = asyncio.get_event_loop()
+        except RuntimeError:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
         if loop.is_running():
             character_responses = asyncio.run_coroutine_threadsafe(
                 generate_character_responses(chosen_development),
@@ -289,9 +268,12 @@ def display_story_developments() -> None:
     if not st.session_state.current_developments:
         with st.spinner("Generating story developments..."):
             st.session_state.current_developments = game.narrative.generate_developments(
-                story_state=game.story_state,
-                character_actions=config.initial_state['character_actions'],
-                theme=config.game_settings['default_theme']
+                context={
+                    'current_state': game.story_state,
+                    'character_responses': config.initial_state['character_actions'],
+                    'theme': config.game_settings['default_theme'],
+                    'conflicts': [c for c in (game.story_state.get('conflicts', []) if isinstance(game.story_state, dict) else [])]
+                }
             )
     
     st.markdown("### What happens next?")

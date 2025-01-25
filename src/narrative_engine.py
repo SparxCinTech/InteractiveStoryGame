@@ -2,8 +2,8 @@ from typing import Any, Dict, List
 from langchain.llms import BaseLLM
 from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import JsonOutputParser
-from .config import GameConfig
-from .drama_manager import DramaManager
+from config import GameConfig
+from drama_manager import DramaManager
 
 class NarrativeEngine:
     """Orchestrates complex story progression with branching narratives."""
@@ -61,9 +61,10 @@ class NarrativeEngine:
                     "analysis": drama_analysis['analysis']
                 })
                 developments.append(self._parse_development(response, drama_analysis))
-
+            print(f"Developments: {developments}")
             # Apply butterfly effect to future branches
-            self._update_branching_factor(context['choices_made'])
+            if 'choices_made' in context:
+                self._update_branching_factor(context['choices_made'])
             
             return {"developments": developments}
             

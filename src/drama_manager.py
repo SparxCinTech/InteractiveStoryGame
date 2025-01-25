@@ -26,42 +26,8 @@ class DramaManager:
         self.llm = model
         self.logger = logger or logging.getLogger(__name__)
         self.json_parser = JsonOutputParser()
-
-        # Configure chains with type hints
-        self.drama_analysis_chain: RunnableSerializable = self._create_analysis_chain()
-
-    def _create_analysis_chain(self) -> RunnableSerializable:
-        """Create the dramatic analysis chain with validation."""
-        return (
-            self._create_analysis_template()
-            | self.llm
-            | self.json_parser
-        )
-
-    def _create_analysis_template(self) -> PromptTemplate:
-        """Create and validate the drama analysis prompt template."""
-        return PromptTemplate(
-            input_variables=["responses", "current_state"],
-            template=(
-                "Analyze character responses for dramatic elements:\n\n"
-                "Current State:\n{current_state}\n\n"
-                "Character Responses:\n{responses}\n\n"
-                "Identify:\n"
-                "1. Key conflicts and tensions\n"
-                "2. Character motivations/emotions\n"
-                "3. Potential plot twists\n"
-                "4. Dramatic themes\n\n"
-                "Respond with JSON:\n"
-                '{"analysis": {\n'
-                '  "conflicts": ["..."],\n'
-                '  "emotions": {"...": "..."},\n'
-                '  "plot_opportunities": ["..."],\n'
-                '  "themes": ["..."]\n}}\n'
-            ),
-            template_format="f-string"
-        )
         
-        # Template for enhancing drama in responses
+        # Initialize enhancement template
         self.drama_enhancement_template = PromptTemplate(
             input_variables=["response", "analysis", "character"],
             template="""
@@ -80,9 +46,51 @@ class DramaManager:
             Respond with enhanced dialogue only.
             """
         )
-        
-        self.json_parser = JsonOutputParser()
-        self.drama_analysis_chain = self.drama_analysis_template.pipe(self.llm).pipe(self.json_parser)
+
+        # Configure chains with type hints
+        self.drama_analysis_chain: RunnableSerializable = self._create_analysis_chain()
+
+    def _create_analysis_chain(self) -> RunnableSerializable:
+        """Create the dramatic analysis chain with validation."""
+        return (
+            self._create_analysis_template()
+            | self.llm
+            | self.json_parser
+        )
+
+    def _create_analysis_template(self) -> PromptTemplate:
+        """Create and validate the drama analysis prompt template."""
+        return PromptTemplate(
+            input_variables=["responses", "current_state"],
+            template="""
+            DO NOT OUTPUT THOUGHTS OR COMMENTS.
+            Analyze the following character responses in the current story state for dramatic elements:
+            
+            Current State:
+            {current_state}
+            
+            Character Responses:
+            {responses}
+            
+            Identify:
+            1. Key conflicts and tensions
+            2. Character motivations and emotions
+            3. Potential plot twists
+            4. Dramatic themes
+            
+            ONLY Respond in JSON format:
+            {{"analysis": {{
+                "conflicts": ["list of conflicts"],
+                "emotions": {{"character_name": "emotional_state"}},
+                "plot_opportunities": ["potential developments"],
+                "themes": ["dramatic themes"]
+            }}}}
+            """
+        )
+
+    def _create_enhancement_chain(self) -> RunnableSerializable:
+        """Create drama enhancement chain with proper typing."""
+        return self.drama_enhancement_template | self.llm
     
     def analyze_dramatic_elements(
         self,
@@ -141,12 +149,13 @@ class DramaManager:
         """
         try:
             enhanced = self.llm.invoke(
-                self.drama_enhancement_template.format(
+                self.drama_enhancement_template.format_prompt(
                     response=response,
                     character=character,
-                    analysis=str(analysis)
+                    analysis=analysis
                 )
             )
+            # print(enhanced)
             return enhanced.strip()
             
         except Exception as e:
@@ -185,7 +194,7 @@ class DramaManager:
         if narrative_engine:
             developments = narrative_engine.generate_developments(
                 story_state=current_state,
-                character_actions=str(enhanced_responses),
+                character_actions=enhanced_responses,
                 theme=", ".join(analysis["analysis"]["themes"])
             )
         else:

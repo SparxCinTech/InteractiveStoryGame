@@ -6,7 +6,7 @@ from langgraph.graph import START, MessagesState, StateGraph
 from langgraph.checkpoint.memory import MemorySaver
 import uuid
 from dataclasses import dataclass
-from .config import GameConfig
+from config import GameConfig
 
 class Character:
     def __init__(self, name: str, personality: str, background: str,
