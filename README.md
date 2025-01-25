@@ -30,22 +30,30 @@ uv run streamlit run src/app.py
 graph TD
     A[Player] --> B[Web Interface]
     B --> C[Game Engine]
-    C --> D[LLM Backend]
+    C --> D[Narrative Engine]
     C --> E[Drama Manager]
     C --> F[Save System]
-    D --> G[(Ollama)]
-    D --> H[(LM Studio)]
+    C --> G[Speech Manager]
+    D --> H[LLM Backend]
+    H --> I[(Ollama)]
+    H --> J[(LM Studio)]
+    G --> K[(Kokoro TTS)]
+    E --> L[Character Memory]
+    F --> M[Auto-Save System]
 ```
 
-## Development Guide 👩💻
+### Model Providers
+- Ollama support for local models
+- LM Studio integration for additional models
+- Model switching and fallbacks
+- Parameter optimization
 
-### Key Components
-| Component | Purpose | Tech Stack |
-|-----------|---------|------------|
-| `app.py` | Web interface | Streamlit |
-| `game.py` | Core game logic | LangChain, LangGraph |
-| `model_providers.py` | LLM integration | Ollama, LM Studio |
-| `drama_manager.py` | Story analysis | Custom prompts |
+### Story Engine
+- Dynamic narrative generation
+- Character-driven responses
+- Theme consistency
+- Multiple choice paths
+- State tracking
 
 ### Workflow
 1. Set up models:
@@ -107,10 +115,15 @@ schema:
 |-------|----------|
 | Model not responding | Check `ollama serve` status |
 | Low response quality | Adjust temperature (0.7-1.0) |
-| Save file corruption | Use `save_repair_tool.py` |
 
-## Roadmap 🗺️
-- [ ] Multiplayer support
-- [ ] Plugin system
-- [ ] Localization
-- [ ] Modding API
+## Contributing
+
+Feel free to contribute by:
+1. Opening issues for bugs or suggestions
+2. Submitting pull requests with improvements
+3. Adding new model integrations
+4. Improving prompts and configurations
+
+## License
+
+This project is open source and available under the MIT License.
