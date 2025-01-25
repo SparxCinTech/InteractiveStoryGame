@@ -64,7 +64,9 @@ def initialize_game() -> bool:
             )
         
         if st.session_state.speech_enabled:
-            st.session_state.speech_manager = asyncio.run(init_speech_manager())
+            # Use existing event loop for async initialization
+            loop = asyncio.get_event_loop()
+            st.session_state.speech_manager = loop.run_until_complete(init_speech_manager())
             
         st.session_state.story_started = True
         return True
@@ -223,12 +225,31 @@ def process_choice(choice_index: int) -> None:
         game.story_state = chosen_development["new_situation"]
     
     with st.spinner("Generating character responses..."):
-        # Use asyncio.run() to handle coroutine
-        character_responses = asyncio.run(generate_character_responses(chosen_development))
+        # Use proper async context management
+        loop = asyncio.get_event_loop()
+        if loop.is_running():
+            character_responses = asyncio.run_coroutine_threadsafe(
+                generate_character_responses(chosen_development),
+                loop
+            ).result()
+        else:
+            character_responses = loop.run_until_complete(
+                generate_character_responses(chosen_development)
+            )
     
     development_audio = None
     if st.session_state.speech_enabled:
-        development_audio = asyncio.run(generate_audio(chosen_development["description"]))
+        # Use thread-safe async execution for audio generation
+        loop = asyncio.get_event_loop()
+        if loop.is_running():
+            development_audio = asyncio.run_coroutine_threadsafe(
+                generate_audio(chosen_development["description"]),
+                loop
+            ).result()
+        else:
+            development_audio = loop.run_until_complete(
+                generate_audio(chosen_development["description"])
+            )
 
         # Generate audio if enabled
         if st.session_state.speech_enabled:
@@ -303,7 +324,10 @@ def display_story_developments() -> None:
                 "possible_actions": []  # No predefined actions for custom choice
             }
             # Insert custom development at chosen index
-            developments.insert(choice, custom_development)
+            # Create modified copy for immutable update
+            updated_developments = [d for d in developments]
+            updated_developments.insert(choice, custom_development)
+            developments[:] = updated_developments  # Replace in-place
             process_choice(choice)
             # Clear custom choice after using it
             st.session_state.custom_choice = ""
@@ -374,9 +398,10 @@ def render_model_selection() -> None:
             format_func=lambda x: f"{x} ({x.split('-')[1].upper()})"
         )
         
-        if st.button("Start New Game"):
-            if initialize_game():
-                st.rerun()
+        if st.button("Start New Game", type="primary"):
+            with st.spinner("Initializing game..."):
+                if initialize_game():
+                    st.rerun()
     else:
         st.error("No AI models available. Please ensure Ollama or LM Studio is running.")
 
