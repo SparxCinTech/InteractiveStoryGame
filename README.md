@@ -40,12 +40,23 @@ graph TD
     G --> K[(Kokoro TTS)]
     E --> L[Character Memory]
     F --> M[Auto-Save System]
+    H --> I[(Ollama)]
+    H --> J[(LM Studio)]
+    G --> K[(Kokoro TTS)]
+    E --> L[Character Memory]
+    F --> M[Auto-Save System]
 ```
 
-### Model Providers
-- Ollama support for local models
-- LM Studio integration for additional models
-- Model switching and fallbacks
+### Key Components
+| Component | Purpose | Tech Stack |
+|-----------|---------|------------|
+| `app.py` | Web interface | Streamlit, Websockets |
+| `game.py` | Core game loop | LangChain, LangGraph |
+| `narrative_engine.py` | Story generation | Custom prompts |
+| `model_providers.py` | LLM integration | Ollama, LM Studio, OpenAI |
+| `drama_manager.py` | Dramatic analysis | Dramatic theory patterns |
+| `speech_manager.py` | Voice synthesis | Kokoro TTS |
+| `story_save_manager.py` | Save system | JSON schema validation |
 - Parameter optimization
 
 ### Story Engine
@@ -56,11 +67,13 @@ graph TD
 - State tracking
 
 ### Workflow
-1. Set up models:
+1. Run with voice synthesis enabled:
 ```bash
-# For testing multiple models
-ollama pull llama2
-ollama pull neural-chat
+VOICE_ENABLED=true streamlit run src/app.py
+
+2. Run drama manager tests:
+```bash
+python -m pytest tests/test_drama_manager.py -v
 ```
 
 2. Run with debug mode:
@@ -77,19 +90,19 @@ python -m pytest tests/ -v
 
 ### Model Setup (`config/models.yml`)
 ```yaml
-# Example production config
-production_model:
-  provider: ollama
-  model_name: llama2
-  temperature: 0.65
-  max_tokens: 4096
-  system_prompt: "You are a professional novelist..."
-  
-# Example testing config  
-testing_model:
+llama-lmstudio:
   provider: lmstudio
-  model_name: codellama-7b
-  temperature: 0.9
+  model_name: llama-3.1-8b-lexi-uncensored-v2
+  temperature: 0.8
+  max_tokens: 2048
+  context_window: 8192
+
+mistral-ollama:
+  provider: ollama
+  model_name: mistral
+  temperature: 0.7
+  repeat_penalty: 1.1
+  num_gpu: 1
 ```
 
 ### Game Templates (`config/game_config.yml`)
@@ -113,8 +126,11 @@ schema:
 ## Troubleshooting 🔧
 | Issue | Solution |
 |-------|----------|
-| Model not responding | Check `ollama serve` status |
+| Model not responding | Check `ollama serve`/LM Studio status |
+| Audio synthesis failures | Verify Kokoro model files exist |
+| Save file corruption | Use `save_repair_tool.py` |
 | Low response quality | Adjust temperature (0.7-1.0) |
+| Drama analysis errors | Check character config templates |
 
 ## Contributing
 
