@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>On-Device SLM for Adaptive NPCs in Psychological Horror Games</title>
+    <script src="./On-Device SLM for Adaptive NPCs in Psychological Horror Games_files/saved_resource"></script>
+    <script src="./On-Device SLM for Adaptive NPCs in Psychological Horror Games_files/chart.js.download"></script>
+    <script src="./On-Device SLM for Adaptive NPCs in Psychological Horror Games_files/echarts.min.js.download"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+    <link href="./On-Device SLM for Adaptive NPCs in Psychological Horror Games_files/css2" rel="stylesheet">
+    <link rel="stylesheet" href="./On-Device SLM for Adaptive NPCs in Psychological Horror Games_files/all.min.css">
+    <style>
+        :root {
+            --primary: #1a1a1a;
+            --secondary: #2d2d2d;
+            --accent: #dc2626;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            --border: #374151;
+            --surface: #0f0f0f;
+        }
+        
+        .font-canela { font-family: 'Canela', serif; }
+        .font-inter { font-family: 'Inter', sans-serif; }
+        
+        * {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            background: var(--surface);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 50%, #2d2d2d 100%);
+        }
+        
+        .text-shadow {
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+        
+        .glass-effect {
+            backdrop-filter: blur(10px);
+            background: rgba(15, 15, 15, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .toc-fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 280px;
+            background: rgba(15, 15, 15, 0.95);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid var(--border);
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 2rem 1.5rem;
+        }
+        
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+        }
+        
+        .toc-link {
+            display: block;
+            padding: 0.5rem 0;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 2px solid transparent;
+            padding-left: 1rem;
+        }
+        
+        .toc-link:hover, .toc-link.active {
+            color: var(--text-primary);
+            border-left-color: var(--accent);
+            background: rgba(220, 38, 38, 0.1);
+        }
+        
+        .toc-link.sub {
+            font-size: 0.9rem;
+            padding-left: 2rem;
+            color: var(--text-muted);
+        }
+        
+        .citation {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .citation:hover {
+            text-decoration: underline;
+        }
+        
+        .bento-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .bento-item {
+            background: var(--secondary);
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .bento-large {
+            grid-row: span 2;
+        }
+        
+        .chart-container {
+            background: var(--secondary);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .insight-highlight {
+            background: linear-gradient(135deg, rgba(220, 38, 38, 0.1) 0%, rgba(220, 38, 38, 0.05) 100%);
+            border-left: 4px solid var(--accent);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        @media (max-width: 1024px) {
+            .toc-fixed {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            
+            .toc-fixed.open {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .bento-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            
+            .hero-gradient h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-gradient p {
+                font-size: 1rem;
+            }
+        }
+        
+        .comparison-table {
+            background: var(--secondary);
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 2rem 0;
+        }
+        
+        .comparison-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .comparison-table th {
+            background: rgba(220, 38, 38, 0.2);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .comparison-table td {
+            padding: 1rem;
+            border-top: 1px solid var(--border);
+        }
+        
+        .comparison-table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .highlight-high {
+            color: #10b981;
+            font-weight: 600;
+        }
+        
+        .highlight-low {
+            color: #ef4444;
+            font-weight: 600;
+        }
+        
+        .highlight-medium {
+            color: #f59e0b;
+            font-weight: 600;
+        }
+    </style>
+  <style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.container{width:100%}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px}}@media (min-width: 1536px){.container{max-width:1536px}}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.inset-0{inset:0px}.left-4{left:1rem}.top-4{top:1rem}.z-10{z-index:10}.z-40{z-index:40}.z-50{z-index:50}.mx-auto{margin-left:auto;margin-right:auto}.mb-12{margin-bottom:3rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mt-6{margin-top:1.5rem}.mt-8{margin-top:2rem}.block{display:block}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-full{height:100%}.h-8{height:2rem}.h-3{height:0.75rem}.min-h-screen{min-height:100vh}.w-full{width:100%}.w-8{width:2rem}.w-3{width:0.75rem}.max-w-4xl{max-width:56rem}.flex-1{flex:1 1 0%}.flex-shrink-0{flex-shrink:0}.list-inside{list-style-position:inside}.list-decimal{list-style-type:decimal}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-2{gap:0.5rem}.gap-3{gap:0.75rem}.gap-8{gap:2rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-20 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(5rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-1 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.25rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded{border-radius:0.25rem}.border{border-width:1px}.border-l-4{border-left-width:4px}.border-gray-700{--tw-border-opacity:1;border-color:rgb(55 65 81 / var(--tw-border-opacity, 1))}.border-red-700\/50{border-color:rgb(185 28 28 / 0.5)}.border-red-500{--tw-border-opacity:1;border-color:rgb(239 68 68 / var(--tw-border-opacity, 1))}.bg-black{--tw-bg-opacity:1;background-color:rgb(0 0 0 / var(--tw-bg-opacity, 1))}.bg-gray-800\/50{background-color:rgb(31 41 55 / 0.5)}.bg-gray-900{--tw-bg-opacity:1;background-color:rgb(17 24 39 / var(--tw-bg-opacity, 1))}.bg-red-900\/30{background-color:rgb(127 29 29 / 0.3)}.bg-gray-800{--tw-bg-opacity:1;background-color:rgb(31 41 55 / var(--tw-bg-opacity, 1))}.bg-gray-900\/50{background-color:rgb(17 24 39 / 0.5)}.bg-red-600{--tw-bg-opacity:1;background-color:rgb(220 38 38 / var(--tw-bg-opacity, 1))}.bg-blue-500{--tw-bg-opacity:1;background-color:rgb(59 130 246 / var(--tw-bg-opacity, 1))}.bg-red-500{--tw-bg-opacity:1;background-color:rgb(239 68 68 / var(--tw-bg-opacity, 1))}.bg-yellow-500{--tw-bg-opacity:1;background-color:rgb(234 179 8 / var(--tw-bg-opacity, 1))}.bg-opacity-50{--tw-bg-opacity:0.5}.object-cover{object-fit:cover}.p-3{padding:0.75rem}.p-6{padding:1.5rem}.p-8{padding:2rem}.p-4{padding:1rem}.px-4{padding-left:1rem;padding-right:1rem}.px-8{padding-left:2rem;padding-right:2rem}.py-16{padding-top:4rem;padding-bottom:4rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.pl-3{padding-left:0.75rem}.pl-4{padding-left:1rem}.text-center{text-align:center}.font-mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}.text-2xl{font-size:1.5rem;line-height:2rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-5xl{font-size:3rem;line-height:1}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-bold{font-weight:700}.font-light{font-weight:300}.font-semibold{font-weight:600}.italic{font-style:italic}.leading-relaxed{line-height:1.625}.text-gray-300{--tw-text-opacity:1;color:rgb(209 213 219 / var(--tw-text-opacity, 1))}.text-gray-400{--tw-text-opacity:1;color:rgb(156 163 175 / var(--tw-text-opacity, 1))}.text-red-300{--tw-text-opacity:1;color:rgb(252 165 165 / var(--tw-text-opacity, 1))}.text-red-500{--tw-text-opacity:1;color:rgb(239 68 68 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-yellow-500{--tw-text-opacity:1;color:rgb(234 179 8 / var(--tw-text-opacity, 1))}.text-green-500{--tw-text-opacity:1;color:rgb(34 197 94 / var(--tw-text-opacity, 1))}.text-red-400{--tw-text-opacity:1;color:rgb(248 113 113 / var(--tw-text-opacity, 1))}.text-green-400{--tw-text-opacity:1;color:rgb(74 222 128 / var(--tw-text-opacity, 1))}.opacity-20{opacity:0.2}.opacity-80{opacity:0.8}.opacity-70{opacity:0.7}@media (min-width: 768px){.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.md\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.md\:grid-cols-5{grid-template-columns:repeat(5, minmax(0, 1fr))}.md\:flex-row{flex-direction:row}}@media (min-width: 1024px){.lg\:hidden{display:none}.lg\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.lg\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.lg\:text-7xl{font-size:4.5rem;line-height:1}}</style></head>
+
+  <body>
+    <!-- Back to Home Button -->
+    <a href="../index.html" class="fixed top-4 right-4 z-50 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-semibold transition-all transform hover:scale-105 shadow-lg">
+        <i class="fas fa-home mr-2"></i>
+        Back to Home
+    </a>
+
+    <!-- Fixed Table of Contents -->
+    <nav class="toc-fixed" id="toc">
+      <div class="mb-8">
+        <h3 class="font-canela text-xl font-bold text-white mb-4">Contents</h3>
+        <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#introduction" class="toc-link">Introduction</a>
+        <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#defining-slm" class="toc-link active">Defining the SLM</a>
+        <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#slm-role" class="toc-link sub">Role in Autonomous Characters</a>
+        <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#core-architecture" class="toc-link">Core Architecture</a>
+        <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#perception-cognition" class="toc-link sub">Perception-Cognition-Action Loop</a>
+        <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#decision-making" class="toc-link sub">SLM Decision-Making</a>
+        <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#memory-system" class="toc-link">Memory System</a>
+        <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#stm-ltm" class="toc-link sub">Short-Term &amp; Long-Term Memory</a>
+        <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#semantic-episodic" class="toc-link sub">Semantic &amp; Episodic Memory</a>
+        <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#emotional-modeling" class="toc-link">Emotional Modeling (APF)</a>
+        <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#generating-emotions" class="toc-link sub">Generating Emotions</a>
+        <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#emotional-influence" class="toc-link sub">Influence on Behavior</a>
+        <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#action-planning" class="toc-link">Action Planning</a>
+        <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#goap-htn" class="toc-link sub">GOAP &amp; HTN Planning</a>
+        <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#integration-algorithm" class="toc-link sub">Integration Algorithm</a>
+        <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#drama-system" class="toc-link">Drama System Integration</a>
+        <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#role-tags" class="toc-link sub">Role Tags &amp; Events</a>
+        <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#narrative-triggers" class="toc-link sub">Narrative Event Triggers</a>
+        <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#comparative-analysis" class="toc-link">Comparative Analysis</a>
+        <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#complexity-benefits" class="toc-link sub">Complexity &amp; Benefits</a>
+        <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#rule-based-limitations" class="toc-link sub">Rule-Based Limitations</a>
+        <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#implementation" class="toc-link">Unreal Engine Implementation</a>
+        <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#performance" class="toc-link sub">Performance &amp; Optimization</a>
+        <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ue-tools" class="toc-link sub">UE Tools &amp; Plugins</a>
+      </div>
+    </nav>
+
+    <!-- Mobile TOC Toggle -->
+    <button class="lg:hidden fixed top-4 left-4 z-50 bg-gray-900 p-3 rounded-lg border border-gray-700" onclick="toggleTOC()">
+      <i class="fas fa-bars text-white"></i>
+    </button>
+
+    <!-- Overlay for closing TOC -->
+    <div id="toc-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden" onclick="closeTOC()"></div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Hero Section with Bento Grid -->
+      <section class="hero-gradient min-h-screen flex items-center relative overflow-hidden">
+        <div class="absolute inset-0 opacity-20">
+          <img src="./On-Device SLM for Adaptive NPCs in Psychological Horror Games_files/8e2eaa578a54cd69a5baa77d60e1826aa83b98ae.jpg" alt="Atmospheric horror game environment with dramatic lighting" class="w-full h-full object-cover" size="wallpaper" aspect="wide" style="photo" query="psychological horror game environment" referrerpolicy="no-referrer" data-modified="1" data-score="11598.00">
+        </div>
+
+        <div class="container mx-auto px-8 py-16 relative z-10">
+          <div class="bento-grid">
+            <!-- Main Title Area -->
+            <div class="bento-item bento-large p-8 flex flex-col justify-center glass-effect">
+              <h1 class="font-canela text-5xl lg:text-7xl font-bold mb-6 text-shadow">
+                <span class="block italic text-gray-300">On-Device</span>
+                <span class="block text-white">SLM for Adaptive NPCs</span>
+                <span class="block text-red-500 italic">in Psychological Horror</span>
+              </h1>
+              <p class="text-xl text-gray-300 mb-8 font-light">
+                Integrating perception, cognition, and memory systems for truly unsettling non-player characters
+              </p>
+              <div class="flex flex-wrap gap-2">
+                <span class="px-4 py-2 bg-red-900/30 text-red-300 rounded-full text-sm border border-red-700/50">Unreal Engine</span>
+                <span class="px-4 py-2 bg-gray-800/50 text-gray-300 rounded-full text-sm border border-gray-700">NVIDIA ACE</span>
+                <span class="px-4 py-2 bg-gray-800/50 text-gray-300 rounded-full text-sm border border-gray-700">GOAP/HTN</span>
+                <span class="px-4 py-2 bg-gray-800/50 text-gray-300 rounded-full text-sm border border-gray-700">APF Framework</span>
+              </div>
+            </div>
+
+            <!-- Key Insights -->
+            <div class="bento-item p-6 glass-effect">
+              <h3 class="font-canela text-2xl font-bold mb-4 text-white">Key Architecture</h3>
+              <div class="space-y-3">
+                <div class="flex items-center gap-3">
+                  <i class="fas fa-eye text-red-500"></i>
+                  <span class="text-sm">Perception Models</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <i class="fas fa-brain text-red-500"></i>
+                  <span class="text-sm">SLM Cognition Engine</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <i class="fas fa-database text-red-500"></i>
+                  <span class="text-sm">Dynamic Memory System</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <i class="fas fa-cogs text-red-500"></i>
+                  <span class="text-sm">Action Planning</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Memory Structure -->
+            <div class="bento-item p-6 glass-effect">
+              <h3 class="font-canela text-xl font-bold mb-4 text-white">Memory Framework</h3>
+              <div class="space-y-2 text-sm">
+                <div class="flex justify-between">
+                  <span>Short-Term</span>
+                  <span class="text-gray-400">Immediate context</span>
+                </div>
+                <div class="flex justify-between">
+                  <span>Episodic</span>
+                  <span class="text-gray-400">Personal experiences</span>
+                </div>
+                <div class="flex justify-between">
+                  <span>Semantic</span>
+                  <span class="text-gray-400">World knowledge</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Content Sections -->
+      <div class="container mx-auto px-8 py-16 space-y-20">
+
+        <!-- Introduction -->
+        <section id="introduction" class="max-w-4xl">
+          <div class="insight-highlight">
+            <p class="text-lg leading-relaxed">
+              To implement an on-device Small Language Model (SLM) for adaptive NPCs in a psychological horror game, a core architecture integrating <strong>Perception, Cognition (SLM-driven), and Action loops</strong> is essential. This system should be supported by a <strong>dynamic memory system</strong> (with Short-Term and Long-Term components, including Semantic and Episodic structures) that records emotional and situational context, influencing an <strong>Artificial Psychosocial Framework (APF)</strong> for emotional modeling. The SLM acts as a <strong>reasoner for goal selection and high-level planning</strong>, which then interfaces with a <strong>planning algorithm like GOAP or HTN</strong> for detailed action execution. This adaptive approach, while more complex to implement than static rule-based systems, offers significant benefits in <strong>natural adaptation and emergent behavior</strong>, crucial for the nuanced emotional responses (betrayal, withdrawal, etc.) required in psychological horror.
+            </p>
+          </div>
+        </section>
+
+        <!-- Defining SLM -->
+        <section id="defining-slm">
+          <h2 class="font-canela text-4xl font-bold mb-8">Defining the Small Language Model (SLM) in Game AI</h2>
+
+          <div class="grid lg:grid-cols-2 gap-8 mb-12">
+            <div>
+              <h3 class="font-canela text-2xl font-bold mb-4">SLM as "Small Language Model"</h3>
+              <p class="text-gray-300 mb-4">
+                In the context of game AI, particularly with advancements like NVIDIA's ACE (Avatar Cloud Engine) technology, "SLM" refers to a <strong>Small Language Model</strong>
+                <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-14" class="citation">[14]</a>
+                <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-109" class="citation">[109]</a>. These models are a more compact and efficient alternative to Large Language Models (LLMs), designed to run <strong>on-device</strong>, such as a player's PC, rather than relying on cloud-based processing.
+              </p>
+              <p class="text-gray-300 mb-4">
+                This on-device capability is crucial for real-time interactions in games, minimizing latency and ensuring a seamless player experience. NVIDIA's ACE SLMs are specifically engineered to enable autonomous game characters that can perceive their environment, make decisions (cognition), and act in a manner that mimics human-like behavior.
+              </p>
+            </div>
+            <div class="bg-gray-900 p-6 rounded-lg">
+              <h4 class="font-canela text-xl font-bold mb-4">Mistral-Nemo-Minitron Series</h4>
+              <div class="space-y-3">
+                <div class="flex justify-between items-center">
+                  <span>8B Parameter Model</span>
+                  <span class="text-red-500 font-mono">High complexity</span>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span>4B Parameter Model</span>
+                  <span class="text-yellow-500 font-mono">Balanced</span>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span>2B Parameter Model</span>
+                  <span class="text-green-500 font-mono">1.5GB VRAM</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="slm-role" class="bg-gray-900/50 p-8 rounded-lg mb-8">
+            <h3 class="font-canela text-2xl font-bold mb-6">Role of SLMs in Autonomous Game Characters</h3>
+            <p class="text-gray-300 mb-4">
+              Small Language Models (SLMs) play a pivotal role in the development of autonomous game characters by providing the core intelligence for <strong>perception, cognition, and action</strong>
+              <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-14" class="citation">[14]</a>
+              <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-134" class="citation">[134]</a>. NVIDIA's ACE framework utilizes SLMs to allow NPCs to "perceive, plan, and act like human players."
+            </p>
+
+            <div class="grid md:grid-cols-3 gap-6 mt-6">
+              <div class="text-center p-4 bg-gray-800 rounded-lg">
+                <i class="fas fa-eye text-3xl text-red-500 mb-3"></i>
+                <h4 class="font-semibold mb-2">Perception</h4>
+                <p class="text-sm text-gray-400">Audio, visual, and game state processing</p>
+              </div>
+              <div class="text-center p-4 bg-gray-800 rounded-lg">
+                <i class="fas fa-brain text-3xl text-red-500 mb-3"></i>
+                <h4 class="font-semibold mb-2">Cognition</h4>
+                <p class="text-sm text-gray-400">High-frequency decision-making (8-13 sub-movements/sec)</p>
+              </div>
+              <div class="text-center p-4 bg-gray-800 rounded-lg">
+                <i class="fas fa-play text-3xl text-red-500 mb-3"></i>
+                <h4 class="font-semibold mb-2">Action</h4>
+                <p class="text-sm text-gray-400">Strategic planning and reflection</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Core Architecture -->
+        <section id="core-architecture">
+          <h2 class="font-canela text-4xl font-bold mb-8">Core Architecture: Integrating SLM, Memory, and Planning</h2>
+
+          <div id="perception-cognition" class="mb-12">
+            <h3 class="font-canela text-3xl font-bold mb-6">Perception, Cognition (SLM), Action Loop</h3>
+
+            <div class="chart-container">
+              <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+                <div class="flex-1">
+                  <h4 class="font-canela text-2xl font-bold mb-4">The Continuous Loop</h4>
+                  <p class="text-gray-300 mb-4">
+                    The core architecture revolves around a continuous loop of <strong>Perception, Cognition (driven by an SLM), and Action</strong>, with Memory playing a crucial supporting role
+                    <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-14" class="citation">[14]</a>
+                    <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-109" class="citation">[109]</a>.
+                  </p>
+                  <div class="space-y-4">
+                    <div class="flex items-start gap-4">
+                      <div class="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center text-sm font-bold">1</div>
+                      <div>
+                        <h5 class="font-semibold">Perception</h5>
+                        <p class="text-sm text-gray-400">Audio, visual, and game state information processing</p>
+                      </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                      <div class="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center text-sm font-bold">2</div>
+                      <div>
+                        <h5 class="font-semibold">Cognition</h5>
+                        <p class="text-sm text-gray-400">SLM analyzes input, considers goals and emotional state</p>
+                      </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                      <div class="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center text-sm font-bold">3</div>
+                      <div>
+                        <h5 class="font-semibold">Action</h5>
+                        <p class="text-sm text-gray-400">Execute decisions and generate speech via TTS</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex-1">
+                  <img src="./On-Device SLM for Adaptive NPCs in Psychological Horror Games_files/df324fdf959d24d4133e8ee239dffb25632b84ee.jpg" alt="Artificial intelligence perception cognition action loop diagram" class="w-full rounded-lg opacity-80" size="medium" aspect="wide" query="AI perception cognition action loop" referrerpolicy="no-referrer" data-modified="1" data-score="11597.00">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="decision-making" class="mb-12">
+            <h3 class="font-canela text-3xl font-bold mb-6">SLM for Decision-Making and Planning</h3>
+
+            <div class="insight-highlight">
+              <p class="text-lg mb-4">
+                SLMs are positioned as the central cognitive engine for <strong>decision-making and planning</strong> in next-generation autonomous game characters
+                <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-14" class="citation">[14]</a>
+                <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-134" class="citation">[134]</a>.
+              </p>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-6">
+              <div class="bg-gray-900 p-6 rounded-lg">
+                <h4 class="font-canela text-xl font-bold mb-3">Action Selection</h4>
+                <p class="text-gray-300 text-sm">
+                  Given the finite actions that can be taken in the game, the SLM chooses the best appropriate action from available possibilities
+                  <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-14" class="citation">[14]</a>.
+                </p>
+              </div>
+              <div class="bg-gray-900 p-6 rounded-lg">
+                <h4 class="font-canela text-xl font-bold mb-3">Strategic Planning</h4>
+                <p class="text-gray-300 text-sm">
+                  Interface with larger LLMs for higher-level guidance or employ Chain-of-Thought (CoT) prompting for complex problem decomposition
+                  <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-109" class="citation">[109]</a>.
+                </p>
+              </div>
+              <div class="bg-gray-900 p-6 rounded-lg">
+                <h4 class="font-canela text-xl font-bold mb-3">Reflection</h4>
+                <p class="text-gray-300 text-sm">
+                  NPCs consider outcomes of prior actions, allowing self-correction and improvement of decision quality over time
+                  <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-134" class="citation">[134]</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-gray-900/50 p-8 rounded-lg">
+            <h3 class="font-canela text-2xl font-bold mb-6">Integrating LLM/SLM as a Reasoner for Goal Selection</h3>
+            <p class="text-gray-300 mb-4">
+              Integrating a Small Language Model (SLM) as a <strong>"reasoner" for goal selection</strong> offers significant advancement over traditional AI methods
+              <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-139" class="citation">[139]</a>
+              <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-200" class="citation">[200]</a>. The architecture involves:
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-8 mt-6">
+              <div>
+                <h4 class="font-semibold mb-3 text-red-400">Reasoner Module (SLM)</h4>
+                <ul class="space-y-2 text-sm text-gray-300">
+                  <li>• Processes memory information</li>
+                  <li>• Considers personality traits</li>
+                  <li>• Selects appropriate high-level goals</li>
+                  <li>• Outputs natural language goals</li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="font-semibold mb-3 text-red-400">Planner Module (GOAP/HTN)</h4>
+                <ul class="space-y-2 text-sm text-gray-300">
+                  <li>• Receives selected goals</li>
+                  <li>• Generates action sequences</li>
+                  <li>• Uses automated planning techniques</li>
+                  <li>• Executes concrete game actions</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Memory System -->
+        <section id="memory-system">
+          <h2 class="font-canela text-4xl font-bold mb-8">Memory System for Emotional and Situational Context</h2>
+
+          <div class="bg-gray-900/50 p-8 rounded-lg mb-12">
+            <h3 class="font-canela text-2xl font-bold mb-6">Simulated Emotional AI with Memories (Boyd Thesis Framework)</h3>
+            <p class="text-gray-300 mb-4">
+              A robust memory system is foundational for NPCs to exhibit believable emotional responses. The PhD thesis by Reece Boyd, titled <strong>"Simulated Emotional AI with Memories for Games"</strong>
+              <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-18" class="citation">[18]</a>, provides the Artificial Psychosocial Framework (APF) for implementing such systems.
+            </p>
+          </div>
+
+          <div id="stm-ltm" class="mb-12">
+            <h3 class="font-canela text-3xl font-bold mb-6">Short-Term Memory (STM) and Long-Term Memory (LTM)</h3>
+
+            <div class="grid lg:grid-cols-2 gap-8">
+              <div class="bg-gray-900 p-6 rounded-lg">
+                <h4 class="font-canela text-xl font-bold mb-4 flex items-center gap-3">
+                  <i class="fas fa-clock text-red-500"></i>
+                  Short-Term Memory
+                </h4>
+                <p class="text-gray-300 mb-4">
+                  Acts as a temporary buffer, holding information about the immediate environment and recent events. STM has limited capacity and duration
+                  <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-18" class="citation">[18]</a>.
+                </p>
+                <ul class="space-y-2 text-sm text-gray-400">
+                  <li>• Player's current location</li>
+                  <li>• Recent dialogue exchanges</li>
+                  <li>• Objects interacted with</li>
+                  <li>• Transient emotional reactions</li>
+                </ul>
+              </div>
+
+              <div class="bg-gray-900 p-6 rounded-lg">
+                <h4 class="font-canela text-xl font-bold mb-4 flex items-center gap-3">
+                  <i class="fas fa-archive text-red-500"></i>
+                  Long-Term Memory
+                </h4>
+                <p class="text-gray-300 mb-4">
+                  Stores information over extended periods, including significant experiences, learned knowledge, and deeply ingrained emotional associations.
+                </p>
+                <ul class="space-y-2 text-sm text-gray-400">
+                  <li>• Episodic memories of major events</li>
+                  <li>• Semantic knowledge about game world</li>
+                  <li>• Emotional associations</li>
+                  <li>• Character relationships</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div id="semantic-episodic" class="mb-12">
+            <h3 class="font-canela text-3xl font-bold mb-6">Semantic and Episodic Memory Structures</h3>
+
+            <div class="grid lg:grid-cols-2 gap-8 mb-8">
+              <div class="bg-gray-900/50 p-6 rounded-lg">
+                <h4 class="font-canela text-xl font-bold mb-4">Episodic Memory</h4>
+                <p class="text-gray-300 mb-4">
+                  Stores specific, autobiographical events or "episodes" that the NPC has experienced. Each memory includes:
+                </p>
+                <ul class="space-y-1 text-sm text-gray-400">
+                  <li>• <strong>What</strong> happened</li>
+                  <li>• <strong>When</strong> it happened</li>
+                  <li>• <strong>Where</strong> it happened</li>
+                  <li>• <strong>Emotional impact</strong></li>
+                  <li>• <strong>Associated entities</strong></li>
+                </ul>
+              </div>
+
+              <div class="bg-gray-900/50 p-6 rounded-lg">
+                <h4 class="font-canela text-xl font-bold mb-4">Semantic Memory</h4>
+                <p class="text-gray-300 mb-4">
+                  Stores general knowledge and facts about the world, represented as a <strong>directed graph</strong>
+                  <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-18" class="citation">[18]</a> where nodes correspond to concepts and edges represent relationships.
+                </p>
+                <ul class="space-y-1 text-sm text-gray-400">
+                  <li>• Game mechanics knowledge</li>
+                  <li>• Object properties</li>
+                  <li>• Environment layout</li>
+                  <li>• Social norms</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="insight-highlight">
+              <h4 class="font-semibold mb-3">Memory Dynamics</h4>
+              <p class="mb-3">
+                For a memory system to feel realistic, mechanisms like <strong>memory decay, consolidation, and emotional saliency</strong> are essential
+                <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-18" class="citation">[18]</a>:
+              </p>
+              <div class="grid md:grid-cols-3 gap-4 text-sm">
+                <div>
+                  <strong>Memory Decay:</strong> Gradual fading of memories over time if not accessed or reinforced
+                </div>
+                <div>
+                  <strong>Consolidation:</strong> Transfer from STM to LTM based on emotional saliency
+                </div>
+                <div>
+                  <strong>Emotional Saliency:</strong> Emotionally charged events are remembered better and influence behavior more strongly
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Emotional Modeling -->
+        <section id="emotional-modeling">
+          <h2 class="font-canela text-4xl font-bold mb-8">Emotional Modeling and the Artificial Psychosocial Framework (APF)</h2>
+
+          <div id="generating-emotions" class="mb-12">
+            <h3 class="font-canela text-3xl font-bold mb-6">Generating Emotions from Memories and Experiences</h3>
+
+            <div class="chart-container">
+              <div class="grid lg:grid-cols-2 gap-8">
+                <div>
+                  <h4 class="font-canela text-2xl font-bold mb-4">The Appraisal Process</h4>
+                  <p class="text-gray-300 mb-4">
+                    The APF employs a sophisticated system for <strong>generating emotions in NPCs based on their memories and ongoing experiences</strong>
+                    <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-18" class="citation">[18]</a>. Emotions are dynamically elicited through an appraisal process:
+                  </p>
+                  <ol class="list-decimal list-inside space-y-2 text-sm text-gray-300">
+                    <li>NPC perceives event or retrieves memory</li>
+                    <li>APF evaluates against goals, needs, and personality</li>
+                    <li>Appraisal determines emotion type and intensity</li>
+                    <li>Emotional content influences current mood and decisions</li>
+                  </ol>
+                </div>
+                <div>
+                  <img src="./On-Device SLM for Adaptive NPCs in Psychological Horror Games_files/3dc963dedd3a82cfc8a4d07c42a1f42363b58bdd.jpg" alt="Artificial intelligence emotional processing" class="w-full rounded-lg opacity-70" size="medium" aspect="wide" query="AI emotional processing" referrerpolicy="no-referrer" data-modified="1" data-score="11596.00">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="emotional-influence" class="mb-12">
+            <h3 class="font-canela text-3xl font-bold mb-6">Influence of Emotional State on NPC Behavior</h3>
+
+            <div class="grid lg:grid-cols-2 gap-8">
+              <div class="bg-gray-900/50 p-6 rounded-lg">
+                <h4 class="font-canela text-xl font-bold mb-4">Emotional Filters</h4>
+                <p class="text-gray-300 mb-4">
+                  The current emotional state acts as a filter through which the NPC perceives and interprets new information and recalls past memories
+                  <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-18" class="citation">[18]</a>.
+                </p>
+                <div class="space-y-3">
+                  <div class="flex items-center gap-3">
+                    <span class="w-3 h-3 bg-red-500 rounded-full"></span>
+                    <span class="text-sm"><strong>Fear:</strong> Interpret ambiguity as threatening</span>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <span class="w-3 h-3 bg-yellow-500 rounded-full"></span>
+                    <span class="text-sm"><strong>Anger:</strong> Increase aggressive actions</span>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <span class="w-3 h-3 bg-blue-500 rounded-full"></span>
+                    <span class="text-sm"><strong>Sadness:</strong> Lead to withdrawal or sulking</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-gray-900/50 p-6 rounded-lg">
+                <h4 class="font-canela text-xl font-bold mb-4">Behavioral Outcomes</h4>
+                <p class="text-gray-300 mb-4">
+                  Emotions influence goal prioritization and action selection, making behaviors emotionally congruent rather than purely logical.
+                </p>
+                <div class="space-y-2 text-sm text-gray-300">
+                  <div><strong>Jealousy</strong> → Prioritize undermining rival</div>
+                  <div><strong>Despair</strong> → Suicide attempt behaviors</div>
+                  <div><strong>Betrayal</strong> → Complex revenge planning</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Action Planning -->
+        <section id="action-planning">
+          <h2 class="font-canela text-4xl font-bold mb-8">Action Planning and Execution Algorithm</h2>
+
+          <div id="goap-htn" class="mb-12">
+            <h3 class="font-canela text-3xl font-bold mb-6">Goal-Oriented Action Planning (GOAP) and Hierarchical Task Networks (HTN)</h3>
+
+            <div class="grid lg:grid-cols-2 gap-8 mb-8">
+              <div class="bg-gray-900 p-6 rounded-lg">
+                <h4 class="font-canela text-xl font-bold mb-4 flex items-center gap-3">
+                  <i class="fas fa-bullseye text-red-500"></i>
+                  GOAP (Goal-Oriented Action Planning)
+                </h4>
+                <p class="text-gray-300 mb-4">
+                  Allows NPCs to <strong>generate plans at runtime</strong> based on current world state, available actions, and specific goals
+                  <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-38" class="citation">[38]</a>
+                  <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-52" class="citation">[52]</a>.
+                </p>
+                <div class="space-y-2 text-sm">
+                  <div><strong>Preconditions:</strong> Conditions for action execution</div>
+                  <div><strong>Effects:</strong> Changes to world state</div>
+                  <div><strong>Planning:</strong> A* search for action sequences</div>
+                </div>
+              </div>
+
+              <div class="bg-gray-900 p-6 rounded-lg">
+                <h4 class="font-canela text-xl font-bold mb-4 flex items-center gap-3">
+                  <i class="fas fa-sitemap text-red-500"></i>
+                  HTN (Hierarchical Task Network)
+                </h4>
+                <p class="text-gray-300 mb-4">
+                  Works by <strong>decomposing high-level tasks into smaller sub-tasks</strong> until primitive, executable actions are reached.
+                </p>
+                <div class="space-y-2 text-sm">
+                  <div><strong>Compound Tasks:</strong> High-level behaviors</div>
+                  <div><strong>Methods:</strong> Decomposition rules</div>
+                  <div><strong>Primitive Tasks:</strong> Directly executable actions</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="chart-container">
+              <h4 class="font-canela text-2xl font-bold mb-4">GOAP vs HTN Planning Example</h4>
+              <div class="grid md:grid-cols-2 gap-8">
+                <div>
+                  <h5 class="font-semibold mb-3 text-red-400">GOAP Approach</h5>
+                  <div class="text-sm space-y-2">
+                    <div class="bg-gray-800 p-3 rounded"><strong>Goal:</strong> KillPlayer</div>
+                    <div class="bg-gray-800 p-3 rounded"><strong>Plan:</strong> GetWeapon → MoveToPlayer → Attack</div>
+                  </div>
+                </div>
+                <div>
+                  <h5 class="font-semibold mb-3 text-red-400">HTN Approach</h5>
+                  <div class="text-sm space-y-2">
+                    <div class="bg-gray-800 p-3 rounded"><strong>Task:</strong> StalkPlayer</div>
+                    <div class="bg-gray-800 p-3 rounded"><strong>Method:</strong> [MaintainDistance, UseCover, AmbushIfOpportunity]</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="integration-algorithm" class="mb-12">
+            <h3 class="font-canela text-3xl font-bold mb-6">Algorithm: Integrating SLM, Memory, and GOAP/HTN</h3>
+
+            <div class="bg-gray-900/50 p-8 rounded-lg">
+              <p class="text-gray-300 mb-6">
+                The iterative algorithm integrates SLM as a reasoning engine with memory systems and planning algorithms
+                <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-139" class="citation">[139]</a>
+                <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-200" class="citation">[200]</a>:
+              </p>
+
+              <div class="space-y-6">
+                <div class="flex gap-4">
+                  <div class="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">1</div>
+                  <div>
+                    <h4 class="font-semibold mb-2">Perception and Memory Update (Interface)</h4>
+                    <p class="text-gray-300 text-sm mb-2">
+                      NPC perceives game world, Interface updates "memories" data structure, converts raw data to natural language for SLM
+                      <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-200" class="citation">[200]</a>
+                      <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-203" class="citation">[203]</a>.
+                    </p>
+                    <p class="text-gray-400 text-sm">
+                      Relevant memories retrieved from LTM/STM, emotional salience evaluated via APF
+                      <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-18" class="citation">[18]</a>.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="flex gap-4">
+                  <div class="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">2</div>
+                  <div>
+                    <h4 class="font-semibold mb-2">Goal Selection (Reasoner - SLM)</h4>
+                    <p class="text-gray-300 text-sm mb-2">
+                      SLM prompted with situational context: memory stream, emotional state, personality traits, role tags, potential goals
+                      <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-203" class="citation">[203]</a>.
+                    </p>
+                    <p class="text-gray-400 text-sm">
+                      Processes information, selects appropriate high-level goal (e.g., "Intimidate player" for Harasser with high aggression)
+                      <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-139" class="citation">[139]</a>.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="flex gap-4">
+                  <div class="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">3</div>
+                  <div>
+                    <h4 class="font-semibold mb-2">Plan Generation (Planner - GOAP/HTN)</h4>
+                    <p class="text-gray-300 text-sm mb-2">
+                      Selected goal + current world state passed to GOAP/HTN planner in "AP Problem" format
+                      <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-200" class="citation">[200]</a>.
+                    </p>
+                    <p class="text-gray-400 text-sm">
+                      Planner searches for action sequence using Domain Definition for available actions and logic
+                      <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-53" class="citation">[53]</a>
+                      <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-203" class="citation">[203]</a>.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="flex gap-4">
+                  <div class="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">4</div>
+                  <div>
+                    <h4 class="font-semibold mb-2">Plan Execution and Monitoring (Interface &amp; NPC Controller)</h4>
+                    <p class="text-gray-300 text-sm mb-2">
+                      NPC executes planned actions while Interface monitors execution. If world state changes unexpectedly, plan might become invalid
+                      <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-200" class="citation">[200]</a>.
+                    </p>
+                    <p class="text-gray-400 text-sm">
+                      If plan invalidated or completed, loop restarts. SLM can be consulted mid-plan for significant unforeseen events.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-8">
+              <h4 class="font-canela text-2xl font-bold mb-4">SLM's Role in Goal Generation and Action Selection</h4>
+              <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-gray-900 p-6 rounded-lg">
+                  <h5 class="font-semibold mb-3 text-red-400">Goal Generation</h5>
+                  <p class="text-gray-300 text-sm mb-3">
+                    SLM interprets context (perceptions, memories, emotional state) to formulate nuanced goals tailored to specific situations
+                    <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-109" class="citation">[109]</a>
+                    <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-134" class="citation">[134]</a>.
+                  </p>
+                  <p class="text-gray-400 text-sm">
+                    Example: "Betrayed" emotional state + player vulnerability → "ConfrontPlayer" or "DemandExplanation" goals
+                  </p>
+                </div>
+                <div class="bg-gray-900 p-6 rounded-lg">
+                  <h5 class="font-semibold mb-3 text-red-400">Action Selection</h5>
+                  <p class="text-gray-300 text-sm mb-3">
+                    SLM evaluates available actions based on utility AND alignment with personality, emotional state, and narrative impact
+                    <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-134" class="citation">[134]</a>.
+                  </p>
+                  <p class="text-gray-400 text-sm">
+                    Example: Choose between "LurePlayerToTrap" vs "CreateDiversion" for "IsolatePlayer" sub-goal
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Drama System -->
+        <section id="drama-system">
+          <h2 class="font-canela text-4xl font-bold mb-8">Integrating with the Drama System</h2>
+
+          <div id="role-tags" class="mb-12">
+            <h3 class="font-canela text-3xl font-bold mb-6">Role Tags and Predefined Events</h3>
+
+            <div class="grid lg:grid-cols-3 gap-6 mb-8">
+              <div class="bg-gray-900 p-6 rounded-lg text-center">
+                <i class="fas fa-user-secret text-4xl text-red-500 mb-4"></i>
+                <h4 class="font-canela text-xl font-bold mb-2">Harasser</h4>
+                <p class="text-gray-300 text-sm">Aggressive, threatening behaviors. Pursues and intimidates other characters.</p>
+              </div>
+              <div class="bg-gray-900 p-6 rounded-lg text-center">
+                <i class="fas fa-heart-broken text-4xl text-red-500 mb-4"></i>
+                <h4 class="font-canela text-xl font-bold mb-2">Victim</h4>
+                <p class="text-gray-300 text-sm">Vulnerable, fearful responses. May trigger rescue or tragic events.</p>
+              </div>
+              <div class="bg-gray-900 p-6 rounded-lg text-center">
+                <i class="fas fa-handshake text-4xl text-red-500 mb-4"></i>
+                <h4 class="font-canela text-xl font-bold mb-2">Negotiator</h4>
+                <p class="text-gray-300 text-sm">Mediates conflicts, can intervene in dramatic situations.</p>
+              </div>
+            </div>
+
+            <div class="insight-highlight">
+              <p class="text-lg">
+                Role tags serve as high-level descriptors of an NPC's current narrative function. When combined with emotional states and significant actions, they trigger predefined dramatic events that maintain narrative cohesion while allowing emergent behavior.
+              </p>
+            </div>
+          </div>
+
+          <div id="narrative-triggers" class="mb-12">
+            <h3 class="font-canela text-3xl font-bold mb-6">Triggering Narrative Events based on NPC State and Actions</h3>
+
+            <div class="grid lg:grid-cols-2 gap-8">
+              <div class="bg-gray-900/50 p-6 rounded-lg">
+                <h4 class="font-canela text-xl font-bold mb-4">Monitored Parameters</h4>
+                <ul class="space-y-2 text-sm text-gray-300">
+                  <li>• <strong>Emotional states:</strong> Fear, anger, despair (from SLM/APF)</li>
+                  <li>• <strong>Current goals:</strong> Generated or selected by SLM</li>
+                  <li>• <strong>Role tags:</strong> Harasser, Victim, Negotiator</li>
+                  <li>• <strong>Significant actions:</strong> Betrayal, murder attempts, suicide attempts</li>
+                </ul>
+              </div>
+
+              <div class="bg-gray-900/50 p-6 rounded-lg">
+                <h4 class="font-canela text-xl font-bold mb-4">Event Examples</h4>
+                <div class="space-y-3 text-sm">
+                  <div class="border-l-4 border-red-500 pl-3">
+                    <strong>Victim + Extreme Despair + Isolated</strong>
+                    <br>
+                    → Suicide attempt sequence
+                  </div>
+                  <div class="border-l-4 border-red-500 pl-3">
+                    <strong>Harasser + Corners Victim + Player Witness</strong>
+                    <br>
+                    → Gruesome murder event
+                  </div>
+                  <div class="border-l-4 border-red-500 pl-3">
+                    <strong>Negotiator + High Conflict Area</strong>
+                    <br>
+                    → Intervention and mediation
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-8 chart-container">
+              <h4 class="font-canela text-2xl font-bold mb-4">Drama System Flow</h4>
+              <div class="grid md:grid-cols-4 gap-4 text-center">
+                <div class="bg-gray-800 p-4 rounded-lg">
+                  <i class="fas fa-eye text-red-500 text-2xl mb-2"></i>
+                  <div class="text-sm font-semibold">Monitor</div>
+                  <div class="text-xs text-gray-400">NPC states &amp; actions</div>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg">
+                  <i class="fas fa-search text-red-500 text-2xl mb-2"></i>
+                  <div class="text-sm font-semibold">Evaluate</div>
+                  <div class="text-xs text-gray-400">Match conditions</div>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg">
+                  <i class="fas fa-cog text-red-500 text-2xl mb-2"></i>
+                  <div class="text-sm font-semibold">Select</div>
+                  <div class="text-xs text-gray-400">Appropriate event</div>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg">
+                  <i class="fas fa-play text-red-500 text-2xl mb-2"></i>
+                  <div class="text-sm font-semibold">Trigger</div>
+                  <div class="text-xs text-gray-400">Narrative event</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Comparative Analysis -->
+        <section id="comparative-analysis">
+          <h2 class="font-canela text-4xl font-bold mb-8">Adaptive SLM vs. Static Rule-Based Systems</h2>
+
+          <div id="complexity-benefits" class="mb-12">
+            <h3 class="font-canela text-3xl font-bold mb-6">Complexity and Benefits Analysis</h3>
+
+            <div class="grid lg:grid-cols-2 gap-8 mb-8">
+              <div class="bg-gray-900/50 p-6 rounded-lg">
+                <h4 class="font-canela text-xl font-bold mb-4 text-red-400">Implementation Complexity</h4>
+                <div class="space-y-3 text-sm text-gray-300">
+                  <div>
+                    <strong>Computational Cost:</strong> SLMs require substantial processing power for real-time inference on-device
+                    <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-152" class="citation">[152]</a>
+                  </div>
+                  <div>
+                    <strong>Design &amp; Training:</strong> Requires robust training pipeline and high-quality datasets for psychological horror behaviors
+                    <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-156" class="citation">[156]</a>
+                  </div>
+                  <div>
+                    <strong>Integration Challenges:</strong> Complex interfaces with memory, planning, and drama systems
+                    <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-139" class="citation">[139]</a>
+                  </div>
+                  <div>
+                    <strong>Debugging &amp; Control:</strong> Needs robust logging and XAI techniques to understand "thought process"
+                    <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-150" class="citation">[150]</a>
+                    <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-156" class="citation">[156]</a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-gray-900/50 p-6 rounded-lg">
+                <h4 class="font-canela text-xl font-bold mb-4 text-green-400">Key Benefits</h4>
+                <div class="space-y-3 text-sm text-gray-300">
+                  <div>
+                    <strong>Natural Adaptation:</strong> Processes rich inputs (emotional states, memories) for organic behavior changes
+                    <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-18" class="citation">[18]</a>
+                    <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-139" class="citation">[139]</a>
+                  </div>
+                  <div>
+                    <strong>Emergent Behavior:</strong> Generates novel actions and strategies unanticipated by designers
+                    <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-150" class="citation">[150]</a>
+                  </div>
+                  <div>
+                    <strong>Character Differentiation:</strong> NPCs learn and adapt based on specific player interactions
+                    <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-142" class="citation">[142]</a>
+                  </div>
+                  <div>
+                    <strong>Enhanced Horror:</strong> Unpredictability and perceived intelligence amplify tension and fear
+                    <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-150" class="citation">[150]</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="rule-based-limitations" class="mb-12">
+            <h3 class="font-canela text-3xl font-bold mb-6">Strengths and Limitations of Rule-Based Systems</h3>
+
+            <div class="grid lg:grid-cols-2 gap-8">
+              <div class="bg-gray-900/50 p-6 rounded-lg">
+                <h4 class="font-canela text-xl font-bold mb-4 text-green-400">Strengths</h4>
+                <ul class="space-y-2 text-sm text-gray-300">
+                  <li>• <strong>Predictable &amp; Controllable:</strong> Explicit behavior programming
+                    <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-148" class="citation">[148]</a>
+                    <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-149" class="citation">[149]</a>
+                  </li>
+                  <li>• <strong>Simple Implementation:</strong> Straightforward for well-defined behaviors
+                    <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-57" class="citation">[57]</a>
+                  </li>
+                  <li>• <strong>Computationally Efficient:</strong> Less resource-intensive than SLM inference
+                    <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-150" class="citation">[150]</a>
+                  </li>
+                  <li>• <strong>Transparent Debugging:</strong> Clear conditional logic
+                    <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-57" class="citation">[57]</a>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="bg-gray-900/50 p-6 rounded-lg">
+                <h4 class="font-canela text-xl font-bold mb-4 text-red-400">Limitations</h4>
+                <ul class="space-y-2 text-sm text-gray-300">
+                  <li>• <strong>Inflexible:</strong> Limited to explicitly programmed behaviors
+                    <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-150" class="citation">[150]</a>
+                  </li>
+                  <li>• <strong>Poor Emotional Depth:</strong> Fails to capture complex human-like emotions
+                    <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-148" class="citation">[148]</a>
+                  </li>
+                  <li>• <strong>Repetitive Behavior:</strong> Predictable patterns reduce surprise
+                    <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-59" class="citation">[59]</a>
+                  </li>
+                  <li>• <strong>Combinatorial Explosion:</strong> Unwieldy for sophisticated AI
+                    <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-148" class="citation">[148]</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="comparison-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Feature</th>
+                  <th>Adaptive SLM-based Systems</th>
+                  <th>Static Rule-Based Systems (RBS)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Adaptation &amp; Learning</strong></td>
+                  <td><span class="highlight-high">High</span>: Learns from experience, adapts to novel situations <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-149" class="citation">[149]</a>
+                  </td>
+                  <td><span class="highlight-low">Low</span>: Follows predefined rules, limited adaptation <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-150" class="citation">[150]</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Emergent Behavior</strong></td>
+                  <td><span class="highlight-high">High</span>: Can generate unexpected, nuanced actions <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-150" class="citation">[150]</a>
+                  </td>
+                  <td><span class="highlight-low">Low</span>: Behavior is predictable, follows scripts <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-150" class="citation">[150]</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Emotional Depth</strong></td>
+                  <td><span class="highlight-high">High</span>: Can model complex, evolving emotional states <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-18" class="citation">[18]</a>
+                  </td>
+                  <td><span class="highlight-low">Low</span>: Typically models basic, static emotional responses <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-57" class="citation">[57]</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>NPC Unpredictability</strong></td>
+                  <td><span class="highlight-high">High</span>: Enhances tension and replayability in horror</td>
+                  <td><span class="highlight-low">Low</span>: Patterns become predictable, reducing fear</td>
+                </tr>
+                <tr>
+                  <td><strong>Implementation Complexity</strong></td>
+                  <td><span class="highlight-high">High</span>: Requires SLM integration, memory, training <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-152" class="citation">[152]</a>
+                  </td>
+                  <td><span class="highlight-medium">Low to Medium</span>: Easier to design and debug <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-57" class="citation">[57]</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Computational Cost</strong></td>
+                  <td><span class="highlight-high">Higher</span>: Requires on-device processing power <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-158" class="citation">[158]</a>
+                  </td>
+                  <td><span class="highlight-low">Lower</span>: More efficient for simple behaviors <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-150" class="citation">[150]</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Control &amp; Predictability</strong></td>
+                  <td><span class="highlight-low">Lower</span>: Harder to anticipate all behaviors, needs robust testing <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-156" class="citation">[156]</a>
+                  </td>
+                  <td><span class="highlight-high">Higher</span>: Designer has explicit control over NPC actions <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-148" class="citation">[148]</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Suitability for Horror</strong></td>
+                  <td><span class="highlight-high">High</span>: Enables truly unsettling, reactive NPCs</td>
+                  <td><span class="highlight-medium">Medium</span>: Good for scripted scares, less so for dynamic fear</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="insight-highlight mt-8">
+            <h4 class="font-canela text-2xl font-bold mb-4">Recommendation for Psychological Horror</h4>
+            <p class="text-lg">
+              For NPCs that must "adapt naturally to changing situations and act on their own emotions (e.g., betray, harass, murder, withdraw, sulk, suicide attempt)", <strong>adaptive SLMs offer a significantly more promising path</strong> despite higher complexity. The capacity for gradual emotional and behavioral shifts, driven by memory and contextual understanding, is far more aligned with the subtleties of psychological horror than static rule-based systems.
+            </p>
+          </div>
+        </section>
+
+        <!-- Implementation -->
+        <section id="implementation">
+          <h2 class="font-canela text-4xl font-bold mb-8">Implementation Considerations in Unreal Engine</h2>
+
+          <div id="performance" class="mb-12">
+            <h3 class="font-canela text-3xl font-bold mb-6">On-Device SLM Performance and Optimization</h3>
+
+            <div class="grid lg:grid-cols-2 gap-8">
+              <div class="bg-gray-900/50 p-6 rounded-lg">
+                <h4 class="font-canela text-xl font-bold mb-4">Performance Challenges</h4>
+                <p class="text-gray-300 mb-4">
+                  Implementing an on-device SLM in Unreal Engine requires careful attention to <strong>performance and optimization</strong>. The primary challenge is ensuring SLM can run inferences quickly enough for real-time NPC decision-making without causing frame rate drops.
+                </p>
+                <ul class="space-y-2 text-sm text-gray-300">
+                  <li>• Balance model capability with hardware resources (VRAM, CPU/GPU)</li>
+                  <li>• Manage memory footprint of SLM and memory systems</li>
+                  <li>• Maintain smooth player experience through continuous profiling</li>
+                </ul>
+              </div>
+
+              <div class="bg-gray-900/50 p-6 rounded-lg">
+                <h4 class="font-canela text-xl font-bold mb-4">Optimization Techniques</h4>
+                <div class="space-y-3">
+                  <div>
+                    <strong class="text-red-400">Model Quantization:</strong>
+                    <p class="text-sm text-gray-300">Reduce precision of model weights to decrease size and inference time
+                      <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-158" class="citation">[158]</a>
+                    </p>
+                  </div>
+                  <div>
+                    <strong class="text-red-400">Pruning:</strong>
+                    <p class="text-sm text-gray-300">Remove less important connections or neurons to streamline model</p>
+                  </div>
+                  <div>
+                    <strong class="text-red-400">Knowledge Distillation:</strong>
+                    <p class="text-sm text-gray-300">Train smaller model to mimic larger, more powerful one</p>
+                  </div>
+                  <div>
+                    <strong class="text-red-400">Hardware Acceleration:</strong>
+                    <p class="text-sm text-gray-300">Utilize NVIDIA GPUs with Tensor Cores or dedicated AI hardware</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="ue-tools" class="mb-12">
+            <h3 class="font-canela text-3xl font-bold mb-6">Leveraging Unreal Engine's AI Tools and Plugins</h3>
+
+            <div class="grid lg:grid-cols-2 gap-8 mb-8">
+              <div class="bg-gray-900/50 p-6 rounded-lg">
+                <h4 class="font-canela text-xl font-bold mb-4">Core UE AI Tools</h4>
+                <div class="space-y-4">
+                  <div>
+                    <strong class="text-red-400">Behavior Trees &amp; Blackboards:</strong>
+                    <p class="text-sm text-gray-300">SLM acts as sophisticated "brain" setting high-level goals, Blackboard stores emotional state and SLM-generated goals</p>
+                  </div>
+                  <div>
+                    <strong class="text-red-400">Environment Query System (EQS):</strong>
+                    <p class="text-sm text-gray-300">Evaluate positions based on cover, line of sight, distance to player for perceptual input</p>
+                  </div>
+                  <div>
+                    <strong class="text-red-400">Gameplay Ability System (GAS):</strong>
+                    <p class="text-sm text-gray-300">Manage NPC actions, preconditions/effects, cooldowns, and resource costs</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-gray-900/50 p-6 rounded-lg">
+                <h4 class="font-canela text-xl font-bold mb-4">Planning Integration</h4>
+                <div class="space-y-4">
+                  <div>
+                    <strong class="text-red-400">GOAP Implementation:</strong>
+                    <p class="text-sm text-gray-300">Custom C++ implementation or community plugins like "Reasonable Planning AI Plugin"
+                      <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-53" class="citation">[53]</a>
+                      <a href="https://www.kimi.com/preview/198111a3-1b91-8f38-b844-6900900005df#ref-70" class="citation">[70]</a>
+                    </p>
+                  </div>
+                  <div>
+                    <strong class="text-red-400">Memory System:</strong>
+                    <p class="text-sm text-gray-300">UE data structures and serialization for STM/LTM, semantic and episodic memory components</p>
+                  </div>
+                  <div>
+                    <strong class="text-red-400">External Integration:</strong>
+                    <p class="text-sm text-gray-300">Strong C++ support for integrating external SLM libraries and custom AI modules</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="chart-container">
+              <h4 class="font-canela text-2xl font-bold mb-4">Unreal Engine Integration Architecture</h4>
+              <div class="grid md:grid-cols-5 gap-4 text-center">
+                <div class="bg-gray-800 p-4 rounded-lg">
+                  <i class="fas fa-brain text-red-500 text-2xl mb-2"></i>
+                  <div class="text-sm font-semibold">SLM Module</div>
+                  <div class="text-xs text-gray-400">C++ Integration</div>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg">
+                  <i class="fas fa-project-diagram text-red-500 text-2xl mb-2"></i>
+                  <div class="text-sm font-semibold">Behavior Tree</div>
+                  <div class="text-xs text-gray-400">High-level Control</div>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg">
+                  <i class="fas fa-database text-red-500 text-2xl mb-2"></i>
+                  <div class="text-sm font-semibold">Blackboard</div>
+                  <div class="text-xs text-gray-400">State Storage</div>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg">
+                  <i class="fas fa-cogs text-red-500 text-2xl mb-2"></i>
+                  <div class="text-sm font-semibold">GOAP/HTN</div>
+                  <div class="text-xs text-gray-400">Planning System</div>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg">
+                  <i class="fas fa-memory text-red-500 text-2xl mb-2"></i>
+                  <div class="text-sm font-semibold">Memory System</div>
+                  <div class="text-xs text-gray-400">STM/LTM Management</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- References -->
+      <section class="bg-gray-900/50 py-16">
+        <div class="container mx-auto px-8">
+          <h2 class="font-canela text-4xl font-bold mb-8">References</h2>
+          <div class="grid gap-4 text-sm">
+            <div id="ref-14" class="border-l-4 border-red-500 pl-4">
+              <strong>[14]</strong> NVIDIA. "NVIDIA ACE Autonomous AI Companions." <a href="https://www.nvidia.com/en-us/geforce/news/nvidia-ace-autonomous-ai-companions-pubg-naraka-bladepoint/" class="citation">https://www.nvidia.com/en-us/geforce/news/nvidia-ace-autonomous-ai-companions-pubg-naraka-bladepoint/</a>
+            </div>
+            <div id="ref-18" class="border-l-4 border-red-500 pl-4">
+              <strong>[18]</strong> Boyd, Reece. "Simulated Emotional AI with Memories for Games." PhD Thesis. <a href="https://www.yixuanwei.games/individual/master-thesis" class="citation">https://www.yixuanwei.games/individual/master-thesis</a>
+            </div>
+            <div id="ref-38" class="border-l-4 border-red-500 pl-4">
+              <strong>[38]</strong> CEUR Workshop Proceedings. "GOAP Implementation in Unreal Engine." <a href="https://ceur-ws.org/Vol-2719/paper7.pdf" class="citation">https://ceur-ws.org/Vol-2719/paper7.pdf</a>
+            </div>
+            <div id="ref-52" class="border-l-4 border-red-500 pl-4">
+              <strong>[52]</strong> Arnauld Alex. "Using GOAP for Advanced Gaming AI Techniques." <a href="https://arnauld-alex.com/using-goap-for-advanced-gaming-ai-techniques" class="citation">https://arnauld-alex.com/using-goap-for-advanced-gaming-ai-techniques</a>
+            </div>
+            <div id="ref-53" class="border-l-4 border-red-500 pl-4">
+              <strong>[53]</strong> Pankaj Basnal. "NPC AI with GOAP 2: Implementation of Framework." <a href="https://pankajbasnal17.medium.com/npc-ai-with-goap-2-implementation-of-framework-10c47e624964" class="citation">https://pankajbasnal17.medium.com/npc-ai-with-goap-2-implementation-of-framework-10c47e624964</a>
+            </div>
+            <div id="ref-57" class="border-l-4 border-red-500 pl-4">
+              <strong>[57]</strong> ResearchGate. "Emotional Simulation in Game AI and Its Impact on Player Experience." <a href="https://www.researchgate.net/publication/380172177_Emotional_Simulation_in_Game_AI_and_Its_Impact_on_Player_Experience" class="citation">https://www.researchgate.net/publication/380172177_Emotional_Simulation_in_Game_AI_and_Its_Impact_on_Player_Experience</a>
+            </div>
+            <div id="ref-70" class="border-l-4 border-red-500 pl-4">
+              <strong>[70]</strong> Unreal Engine Forums. "Reasonable Planning AI Plugin." <a href="https://forums.unrealengine.com/t/reasonable-planning-ai-plugin/748646" class="citation">https://forums.unrealengine.com/t/reasonable-planning-ai-plugin/748646</a>
+            </div>
+            <div id="ref-109" class="border-l-4 border-red-500 pl-4">
+              <strong>[109]</strong> NVIDIA China. "NVIDIA ACE Autonomous AI Companions." <a href="https://www.nvidia.cn/geforce/news/nvidia-ace-autonomous-ai-companions-pubg-naraka-bladepoint/" class="citation">https://www.nvidia.cn/geforce/news/nvidia-ace-autonomous-ai-companions-pubg-naraka-bladepoint/</a>
+            </div>
+            <div id="ref-134" class="border-l-4 border-red-500 pl-4">
+              <strong>[134]</strong> NVIDIA. "NVIDIA ACE Autonomous AI Companions Technical Details." <a href="https://www.nvidia.com/en-us/geforce/news/nvidia-ace-autonomous-ai-companions-pubg-naraka-bladepoint/" class="citation">https://www.nvidia.com/en-us/geforce/news/nvidia-ace-autonomous-ai-companions-pubg-naraka-bladepoint/</a>
+            </div>
+            <div id="ref-139" class="border-l-4 border-red-500 pl-4">
+              <strong>[139]</strong> arXiv. "LLM Reasoner and Automated Planner." <a href="https://arxiv.org/html/2501.10106v1" class="citation">https://arxiv.org/html/2501.10106v1</a>
+            </div>
+            <div id="ref-142" class="border-l-4 border-red-500 pl-4">
+              <strong>[142]</strong> White Rose eTheses. "Dynamic NPC AI Research." <a href="https://etheses.whiterose.ac.uk/id/eprint/36404/1/Thesis_FormattedDate.pdf" class="citation">https://etheses.whiterose.ac.uk/id/eprint/36404/1/Thesis_FormattedDate.pdf</a>
+            </div>
+            <div id="ref-148" class="border-l-4 border-red-500 pl-4">
+              <strong>[148]</strong> Smythos. "AI Agents in Gaming." <a href="https://smythos.com/managers/gaming/ai-agents-in-gaming/" class="citation">https://smythos.com/managers/gaming/ai-agents-in-gaming/</a>
+            </div>
+            <div id="ref-149" class="border-l-4 border-red-500 pl-4">
+              <strong>[149]</strong> Apptunix. "AI in Gaming." <a href="https://www.apptunix.com/blog/ai-in-gaming/" class="citation">https://www.apptunix.com/blog/ai-in-gaming/</a>
+            </div>
+            <div id="ref-150" class="border-l-4 border-red-500 pl-4">
+              <strong>[150]</strong> ResearchGate. "Dynamic NPC AI Using Reinforcement Learning for an Enhanced Gaming Experience." <a href="https://www.researchgate.net/publication/389846089_DYNAMIC_NPC_AI_USING_REINFORCEMENT_LEARNING_FOR_AN_ENHANCED_GAMING_EXPERIENCE" class="citation">https://www.researchgate.net/publication/389846089_DYNAMIC_NPC_AI_USING_REINFORCEMENT_LEARNING_FOR_AN_ENHANCED_GAMING_EXPERIENCE</a>
+            </div>
+            <div id="ref-152" class="border-l-4 border-red-500 pl-4">
+              <strong>[152]</strong> arXiv. "Computational Challenges in Game AI." <a href="http://arxiv.org/pdf/2303.18223" class="citation">http://arxiv.org/pdf/2303.18223</a>
+            </div>
+            <div id="ref-156" class="border-l-4 border-red-500 pl-4">
+              <strong>[156]</strong> Acer Blog. "Dynamic Difficulty: Exploring Adaptive AI in Video Games." <a href="https://blog.acer.com/en/discussion/1594/dynamic-difficulty-exploring-adaptive-ai-in-video-games" class="citation">https://blog.acer.com/en/discussion/1594/dynamic-difficulty-exploring-adaptive-ai-in-video-games</a>
+            </div>
+            <div id="ref-158" class="border-l-4 border-red-500 pl-4">
+              <strong>[158]</strong> Medium. "Advanced AI Programming for Adaptive NPC Behavior." <a href="https://medium.com/@argentics/advanced-ai-programming-for-adaptive-npc-behavior-91bad6236f95" class="citation">https://medium.com/@argentics/advanced-ai-programming-for-adaptive-npc-behavior-91bad6236f95</a>
+            </div>
+            <div id="ref-200" class="border-l-4 border-red-500 pl-4">
+              <strong>[200]</strong> ar5iv. "LLM Reasoner and Automated Planner Paper." <a href="https://ar5iv.labs.arxiv.org/html/2501.10106" class="citation">https://ar5iv.labs.arxiv.org/html/2501.10106</a>
+            </div>
+            <div id="ref-203" class="border-l-4 border-red-500 pl-4">
+              <strong>[203]</strong> arXiv. "LLM Reasoner and Automated Planner - Version 1." <a href="https://arxiv.org/html/2501.10106v1" class="citation">https://arxiv.org/html/2501.10106v1</a>
+            </div>
+            <div id="ref-229" class="border-l-4 border-red-500 pl-4">
+              <strong>[229]</strong> NVIDIA. "NVIDIA ACE Implementation in Dead Meat." <a href="https://www.nvidia.com/en-us/geforce/news/nvidia-ace-autonomous-ai-companions-pubg-naraka-bladepoint/" class="citation">https://www.nvidia.com/en-us/geforce/news/nvidia-ace-autonomous-ai-companions-pubg-naraka-bladepoint/</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+        // Table of Contents functionality
+        function updateActiveLink() {
+            const sections = document.querySelectorAll('section[id], div[id]');
+            const tocLinks = document.querySelectorAll('.toc-link');
+            
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (window.scrollY >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            tocLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        }
+        
+        window.addEventListener('scroll', updateActiveLink);
+        window.addEventListener('load', updateActiveLink);
+        
+        // Mobile TOC toggle
+        function toggleTOC() {
+            const toc = document.getElementById('toc');
+            const overlay = document.getElementById('toc-overlay');
+            toc.classList.toggle('open');
+            overlay.classList.toggle('hidden');
+        }
+        
+        function closeTOC() {
+            const toc = document.getElementById('toc');
+            const overlay = document.getElementById('toc-overlay');
+            toc.classList.remove('open');
+            overlay.classList.add('hidden');
+        }
+        
+        // Close TOC when window is resized to desktop
+        window.addEventListener('resize', function() {
+            if (window.innerWidth >= 1024) {
+                closeTOC();
+            }
+        });
+        
+        // Smooth scrolling for TOC links
+        document.querySelectorAll('.toc-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+                // Close mobile TOC
+                if (window.innerWidth < 1024) {
+                    closeTOC();
+                }
+            });
+        });
+        
+        // Citation hover effects
+        document.querySelectorAll('.citation').forEach(citation => {
+            citation.addEventListener('click', function(e) {
+                e.preventDefault();
+                const refId = this.getAttribute('href').substring(1);
+                const refElement = document.getElementById(refId);
+                if (refElement) {
+                    refElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+                    refElement.classList.add('bg-red-900/30');
+                    setTimeout(() => {
+                        refElement.classList.remove('bg-red-900/30');
+                    }, 2000);
+                }
+            });
+        });
+    </script>
+  
+
+<span style="border-radius:10px !important;text-indent:12px !important;width:auto !important;height:20px !important;padding:0px 8px !important;text-align:center !important;vertical-align:middle !important;font:bold 11px / 20px &quot;Helvetica Neue&quot;, Helvetica, sans-serif !important;color:rgb(255, 255, 255) !important;background:url(&quot;data:image/svg+xml;base64,PHN2ZyBpZD0ic291cmNlIiB3aWR0aD0iMTIiIGhlaWdodD0iMTIiIHZpZXdCb3g9IjAgMCAxMiAxMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iNiIgY3k9IjYiIHI9IjYiIGZpbGw9IiNFNjAwMjMiPjwvY2lyY2xlPgo8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTAgNkMwIDguNTYxNSAxLjYwNTUgMTAuNzQ4NSAzLjg2NSAxMS42MDlDMy44MSAxMS4xNDA1IDMuNzUxNSAxMC4zNjggMy44Nzc1IDkuODI2QzMuOTg2IDkuMzYgNC41NzggNi44NTcgNC41NzggNi44NTdDNC41NzggNi44NTcgNC4zOTk1IDYuNDk5NSA0LjM5OTUgNS45N0M0LjM5OTUgNS4xNCA0Ljg4MDUgNC41MiA1LjQ4IDQuNTJDNS45OSA0LjUyIDYuMjM2IDQuOTAyNSA2LjIzNiA1LjM2MUM2LjIzNiA1Ljg3MzUgNS45MDk1IDYuNjM5NSA1Ljc0MSA3LjM1QzUuNjAwNSA3Ljk0NDUgNi4wMzk1IDguNDI5NSA2LjYyNTUgOC40Mjk1QzcuNjg3IDguNDI5NSA4LjUwMzUgNy4zMSA4LjUwMzUgNS42OTRDOC41MDM1IDQuMjYzNSA3LjQ3NTUgMy4yNjQgNi4wMDggMy4yNjRDNC4zMDkgMy4yNjQgMy4zMTE1IDQuNTM4NSAzLjMxMTUgNS44NTZDMy4zMTE1IDYuMzY5NSAzLjUwOSA2LjkxOTUgMy43NTYgNy4yMTlDMy44MDQ1IDcuMjc4NSAzLjgxMiA3LjMzIDMuNzk3NSA3LjM5MDVDMy43NTIgNy41Nzk1IDMuNjUxIDcuOTg1IDMuNjMxNSA4LjA2OEMzLjYwNSA4LjE3NyAzLjU0NSA4LjIwMDUgMy40MzE1IDguMTQ3NUMyLjY4NTUgNy44MDA1IDIuMjE5NSA2LjcxIDIuMjE5NSA1LjgzNEMyLjIxOTUgMy45NDk1IDMuNTg4IDIuMjE5NSA2LjE2NTUgMi4yMTk1QzguMjM3NSAyLjIxOTUgOS44NDggMy42OTYgOS44NDggNS42NjlDOS44NDggNy43Mjc1IDguNTUwNSA5LjM4NDUgNi43NDg1IDkuMzg0NUM2LjE0MyA5LjM4NDUgNS41NzQ1IDkuMDY5NSA1LjM3OTUgOC42OThDNS4zNzk1IDguNjk4IDUuMDggOS44MzkgNS4wMDc1IDEwLjExOEM0Ljg2NjUgMTAuNjYgNC40NzU1IDExLjM0NiA0LjIzMyAxMS43MzU1QzQuNzkyIDExLjkwNzUgNS4zODUgMTIgNiAxMkM5LjMxMzUgMTIgMTIgOS4zMTM1IDEyIDZDMTIgMi42ODY1IDkuMzEzNSAwIDYgMEMyLjY4NjUgMCAwIDIuNjg2NSAwIDZaIiBmaWxsPSJ3aGl0ZSI+PC9wYXRoPgo8L3N2Zz4=&quot;) 4px 50% / 12px 12px no-repeat rgb(230, 0, 35) !important;position:absolute !important;opacity:1 !important;z-index:9007199254740990 !important;display:none !important;cursor:pointer !important;border:none !important;-webkit-font-smoothing:antialiased !important;top:0 !important;left:0 !important;display:none !important;top:10px !important;left:290px !important">Save</span></body></html>

@@ -1,0 +1,1789 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)https://www.kimi.com/preview/198109e7-ffb1-80b9-a084-bd13740005df -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Branching Narratives in Video Games: Tools, Techniques, and LLM Integration</title>
+    <script src="./Branching Narratives in Video Games_ Tools, Techniques, and LLM Integration_files/saved_resource"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'sage': '#87a96b',
+                        'forest': '#2d5016',
+                        'earth': '#8b7355',
+                        'stone': '#a8a29e',
+                        'cream': '#faf7f2',
+                        'charcoal': '#374151'
+                    },
+                    fontFamily: {
+                        'canela': ['Canela', 'Georgia', 'serif'],
+                        'neue': ['Neue Haas Grotesk', 'Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+    <link href="./Branching Narratives in Video Games_ Tools, Techniques, and LLM Integration_files/css2" rel="stylesheet">
+    <link rel="stylesheet" href="./Branching Narratives in Video Games_ Tools, Techniques, and LLM Integration_files/all.min.css">
+
+    <style>
+        .font-canela { font-family: 'Playfair Display', Georgia, serif; }
+        .font-neue { font-family: 'Inter', system-ui, sans-serif; }
+        
+        /* TOC Styles */
+        .toc-fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 280px;
+            height: 100vh;
+            background: linear-gradient(135deg, #faf7f2 0%, #f3f4f6 100%);
+            border-right: 1px solid #e5e7eb;
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 2rem 1.5rem;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.05);
+        }
+        
+        .content-wrapper {
+            margin-left: 280px;
+            min-height: 100vh;
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Hero overlay */
+        .hero-overlay {
+            background: linear-gradient(135deg, rgba(45, 80, 22, 0.8) 0%, rgba(135, 169, 107, 0.6) 100%);
+        }
+        
+        /* Custom scrollbar */
+        .toc-fixed::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        .toc-fixed::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        .toc-fixed::-webkit-scrollbar-thumb {
+            background: #87a96b;
+            border-radius: 2px;
+        }
+        
+        /* Citation styles */
+        .citation {
+            color: #87a96b;
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px dotted #87a96b;
+            transition: all 0.2s ease;
+        }
+        
+        .citation:hover {
+            color: #2d5016;
+            border-bottom-color: #2d5016;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 1024px) {
+            .toc-fixed {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            
+            .toc-fixed.open {
+                transform: translateX(0);
+            }
+            
+            .content-wrapper {
+                margin-left: 0;
+            }
+        }
+        
+        /* Pull quote styles */
+        .pull-quote {
+            font-size: 1.25rem;
+            line-height: 1.6;
+            font-style: italic;
+            color: #2d5016;
+            border-left: 4px solid #87a96b;
+            padding-left: 2rem;
+            margin: 2rem 0;
+            background: linear-gradient(90deg, rgba(135, 169, 107, 0.1) 0%, transparent 100%);
+            padding: 1.5rem 2rem;
+        }
+        
+        /* Table styles */
+        .comparison-table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 2rem 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        
+        .comparison-table th {
+            background: linear-gradient(135deg, #2d5016 0%, #87a96b 100%);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .comparison-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #f3f4f6;
+            vertical-align: top;
+        }
+        
+        .comparison-table tr:hover {
+            background: rgba(135, 169, 107, 0.05);
+        }
+    </style>
+  <style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.inset-0{inset:0px}.left-4{left:1rem}.top-4{top:1rem}.z-0{z-index:0}.z-10{z-index:10}.z-50{z-index:50}.mx-auto{margin-left:auto;margin-right:auto}.mb-4{margin-bottom:1rem}.mb-8{margin-bottom:2rem}.ml-4{margin-left:1rem}.mb-6{margin-bottom:1.5rem}.mt-8{margin-top:2rem}.mb-12{margin-bottom:3rem}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mr-2{margin-right:0.5rem}.mr-3{margin-right:0.75rem}.mt-1{margin-top:0.25rem}.mt-1\.5{margin-top:0.375rem}.mr-4{margin-right:1rem}.mb-1{margin-bottom:0.25rem}.flex{display:flex}.grid{display:grid}.h-full{height:100%}.h-3{height:0.75rem}.h-16{height:4rem}.h-12{height:3rem}.h-8{height:2rem}.min-h-screen{min-height:100vh}.w-full{width:100%}.w-3{width:0.75rem}.w-16{width:4rem}.w-12{width:3rem}.w-8{width:2rem}.max-w-7xl{max-width:80rem}.max-w-4xl{max-width:56rem}.max-w-none{max-width:none}.flex-shrink-0{flex-shrink:0}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-center{justify-content:center}.gap-8{gap:2rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-20 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(5rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-1 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.25rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.overflow-x-auto{overflow-x:auto}.rounded-full{border-radius:9999px}.rounded-xl{border-radius:0.75rem}.rounded-lg{border-radius:0.5rem}.rounded{border-radius:0.25rem}.border{border-width:1px}.border-t{border-top-width:1px}.border-l-4{border-left-width:4px}.border-stone\/30{border-color:rgb(168 162 158 / 0.3)}.border-sage{--tw-border-opacity:1;border-color:rgb(135 169 107 / var(--tw-border-opacity, 1))}.border-white\/20{border-color:rgb(255 255 255 / 0.2)}.border-forest{--tw-border-opacity:1;border-color:rgb(45 80 22 / var(--tw-border-opacity, 1))}.border-stone{--tw-border-opacity:1;border-color:rgb(168 162 158 / var(--tw-border-opacity, 1))}.bg-cream{--tw-bg-opacity:1;background-color:rgb(250 247 242 / var(--tw-bg-opacity, 1))}.bg-forest{--tw-bg-opacity:1;background-color:rgb(45 80 22 / var(--tw-bg-opacity, 1))}.bg-sage\/20{background-color:rgb(135 169 107 / 0.2)}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-white\/10{background-color:rgb(255 255 255 / 0.1)}.bg-sage{--tw-bg-opacity:1;background-color:rgb(135 169 107 / var(--tw-bg-opacity, 1))}.bg-forest\/10{background-color:rgb(45 80 22 / 0.1)}.bg-sage\/10{background-color:rgb(135 169 107 / 0.1)}.bg-stone\/10{background-color:rgb(168 162 158 / 0.1)}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.from-forest\/5{--tw-gradient-from:rgb(45 80 22 / 0.05) var(--tw-gradient-from-position);--tw-gradient-to:rgb(45 80 22 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-sage\/10{--tw-gradient-from:rgb(135 169 107 / 0.1) var(--tw-gradient-from-position);--tw-gradient-to:rgb(135 169 107 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.to-forest\/10{--tw-gradient-to:rgb(45 80 22 / 0.1) var(--tw-gradient-to-position)}.to-sage\/5{--tw-gradient-to:rgb(135 169 107 / 0.05) var(--tw-gradient-to-position)}.object-cover{object-fit:cover}.p-3{padding:0.75rem}.p-6{padding:1.5rem}.p-8{padding:2rem}.px-4{padding-left:1rem;padding-right:1rem}.py-16{padding-top:4rem;padding-bottom:4rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.pt-6{padding-top:1.5rem}.pl-4{padding-left:1rem}.pl-6{padding-left:1.5rem}.pt-12{padding-top:3rem}.text-center{text-align:center}.font-canela{font-family:Canela, Georgia, serif}.font-neue{font-family:Neue Haas Grotesk, Inter, system-ui, sans-serif}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-xs{font-size:0.75rem;line-height:1rem}.text-2xl{font-size:1.5rem;line-height:2rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.font-semibold{font-weight:600}.font-bold{font-weight:700}.font-light{font-weight:300}.font-medium{font-weight:500}.italic{font-style:italic}.leading-relaxed{line-height:1.625}.leading-tight{line-height:1.25}.text-charcoal{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}.text-forest{--tw-text-opacity:1;color:rgb(45 80 22 / var(--tw-text-opacity, 1))}.text-stone{--tw-text-opacity:1;color:rgb(168 162 158 / var(--tw-text-opacity, 1))}.text-stone\/70{color:rgb(168 162 158 / 0.7)}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-white\/90{color:rgb(255 255 255 / 0.9)}.text-charcoal\/80{color:rgb(55 65 81 / 0.8)}.text-sage{--tw-text-opacity:1;color:rgb(135 169 107 / var(--tw-text-opacity, 1))}.text-white\/80{color:rgb(255 255 255 / 0.8)}.text-charcoal\/70{color:rgb(55 65 81 / 0.7)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.backdrop-blur-sm{--tw-backdrop-blur:blur(4px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:text-forest:hover{--tw-text-opacity:1;color:rgb(45 80 22 / var(--tw-text-opacity, 1))}@media (min-width: 640px){.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}.sm\:text-5xl{font-size:3rem;line-height:1}.sm\:text-xl{font-size:1.25rem;line-height:1.75rem}}@media (min-width: 768px){.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.md\:px-8{padding-left:2rem;padding-right:2rem}}@media (min-width: 1024px){.lg\:col-span-7{grid-column:span 7 / span 7}.lg\:col-span-5{grid-column:span 5 / span 5}.lg\:hidden{display:none}.lg\:grid-cols-12{grid-template-columns:repeat(12, minmax(0, 1fr))}.lg\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.lg\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.lg\:text-2xl{font-size:1.5rem;line-height:2rem}.lg\:text-7xl{font-size:4.5rem;line-height:1}}</style></head>
+
+  <body class="bg-cream font-neue text-charcoal leading-relaxed">
+
+    <!-- Back to Home Button -->
+    <a href="../index.html" class="fixed top-4 right-4 z-50 bg-forest hover:bg-sage text-white px-4 py-2 rounded-lg font-semibold transition-all transform hover:scale-105 shadow-lg">
+        <i class="fas fa-home mr-2"></i>
+        Back to Home
+    </a>
+
+    <!-- Fixed Table of Contents -->
+    <nav class="toc-fixed">
+      <div class="mb-8">
+        <h3 class="font-canela text-lg font-semibold text-forest mb-4">Contents</h3>
+        <ul class="space-y-2 text-sm">
+          <li>
+            <a href="https://www.kimi.com/preview/198109e7-ffb1-80b9-a084-bd13740005df#hero" class="hover:text-forest transition-colors text-stone">Introduction</a>
+          </li>
+          <li>
+            <a href="https://www.kimi.com/preview/198109e7-ffb1-80b9-a084-bd13740005df#understanding" class="hover:text-forest transition-colors text-stone">1. Understanding Structures</a>
+          </li>
+          <li class="ml-4">
+            <a href="https://www.kimi.com/preview/198109e7-ffb1-80b9-a084-bd13740005df#structural-models" class="hover:text-forest transition-colors text-stone">1.1 Structural Models</a>
+          </li>
+          <li class="ml-4">
+            <a href="https://www.kimi.com/preview/198109e7-ffb1-80b9-a084-bd13740005df#sculptural-hypertext" class="hover:text-forest transition-colors text-stone">1.2 Sculptural Hypertext</a>
+          </li>
+          <li class="ml-4">
+            <a href="https://www.kimi.com/preview/198109e7-ffb1-80b9-a084-bd13740005df#narrative-patterns" class="hover:text-forest transition-colors text-stone">1.3 Narrative Patterns</a>
+          </li>
+          <li>
+            <a href="https://www.kimi.com/preview/198109e7-ffb1-80b9-a084-bd13740005df#techniques" class="hover:text-forest transition-colors text-stone">2. Design Techniques</a>
+          </li>
+          <li class="ml-4">
+            <a href="https://www.kimi.com/preview/198109e7-ffb1-80b9-a084-bd13740005df#flowcharting" class="hover:text-forest transition-colors text-stone">2.1 Flowcharting</a>
+          </li>
+          <li class="ml-4">
+            <a href="https://www.kimi.com/preview/198109e7-ffb1-80b9-a084-bd13740005df#mapping-beats" class="hover:text-forest transition-colors text-stone">2.2 Mapping Beats</a>
+          </li>
+          <li class="ml-4">
+            <a href="https://www.kimi.com/preview/198109e7-ffb1-80b9-a084-bd13740005df#meaningful-choices" class="hover:text-forest transition-colors text-forest font-semibold">2.3 Meaningful Choices</a>
+          </li>
+          <li class="ml-4">
+            <a href="https://www.kimi.com/preview/198109e7-ffb1-80b9-a084-bd13740005df#managing-complexity" class="text-stone hover:text-forest transition-colors">2.4 Managing Complexity</a>
+          </li>
+          <li>
+            <a href="https://www.kimi.com/preview/198109e7-ffb1-80b9-a084-bd13740005df#tools" class="text-stone hover:text-forest transition-colors">3. Creation Tools</a>
+          </li>
+          <li class="ml-4">
+            <a href="https://www.kimi.com/preview/198109e7-ffb1-80b9-a084-bd13740005df#specialized-software" class="text-stone hover:text-forest transition-colors">3.1 Specialized Software</a>
+          </li>
+          <li class="ml-4">
+            <a href="https://www.kimi.com/preview/198109e7-ffb1-80b9-a084-bd13740005df#game-engines" class="text-stone hover:text-forest transition-colors">3.2 Game Engine Integration</a>
+          </li>
+          <li class="ml-4">
+            <a href="https://www.kimi.com/preview/198109e7-ffb1-80b9-a084-bd13740005df#ai-tools" class="text-stone hover:text-forest transition-colors">3.3 AI-Powered Tools</a>
+          </li>
+          <li>
+            <a href="https://www.kimi.com/preview/198109e7-ffb1-80b9-a084-bd13740005df#writing" class="text-stone hover:text-forest transition-colors">4. Writing Strategies</a>
+          </li>
+          <li class="ml-4">
+            <a href="https://www.kimi.com/preview/198109e7-ffb1-80b9-a084-bd13740005df#core-narrative" class="text-stone hover:text-forest transition-colors">4.1 Core Narrative</a>
+          </li>
+          <li class="ml-4">
+            <a href="https://www.kimi.com/preview/198109e7-ffb1-80b9-a084-bd13740005df#character-development" class="text-stone hover:text-forest transition-colors">4.2 Character Development</a>
+          </li>
+          <li class="ml-4">
+            <a href="https://www.kimi.com/preview/198109e7-ffb1-80b9-a084-bd13740005df#narrative-cohesion" class="text-stone hover:text-forest transition-colors">4.3 Narrative Cohesion</a>
+          </li>
+          <li class="ml-4">
+            <a href="https://www.kimi.com/preview/198109e7-ffb1-80b9-a084-bd13740005df#iterative-design" class="text-stone hover:text-forest transition-colors">4.4 Iterative Design</a>
+          </li>
+          <li>
+            <a href="https://www.kimi.com/preview/198109e7-ffb1-80b9-a084-bd13740005df#llms" class="text-stone hover:text-forest transition-colors">5. LLM Integration</a>
+          </li>
+          <li class="ml-4">
+            <a href="https://www.kimi.com/preview/198109e7-ffb1-80b9-a084-bd13740005df#llm-structures" class="text-stone hover:text-forest transition-colors">5.1 LLM-Generated Structures</a>
+          </li>
+          <li class="ml-4">
+            <a href="https://www.kimi.com/preview/198109e7-ffb1-80b9-a084-bd13740005df#dynamic-dialogue" class="text-stone hover:text-forest transition-colors">5.2 Dynamic Dialogue</a>
+          </li>
+          <li class="ml-4">
+            <a href="https://www.kimi.com/preview/198109e7-ffb1-80b9-a084-bd13740005df#advanced-llm" class="text-stone hover:text-forest transition-colors">5.3 Advanced Applications</a>
+          </li>
+          <li class="ml-4">
+            <a href="https://www.kimi.com/preview/198109e7-ffb1-80b9-a084-bd13740005df#balancing-intent" class="text-stone hover:text-forest transition-colors">5.4 Balancing Authorial Intent</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="mt-8 pt-6 border-t border-stone/30">
+        <p class="text-xs text-stone/70">Navigate through sections using the links above</p>
+      </div>
+    </nav>
+
+    <!-- Mobile TOC Toggle -->
+    <button id="toc-toggle" class="lg:hidden fixed top-4 left-4 z-50 bg-forest text-white p-3 rounded-full shadow-lg">
+      <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Main Content -->
+    <div class="content-wrapper">
+
+      <!-- Hero Section -->
+      <section id="hero" class="relative min-h-screen flex items-center">
+        <!-- Background Image -->
+        <div class="absolute inset-0 z-0">
+          <img src="./Branching Narratives in Video Games_ Tools, Techniques, and LLM Integration_files/8730a757be01d634a5343e4dd3b0146297fc4290.jpg" alt="Abstract branching paths in a forest" class="w-full h-full object-cover" size="wallpaper" aspect="wide" color="green" style="photo" query="abstract forest path branching" referrerpolicy="no-referrer" data-modified="1" data-score="11592.00">
+          <div class="hero-overlay absolute inset-0"></div>
+        </div>
+
+        <!-- Hero Content Grid -->
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-16">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center min-h-screen">
+
+            <!-- Main Title Section -->
+            <div class="lg:col-span-7 text-white">
+              <h1 class="font-canela text-4xl sm:text-5xl lg:text-7xl font-bold leading-tight mb-6">
+                <span class="italic">Branching Narratives</span>
+                <br>
+                in Video Games
+              </h1>
+              <p class="text-lg sm:text-xl lg:text-2xl font-light mb-8 text-white/90">
+                Tools, Techniques, and LLM Integration
+              </p>
+              <div class="flex flex-wrap gap-4 text-sm font-medium">
+                <span class="bg-sage/20 px-3 py-1.5 rounded-full backdrop-blur-sm">Interactive Design</span>
+                <span class="bg-sage/20 px-3 py-1.5 rounded-full backdrop-blur-sm">Narrative Systems</span>
+                <span class="bg-sage/20 px-3 py-1.5 rounded-full backdrop-blur-sm">AI Integration</span>
+              </div>
+            </div>
+
+            <!-- Key Highlights Bento Grid -->
+            <div class="lg:col-span-5 grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20">
+                <div class="text-sage mb-2">
+                  <i class="fas fa-sitemap text-2xl"></i>
+                </div>
+                <h3 class="font-canela text-lg font-semibold text-white mb-2">Structural Models</h3>
+                <p class="text-sm text-white/80">Linear, Branching, Sculptural Hypertext, and emergent narrative frameworks</p>
+              </div>
+
+              <div class="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20">
+                <div class="text-sage mb-2">
+                  <i class="fas fa-tools text-2xl"></i>
+                </div>
+                <h3 class="font-canela text-lg font-semibold text-white mb-2">Design Tools</h3>
+                <p class="text-sm text-white/80">Articy:Draft, Twine, Inklewriter, and AI-powered narrative systems</p>
+              </div>
+
+              <div class="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20">
+                <div class="text-sage mb-2">
+                  <i class="fas fa-pen-fancy text-2xl"></i>
+                </div>
+                <h3 class="font-canela text-lg font-semibold text-white mb-2">Writing Techniques</h3>
+                <p class="text-sm text-white/80">Meaningful choices, character development, and maintaining narrative cohesion</p>
+              </div>
+
+              <div class="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20">
+                <div class="text-sage mb-2">
+                  <i class="fas fa-robot text-2xl"></i>
+                </div>
+                <h3 class="font-canela text-lg font-semibold text-white mb-2">LLM Integration</h3>
+                <p class="text-sm text-white/80">GENEVA, GamePlot, AgentVerse, and dynamic dialogue generation</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Main Article Content -->
+      <article class="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-16 space-y-20">
+
+        <!-- Introduction -->
+        <section class="prose prose-lg max-w-none">
+          <p class="text-xl leading-relaxed text-charcoal/80 mb-8">
+            Branching narratives in video games represent one of the most complex and rewarding challenges in interactive storytelling. These narrative structures employ tools like <a href="https://www.articy.com/" class="citation" target="_blank">Articy:Draft</a>, <a href="https://twinery.org/" class="citation" target="_blank">Twine</a>, and <a href="https://www.inklestudios.com/inklewriter/" class="citation" target="_blank">Inklewriter</a> for design, alongside sophisticated techniques such as flowcharting, mapping narrative beats, and designing meaningful choices. The landscape encompasses various structural models including linear, branching, and sculptural hypertext approaches, each offering unique opportunities for player engagement and narrative complexity.
+          </p>
+
+          <div class="pull-quote">
+            "The advent of Large Language Models (LLMs) has opened new frontiers in narrative design, enabling dynamic dialogue generation, emergent narratives, and sophisticated systems like GENEVA, GamePlot, AgentVerse, and StoryVerse that balance authorial intent with AI-driven complexity."
+          </div>
+        </section>
+
+        <!-- Section 1: Understanding Branching Narrative Structures -->
+        <section id="understanding">
+          <h2 class="font-canela text-4xl font-bold text-forest mb-8">Understanding Branching Narrative Structures</h2>
+
+          <div id="structural-models" class="mb-12">
+            <h3 class="font-canela text-2xl font-semibold text-forest mb-6">1.1 Common Structural Models</h3>
+
+            <p class="mb-6">
+              The landscape of video game narrative structures encompasses diverse models that shape player experience, from simple predetermined paths to complex player-driven webs of possibility. <a href="https://invogames.com/blog/game-narrative-design/" class="citation" target="_blank">These models significantly impact player agency, replayability, and development scope</a>, ranging from linear narratives to complex modulated structures and sandbox narratives.
+            </p>
+
+            <div class="bg-white rounded-xl p-8 shadow-lg mb-8">
+              <h4 class="font-canela text-xl font-semibold text-forest mb-4">Key Structural Models</h4>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="border-l-4 border-sage pl-4">
+                  <h5 class="font-semibold text-forest mb-2">Linear Narratives</h5>
+                  <p class="text-sm text-charcoal/80 mb-2">Fixed sequence of events, minimal player alteration</p>
+                  <p class="text-xs text-stone"><strong>Examples:</strong>
+                    <a href="https://invogames.com/blog/game-narrative-design/" class="citation" target="_blank">Prince of Persia, Super Mario Bros.</a>
+                  </p>
+                </div>
+
+                <div class="border-l-4 border-sage pl-4">
+                  <h5 class="font-semibold text-forest mb-2">Branching Narratives</h5>
+                  <p class="text-sm text-charcoal/80 mb-2">Player choices create multiple narrative paths and outcomes</p>
+                  <p class="text-xs text-stone"><strong>Examples:</strong>
+                    <a href="https://aestranger.com/structures-choice-narratives-gamification-games/" class="citation" target="_blank">Until Dawn, The Stanley Parable</a>
+                  </p>
+                </div>
+
+                <div class="border-l-4 border-sage pl-4">
+                  <h5 class="font-semibold text-forest mb-2">String of Pearls</h5>
+                  <p class="text-sm text-charcoal/80 mb-2">Main linear story with optional side content/quests</p>
+                  <p class="text-xs text-stone"><strong>Examples:</strong>
+                    <a href="https://invogames.com/blog/game-narrative-design/" class="citation" target="_blank">Final Fantasy, Uncharted</a>
+                  </p>
+                </div>
+
+                <div class="border-l-4 border-sage pl-4">
+                  <h5 class="font-semibold text-forest mb-2">Sandbox Narratives</h5>
+                  <p class="text-sm text-charcoal/80 mb-2">Highly freeform, player-defined goals and experiences</p>
+                  <p class="text-xs text-stone"><strong>Examples:</strong>
+                    <a href="https://aestranger.com/structures-choice-narratives-gamification-games/" class="citation" target="_blank">Minecraft, The Sims</a>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Structural Models Comparison Table -->
+            <div class="overflow-x-auto">
+              <table class="comparison-table">
+                <thead>
+                  <tr>
+                    <th>Structure Type</th>
+                    <th>Description</th>
+                    <th>Player Agency</th>
+                    <th>Example Games</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="font-semibold">Linear</td>
+                    <td>Fixed sequence of events, no player alteration of plot</td>
+                    <td>Low</td>
+                    <td>
+                      <a href="https://invogames.com/blog/game-narrative-design/" class="citation" target="_blank">Prince of Persia, Super Mario Bros.</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="font-semibold">Branching (Tree)</td>
+                    <td>Player choices create multiple narrative paths and outcomes</td>
+                    <td>High</td>
+                    <td>
+                      <a href="https://aestranger.com/structures-choice-narratives-gamification-games/" class="citation" target="_blank">Until Dawn, The Stanley Parable</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="font-semibold">Interconnected</td>
+                    <td>Main linear story with optional side content/quests</td>
+                    <td>Medium</td>
+                    <td>
+                      <a href="https://invogames.com/blog/game-narrative-design/" class="citation" target="_blank">Final Fantasy, Uncharted</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="font-semibold">Sandbox</td>
+                    <td>Highly freeform, player-defined goals, no clear resolution</td>
+                    <td>Very High</td>
+                    <td>
+                      <a href="https://aestranger.com/structures-choice-narratives-gamification-games/" class="citation" target="_blank">Minecraft, The Sims</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="font-semibold">Emergent</td>
+                    <td>Stories emerge spontaneously from player actions and unpredictable AI</td>
+                    <td>Very High</td>
+                    <td>
+                      <a href="https://issuu.com/polisuniversity/docs/ikonomi_thesis_final_19_june_2022_pdf_a/s/17158997" class="citation" target="_blank">Research focus</a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div id="sculptural-hypertext" class="mb-12">
+            <h3 class="font-canela text-2xl font-semibold text-forest mb-6">1.2 The "Sculptural Hypertext" Model</h3>
+
+            <p class="mb-6">
+              The <strong>Sculptural Hypertext model</strong> offers a sophisticated framework for complex open-world narratives, exemplified by <a href="https://davidmillard.org/2016/12/03/the-narrative-structure-of-the-witcher-3/" class="citation" target="_blank">The Witcher 3: Wild Hunt</a>. This model conceptualizes narrative as a state machine where progression is determined by player actions and current game state.
+            </p>
+
+            <div class="bg-gradient-to-r from-sage/10 to-forest/10 rounded-xl p-8 mb-8">
+              <h4 class="font-canela text-xl font-semibold text-forest mb-4">Key Components of Sculptural Hypertext</h4>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <h5 class="font-semibold text-forest mb-3">Structural Elements</h5>
+                  <ul class="space-y-2 text-sm">
+                    <li class="flex items-start">
+                      <i class="fas fa-circle text-sage text-xs mt-1.5 mr-2"></i>
+                      <span><strong>Threads:</strong> Linear story quests within broader acts</span>
+                    </li>
+                    <li class="flex items-start">
+                      <i class="fas fa-circle text-sage text-xs mt-1.5 mr-2"></i>
+                      <span><strong>Phases:</strong> Three or four-act structure containing multiple threads</span>
+                    </li>
+                    <li class="flex items-start">
+                      <i class="fas fa-circle text-sage text-xs mt-1.5 mr-2"></i>
+                      <span><strong>Alternatives:</strong> Scene variations based on player actions</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h5 class="font-semibold text-forest mb-3">Implementation Features</h5>
+                  <ul class="space-y-2 text-sm">
+                    <li class="flex items-start">
+                      <i class="fas fa-circle text-sage text-xs mt-1.5 mr-2"></i>
+                      <span><strong>Unlocking:</strong> Content revealed based on progression</span>
+                    </li>
+                    <li class="flex items-start">
+                      <i class="fas fa-circle text-sage text-xs mt-1.5 mr-2"></i>
+                      <span><strong>Parallel Threads:</strong> Multiple sub-threads for quest completion</span>
+                    </li>
+                    <li class="flex items-start">
+                      <i class="fas fa-circle text-sage text-xs mt-1.5 mr-2"></i>
+                      <span><strong>Hypertext Links:</strong> Selective removal at runtime</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <p class="mb-6">
+              This approach allows players to move between available threads within phases without fixed order requirements, creating hypertextual experiences through juxtaposition and sequencing. <a href="https://davidmillard.org/2016/12/03/the-narrative-structure-of-the-witcher-3/" class="citation" target="_blank">The Witcher 3's implementation</a> demonstrates how this model manages vast narrative scope while maintaining player agency and localized consequences.
+            </p>
+          </div>
+
+          <div id="narrative-patterns" class="mb-12">
+            <h3 class="font-canela text-2xl font-semibold text-forest mb-6">1.3 Narrative Patterns</h3>
+
+            <p class="mb-6">
+              Choice-based games exhibit recurring structural patterns, each with distinct characteristics and effects on player experience. <a href="https://heterogenoustasks.wordpress.com/2015/01/26/standard-patterns-in-choice-based-games/" class="citation" target="_blank">These patterns include Time Cave, Gauntlet, and Branch-and-Bottleneck structures</a>, each serving different narrative goals.
+            </p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+              <div class="bg-white rounded-xl p-6 shadow-lg">
+                <div class="text-sage mb-4">
+                  <i class="fas fa-cave text-3xl"></i>
+                </div>
+                <h4 class="font-canela text-lg font-semibold text-forest mb-3">Time Cave</h4>
+                <p class="text-sm text-charcoal/80 mb-3">Heavy branching with little re-merging, numerous endings, and strong replayability encouragement.</p>
+                <p class="text-xs text-stone">
+                  <strong>Example:</strong>
+                  <a href="https://heterogenoustasks.wordpress.com/2015/01/26/standard-patterns-in-choice-based-games/" class="citation" target="_blank">The Cave of Time</a>
+                </p>
+              </div>
+
+              <div class="bg-white rounded-xl p-6 shadow-lg">
+                <div class="text-sage mb-4">
+                  <i class="fas fa-route text-3xl"></i>
+                </div>
+                <h4 class="font-canela text-lg font-semibold text-forest mb-3">Gauntlet</h4>
+                <p class="text-sm text-charcoal/80 mb-3">Linear central thread with pruning branches ending in death, backtracking, or quick rejoining.</p>
+                <p class="text-xs text-stone">
+                  <strong>Focus:</strong> Curated, anointed story experience
+                </p>
+              </div>
+
+              <div class="bg-white rounded-xl p-6 shadow-lg">
+                <div class="text-sage mb-4">
+                  <i class="fas fa-code-branch text-3xl"></i>
+                </div>
+                <h4 class="font-canela text-lg font-semibold text-forest mb-3">Branch-and-Bottleneck</h4>
+                <p class="text-sm text-charcoal/80 mb-3">Periodic branching with reconvergence at bottleneck points to manage combinatorial explosion.</p>
+                <p class="text-xs text-stone">
+                  <strong>Benefit:</strong> Balanced player choice and narrative coherence
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section 2: Design Techniques -->
+        <section id="techniques">
+          <h2 class="font-canela text-4xl font-bold text-forest mb-8">Techniques for Designing and Structuring Branching Narratives</h2>
+
+          <div id="flowcharting" class="mb-12">
+            <h3 class="font-canela text-2xl font-semibold text-forest mb-6">2.1 Flowcharting as a Core Design Tool</h3>
+
+            <p class="mb-6">
+              <strong>Flowcharting is fundamental for designing and visualizing complex branching narrative structures</strong>. <a href="https://pinnguaq.com/learn/game-narrative-in-detail-2/" class="citation" target="_blank">This visual mapping allows narrative designers to see the complete story picture</a>, identifying inconsistencies, plot holes, and convoluted areas before implementation.
+            </p>
+
+            <div class="bg-white rounded-xl p-8 shadow-lg mb-8">
+              <h4 class="font-canela text-xl font-semibold text-forest mb-6">Essential Flowcharting Practices</h4>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                  <h5 class="font-semibold text-forest mb-4">Node Types</h5>
+                  <div class="space-y-3">
+                    <div class="flex items-start">
+                      <div class="w-3 h-3 bg-sage rounded-full mt-1.5 mr-3"></div>
+                      <div>
+                        <strong class="text-sm">Start/End Nodes:</strong>
+                        <p class="text-xs text-charcoal/80">Mark beginning and conclusion of narrative segments</p>
+                      </div>
+                    </div>
+                    <div class="flex items-start">
+                      <div class="w-3 h-3 bg-sage rounded-full mt-1.5 mr-3"></div>
+                      <div>
+                        <strong class="text-sm">Exposition Nodes:</strong>
+                        <p class="text-xs text-charcoal/80">Convey story fragments and information to players</p>
+                      </div>
+                    </div>
+                    <div class="flex items-start">
+                      <div class="w-3 h-3 bg-sage rounded-full mt-1.5 mr-3"></div>
+                      <div>
+                        <strong class="text-sm">Choice Nodes:</strong>
+                        <p class="text-xs text-charcoal/80">Player decision points with branching consequences</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h5 class="font-semibold text-forest mb-4">Best Practices</h5>
+                  <div class="space-y-3">
+                    <div class="flex items-start">
+                      <i class="fas fa-check text-sage mt-1 mr-3"></i>
+                      <div>
+                        <strong class="text-sm">Clear Labeling:</strong>
+                        <p class="text-xs text-charcoal/80">Add context to nodes and transitions for team understanding</p>
+                      </div>
+                    </div>
+                    <div class="flex items-start">
+                      <i class="fas fa-check text-sage mt-1 mr-3"></i>
+                      <div>
+                        <strong class="text-sm">Visual Organization:</strong>
+                        <p class="text-xs text-charcoal/80">Manage spacing to avoid cluttered arrow networks</p>
+                      </div>
+                    </div>
+                    <div class="flex items-start">
+                      <i class="fas fa-check text-sage mt-1 mr-3"></i>
+                      <div>
+                        <strong class="text-sm">Living Documentation:</strong>
+                        <p class="text-xs text-charcoal/80">Reference throughout development process</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <p class="mb-6">
+              <a href="https://joshjgoodwin.itch.io/dajjal/devlog/202165/branching-narrative-flow-chart" class="citation" target="_blank">The game Dajjal successfully utilized flowcharting</a> to map branching dialogue within a three-act structure, while <a href="https://www.meegle.com/en_us/topics/game-design/branching-storylines" class="citation" target="_blank">Detroit: Become Human famously incorporated in-game flowcharts</a> to show players possible paths.
+            </p>
+          </div>
+
+          <div id="mapping-beats" class="mb-12">
+            <h3 class="font-canela text-2xl font-semibold text-forest mb-6">2.2 Mapping Narrative Beats and Possibility Spaces</h3>
+
+            <p class="mb-6">
+              <strong>Narrative beats represent fundamental story units</strong> - significant events, turning points, character developments, or revelations that drive the plot forward. <a href="https://pinnguaq.com/learn/game-narrative-in-detail-2/" class="citation" target="_blank">In branching narratives, these beats interconnect across different branches</a>, contributing to multifaceted narrative arcs.
+            </p>
+
+            <div class="pull-quote">
+              "The possibility space defines the totality of narrative paths, choices, and outcomes available to players within the game's design boundaries, requiring careful management to balance player agency with authorial control."
+            </div>
+
+            <div class="bg-gradient-to-r from-forest/5 to-sage/5 rounded-xl p-8 mb-8">
+              <h4 class="font-canela text-xl font-semibold text-forest mb-6">Possibility Space Management Techniques</h4>
+
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div>
+                  <h5 class="font-semibold text-forest mb-4">Structural Approaches</h5>
+                  <ul class="space-y-3">
+                    <li class="flex items-start">
+                      <i class="fas fa-anchor text-sage mt-1 mr-3"></i>
+                      <div>
+                        <strong>Narrative Anchors:</strong>
+                        <p class="text-sm text-charcoal/80">Fixed plot points ensuring key story beats across all paths</p>
+                      </div>
+                    </li>
+                    <li class="flex items-start">
+                      <i class="fas fa-funnel-dollar text-sage mt-1 mr-3"></i>
+                      <div>
+                        <strong>Foldback Structures:</strong>
+                        <p class="text-sm text-charcoal/80">Branches converge back to main storyline to control scope</p>
+                      </div>
+                    </li>
+                    <li class="flex items-start">
+                      <i class="fas fa-compress-alt text-sage mt-1 mr-3"></i>
+                      <div>
+                        <strong>Bottlenecks:</strong>
+                        <p class="text-sm text-charcoal/80">Multiple paths pass through common story beats</p>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h5 class="font-semibold text-forest mb-4">Design Strategies</h5>
+                  <ul class="space-y-3">
+                    <li class="flex items-start">
+                      <i class="fas fa-map-marked-alt text-sage mt-1 mr-3"></i>
+                      <div>
+                        <strong>Spine Framework:</strong>
+                        <p class="text-sm text-charcoal/80">Core essential events with optional/conditional beats</p>
+                      </div>
+                    </li>
+                    <li class="flex items-start">
+                      <i class="fas fa-chess-board text-sage mt-1 mr-3"></i>
+                      <div>
+                        <strong>Amusement Park Model:</strong>
+                        <p class="text-sm text-charcoal/80">Guided agency within structured narrative environment</p>
+                      </div>
+                    </li>
+                    <li class="flex items-start">
+                      <i class="fas fa-puzzle-piece text-sage mt-1 mr-3"></i>
+                      <div>
+                        <strong>Narrative Embedding:</strong>
+                        <p class="text-sm text-charcoal/80">Smaller stories within main narrative structure</p>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="meaningful-choices" class="mb-12">
+            <h3 class="font-canela text-2xl font-semibold text-forest mb-6">2.3 Designing Meaningful Choices and Consequences</h3>
+
+            <p class="mb-6">
+              <strong>Meaningful choices transform passive storytelling into active engagement</strong>, making players feel their actions have tangible impact on the game world. <a href="https://www.pominis.com/en/blog/branching-narratives-explained-designing-choices-that-matter" class="citation" target="_blank">Effective choices present distinct options, each carrying weight and leading to discernibly different outcomes</a>.
+            </p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+              <div class="bg-white rounded-xl p-6 shadow-lg">
+                <h4 class="font-canela text-lg font-semibold text-forest mb-4">Choice Design Principles</h4>
+                <div class="space-y-4">
+                  <div class="border-l-4 border-sage pl-4">
+                    <h5 class="font-semibold text-forest mb-2">Dilemma-Based Choices</h5>
+                    <p class="text-sm text-charcoal/80">No single "correct" answer, reflecting different values and priorities</p>
+                  </div>
+                  <div class="border-l-4 border-sage pl-4">
+                    <h5 class="font-semibold text-forest mb-2">Immediate Payoff</h5>
+                    <p class="text-sm text-charcoal/80">New information, character reactions, or environmental changes</p>
+                  </div>
+                  <div class="border-l-4 border-sage pl-4">
+                    <h5 class="font-semibold text-forest mb-2">Delayed Impact</h5>
+                    <p class="text-sm text-charcoal/80">Later story twists or consequences creating "aha" moments</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-white rounded-xl p-6 shadow-lg">
+                <h4 class="font-canela text-lg font-semibold text-forest mb-4">Consequence Implementation</h4>
+                <div class="space-y-4">
+                  <div class="border-l-4 border-forest pl-4">
+                    <h5 class="font-semibold text-forest mb-2">Direct Consequences</h5>
+                    <p class="text-sm text-charcoal/80">Immediate plot alterations, character relationships, quest availability</p>
+                  </div>
+                  <div class="border-l-4 border-forest pl-4">
+                    <h5 class="font-semibold text-forest mb-2">Indirect Consequences</h5>
+                    <p class="text-sm text-charcoal/80">Contextual changes, unique dialogue options, environmental shifts</p>
+                  </div>
+                  <div class="border-l-4 border-forest pl-4">
+                    <h5 class="font-semibold text-forest mb-2">Butterfly Effect</h5>
+                    <p class="text-sm text-charcoal/80">Small choices leading to significant, unforeseen outcomes</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <p class="mb-6">
+              <a href="https://www.pominis.com/en/blog/branching-narratives-explained-designing-choices-that-matter" class="citation" target="_blank">The perception of consequence is as important as the consequence itself</a>. Players need clear feedback that their choices mattered, achieved through NPC behavior changes, environmental alterations, and overarching plot shifts.
+            </p>
+          </div>
+
+          <div id="managing-complexity" class="mb-12">
+            <h3 class="font-canela text-2xl font-semibold text-forest mb-6">2.4 Managing Narrative Complexity and Scope</h3>
+
+            <p class="mb-6">
+              <strong>Managing complexity is paramount in branching narrative design</strong>, as exponential growth in content and pathways can overwhelm development resources. <a href="https://rage-productions.com/2016/09/gamedev-on-branching-narratives/" class="citation" target="_blank">Designers must balance player agency with practical constraints</a>.
+            </p>
+
+            <div class="bg-white rounded-xl p-8 shadow-lg mb-8">
+              <h4 class="font-canela text-xl font-semibold text-forest mb-6">Scope Management Strategies</h4>
+
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="text-center">
+                  <div class="w-16 h-16 bg-sage/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-code-branch text-sage text-2xl"></i>
+                  </div>
+                  <h5 class="font-semibold text-forest mb-2">Convergent Branching</h5>
+                  <p class="text-sm text-charcoal/80">Multiple paths merge back to central storyline, controlling overall scope</p>
+                </div>
+
+                <div class="text-center">
+                  <div class="w-16 h-16 bg-sage/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-layer-group text-sage text-2xl"></i>
+                  </div>
+                  <h5 class="font-semibold text-forest mb-2">Depth Limitation</h5>
+                  <p class="text-sm text-charcoal/80">Choices resolved quickly rather than spawning long-term narrative threads</p>
+                </div>
+
+                <div class="text-center">
+                  <div class="w-16 h-16 bg-sage/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-cut text-sage text-2xl"></i>
+                  </div>
+                  <h5 class="font-semibold text-forest mb-2">Pruning</h5>
+                  <p class="text-sm text-charcoal/80">Conscious limitation of branches to prevent narrative diffusion</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="pull-quote">
+              "Successful complexity management involves constant balancing between player freedom and authorial intent, ensuring branching narratives remain engaging, coherent, and feasible to develop."
+            </div>
+          </div>
+        </section>
+
+        <!-- Section 3: Tools -->
+        <section id="tools">
+          <h2 class="font-canela text-4xl font-bold text-forest mb-8">Tools for Branching Narrative Creation</h2>
+
+          <div id="specialized-software" class="mb-12">
+            <h3 class="font-canela text-2xl font-semibold text-forest mb-6">3.1 Specialized Narrative Design Software</h3>
+
+            <p class="mb-6">
+              <strong>Specialized tools are essential for creating complex branching narratives</strong>, providing environments where abstract story structures become concrete plans. <a href="https://blog.arcweave.com/top-10-tools-for-narrative-design" class="citation" target="_blank">These applications help manage inherent complexity through better organization, collaboration, and iteration</a>.
+            </p>
+
+            <!-- Software Comparison Table -->
+            <div class="overflow-x-auto mb-8">
+              <table class="comparison-table">
+                <thead>
+                  <tr>
+                    <th>Tool</th>
+                    <th>Primary Focus</th>
+                    <th>Key Features</th>
+                    <th>Strengths</th>
+                    <th>Weaknesses</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="font-semibold">Articy:Draft</td>
+                    <td>Comprehensive game narrative &amp; content management</td>
+                    <td>Visual flowcharts, entity management, scripting, Unity/Unreal integration</td>
+                    <td>Professional, robust, good for large projects</td>
+                    <td>Steeper learning curve, expensive</td>
+                  </tr>
+                  <tr>
+                    <td class="font-semibold">Twine</td>
+                    <td>Interactive fiction, rapid prototyping</td>
+                    <td>Web-based, simple passage/link system, multiple story formats</td>
+                    <td>Easy to learn, great for prototyping</td>
+                    <td>Less suited for large-scale commercial development</td>
+                  </tr>
+                  <tr>
+                    <td class="font-semibold">Inklewriter</td>
+                    <td>Prose &amp; dialogue-driven narratives</td>
+                    <td>Writer-friendly interface, "ink" scripting, JSON output</td>
+                    <td>Excellent for prose quality, intuitive for writers</td>
+                    <td>Primarily focused on text-based narratives</td>
+                  </tr>
+                  <tr>
+                    <td class="font-semibold">Chat Mapper</td>
+                    <td>Dialogue trees &amp; narrative structures</td>
+                    <td>Tree-graph conversation flow, simulator, localization support</td>
+                    <td>Strong for complex dialogue, clear visualization</td>
+                    <td>UI can be overwhelming, cost considerations</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div class="bg-white rounded-xl p-6 shadow-lg">
+                <h4 class="font-canela text-lg font-semibold text-forest mb-4">Articy:Draft Features</h4>
+                <div class="space-y-3">
+                  <div class="flex items-start">
+                    <i class="fas fa-check-circle text-sage mt-1 mr-3"></i>
+                    <span class="text-sm">Powerful visual flowchart system with high flexibility</span>
+                  </div>
+                  <div class="flex items-start">
+                    <i class="fas fa-check-circle text-sage mt-1 mr-3"></i>
+                    <span class="text-sm">Entity management for characters, items, locations</span>
+                  </div>
+                  <div class="flex items-start">
+                    <i class="fas fa-check-circle text-sage mt-1 mr-3"></i>
+                    <span class="text-sm">articy:expresso scripting language for complex logic</span>
+                  </div>
+                  <div class="flex items-start">
+                    <i class="fas fa-check-circle text-sage mt-1 mr-3"></i>
+                    <span class="text-sm">Simulation mode for playtesting and prototyping</span>
+                  </div>
+                  <div class="flex items-start">
+                    <i class="fas fa-check-circle text-sage mt-1 mr-3"></i>
+                    <span class="text-sm">Collaborative features with version control</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-white rounded-xl p-6 shadow-lg">
+                <h4 class="font-canela text-lg font-semibold text-forest mb-4">Twine Advantages</h4>
+                <div class="space-y-3">
+                  <div class="flex items-start">
+                    <i class="fas fa-globe text-sage mt-1 mr-3"></i>
+                    <span class="text-sm">Web-based accessibility from any device</span>
+                  </div>
+                  <div class="flex items-start">
+                    <i class="fas fa-graduation-cap text-sage mt-1 mr-3"></i>
+                    <span class="text-sm">Simple learning curve for non-programmers</span>
+                  </div>
+                  <div class="flex items-start">
+                    <i class="fas fa-rocket text-sage mt-1 mr-3"></i>
+                    <span class="text-sm">Rapid prototyping capabilities</span>
+                  </div>
+                  <div class="flex items-start">
+                    <i class="fas fa-users text-sage mt-1 mr-3"></i>
+                    <span class="text-sm">Active community and open-source development</span>
+                  </div>
+                  <div class="flex items-start">
+                    <i class="fas fa-code text-sage mt-1 mr-3"></i>
+                    <span class="text-sm">Multiple story formats (Harlowe, SugarCube, Snowman)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="game-engines" class="mb-12">
+            <h3 class="font-canela text-2xl font-semibold text-forest mb-6">3.2 Integrating with Game Engines</h3>
+
+            <p class="mb-6">
+              <strong>Integration with game engines brings planned narrative structures to life</strong> within interactive environments. <a href="https://blog.arcweave.com/top-10-tools-for-narrative-design" class="citation" target="_blank">Modern engines like Unity and Unreal Engine support various methods for incorporating branching narratives</a> from external tools.
+            </p>
+
+            <div class="bg-gradient-to-r from-forest/5 to-sage/5 rounded-xl p-8 mb-8">
+              <h4 class="font-canela text-xl font-semibold text-forest mb-6">Integration Approaches</h4>
+
+              <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="bg-white rounded-lg p-6">
+                  <div class="text-forest mb-3">
+                    <i class="fas fa-plug text-2xl"></i>
+                  </div>
+                  <h5 class="font-semibold text-forest mb-3">Articy:Draft Integration</h5>
+                  <p class="text-sm text-charcoal/80 mb-3">Official plugins for Unity and Unreal Engine with direct project file usage</p>
+                  <ul class="text-xs space-y-1">
+                    <li>• XML/JSON export formats</li>
+                    <li>• articy:expresso logic translation</li>
+                    <li>• Real-time data synchronization</li>
+                  </ul>
+                </div>
+
+                <div class="bg-white rounded-lg p-6">
+                  <div class="text-forest mb-3">
+                    <i class="fas fa-code text-2xl"></i>
+                  </div>
+                  <h5 class="font-semibold text-forest mb-3">Twine Integration</h5>
+                  <p class="text-sm text-charcoal/80 mb-3">HTML/JavaScript export parsed by custom scripts in game engines</p>
+                  <ul class="text-xs space-y-1">
+                    <li>• Community-created frameworks</li>
+                    <li>• Passage content extraction</li>
+                    <li>• Variable and logic mapping</li>
+                  </ul>
+                </div>
+
+                <div class="bg-white rounded-lg p-6">
+                  <div class="text-forest mb-3">
+                    <i class="fas fa-pen-nib text-2xl"></i>
+                  </div>
+                  <h5 class="font-semibold text-forest mb-3">Ink Integration</h5>
+                  <p class="text-sm text-charcoal/80 mb-3">Open-source Unity package with direct ink script importing</p>
+                  <ul class="text-xs space-y-1">
+                    <li>• Inklecate compiler integration</li>
+                    <li>• API for story interaction</li>
+                    <li>• Real-time narrative flow control</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <p class="mb-6">
+              <a href="https://forums.unrealengine.com/t/dialogue-nodes-open-source-c-4-20-4-22/120041" class="citation" target="_blank">Tools like "Dialogue Graph" for Unreal Engine</a> provide node-based systems specifically for creating and managing dialogue trees within the engine's editor environment.
+            </p>
+          </div>
+
+          <div id="ai-tools" class="mb-12">
+            <h3 class="font-canela text-2xl font-semibold text-forest mb-6">3.3 AI-Powered Narrative Design Tools</h3>
+
+            <p class="mb-6">
+              <strong>AI-powered tools are emerging to streamline narrative design processes</strong>. <a href="https://inworld.ai/blog/developer-facing-ai-game-development-tools-streamline-workflows" class="citation" target="_blank">Inworld AI's "Narrative Graph," co-developed with Xbox</a>, exemplifies this trend by auto-generating branching narrative graphs from source materials.
+            </p>
+
+            <div class="bg-white rounded-xl p-8 shadow-lg mb-8">
+              <h4 class="font-canela text-xl font-semibold text-forest mb-6">AI-Powered Tool Capabilities</h4>
+
+              <div class="space-y-6">
+                <div class="flex items-start">
+                  <div class="w-12 h-12 bg-sage/20 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                    <i class="fas fa-brain text-sage"></i>
+                  </div>
+                  <div>
+                    <h5 class="font-semibold text-forest mb-2">Automated Graph Generation</h5>
+                    <p class="text-sm text-charcoal/80">Upload source materials to auto-generate branching narrative graphs with visual representation</p>
+                  </div>
+                </div>
+
+                <div class="flex items-start">
+                  <div class="w-12 h-12 bg-sage/20 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                    <i class="fas fa-comments text-sage"></i>
+                  </div>
+                  <div>
+                    <h5 class="font-semibold text-forest mb-2">Character Context Chat</h5>
+                    <p class="text-sm text-charcoal/80">Test interactions and generate draft dialogue within specific story beat contexts</p>
+                  </div>
+                </div>
+
+                <div class="flex items-start">
+                  <div class="w-12 h-12 bg-sage/20 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                    <i class="fas fa-lightbulb text-sage"></i>
+                  </div>
+                  <div>
+                    <h5 class="font-semibold text-forest mb-2">Ideation Assistance</h5>
+                    <p class="text-sm text-charcoal/80">Generate ideas for new story beats and branching narratives based on existing content</p>
+                  </div>
+                </div>
+
+                <div class="flex items-start">
+                  <div class="w-12 h-12 bg-sage/20 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                    <i class="fas fa-cogs text-sage"></i>
+                  </div>
+                  <div>
+                    <h5 class="font-semibold text-forest mb-2">Content Automation</h5>
+                    <p class="text-sm text-charcoal/80">Automate production of AI NPC content including character descriptions and knowledge bases</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="pull-quote">
+              "AI tools represent an emerging frontier in narrative design, offering new ways to manage complexity and enhance creativity while maintaining authorial control over narrative direction."
+            </div>
+          </div>
+        </section>
+
+        <!-- Section 4: Writing Strategies -->
+        <section id="writing">
+          <h2 class="font-canela text-4xl font-bold text-forest mb-8">Writing for Branching Narratives</h2>
+
+          <div id="core-narrative" class="mb-12">
+            <h3 class="font-canela text-2xl font-semibold text-forest mb-6">4.1 Establishing a Core Narrative and Branching Logic</h3>
+
+            <p class="mb-6">
+              <strong>A strong core narrative acts as the foundation for branching stories</strong>. <a href="https://www.pominis.com/en/blog/branching-narratives-explained-designing-choices-that-matter" class="citation" target="_blank">Before delving into multiple story paths, designers must define the central theme or "north star"</a> that guides all branches, choices, and consequences.
+            </p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+              <div class="bg-white rounded-xl p-6 shadow-lg">
+                <h4 class="font-canela text-lg font-semibold text-forest mb-4">Core Narrative Elements</h4>
+                <div class="space-y-4">
+                  <div class="border-l-4 border-sage pl-4">
+                    <h5 class="font-semibold text-forest mb-2">Central Theme</h5>
+                    <p class="text-sm text-charcoal/80">Defining the story's core message and emotional resonance</p>
+                  </div>
+                  <div class="border-l-4 border-sage pl-4">
+                    <h5 class="font-semibold text-forest mb-2">One-Sentence Logline</h5>
+                    <p class="text-sm text-charcoal/80">Concise summary encapsulating theme for consistent reference</p>
+                  </div>
+                  <div class="border-l-4 border-sage pl-4">
+                    <h5 class="font-semibold text-forest mb-2">Beat Chart Structure</h5>
+                    <p class="text-sm text-charcoal/80">
+                      <a href="https://idrellegames.tumblr.com/post/668061979844509696/how-are-you-able-to-plotplanoutline-your-if" class="citation" target="_blank">Initial guide determining acts, chapters, and major plot points</a>
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-white rounded-xl p-6 shadow-lg">
+                <h4 class="font-canela text-lg font-semibold text-forest mb-4">Branching Logic Framework</h4>
+                <div class="space-y-4">
+                  <div class="border-l-4 border-forest pl-4">
+                    <h5 class="font-semibold text-forest mb-2">Visual Mapping</h5>
+                    <p class="text-sm text-charcoal/80">Flowcharts and decision trees for branch split/converge planning</p>
+                  </div>
+                  <div class="border-l-4 border-forest pl-4">
+                    <h5 class="font-semibold text-forest mb-2">Choice Triggering</h5>
+                    <p class="text-sm text-charcoal/80">Dialogue options, gameplay actions, or condition-based decisions</p>
+                  </div>
+                  <div class="border-l-4 border-forest pl-4">
+                    <h5 class="font-semibold text-forest mb-2">State Tracking</h5>
+                    <p class="text-sm text-charcoal/80">Systems for carrying information across branches and ensuring continuity</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <p class="mb-6">
+              <a href="https://www.pominis.com/en/blog/branching-narratives-explained-designing-choices-that-matter" class="citation" target="_blank">Thematic grounding prevents branches from feeling arbitrary</a> and ensures cohesive experiences across multiple outcomes. For example, if the core theme is "sacrifice," all branching choices should explore different facets and consequences of sacrifice.
+            </p>
+          </div>
+
+          <div id="character-development" class="mb-12">
+            <h3 class="font-canela text-2xl font-semibold text-forest mb-6">4.2 Character Development and Dialogue</h3>
+
+            <p class="mb-6">
+              <strong>Character development in branching narratives requires careful planning</strong> to maintain consistency across divergent story paths. <a href="https://writingexcuses.com/16-20-branching-narratives/" class="citation" target="_blank">Techniques include tying key development moments to narrative "checkpoints"</a> where branches reconverge.
+            </p>
+
+            <div class="bg-white rounded-xl p-8 shadow-lg mb-8">
+              <h4 class="font-canela text-xl font-semibold text-forest mb-6">Dialogue Tree Implementation</h4>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                  <h5 class="font-semibold text-forest mb-4">Effective Dialogue Design</h5>
+                  <div class="space-y-3">
+                    <div class="flex items-start">
+                      <i class="fas fa-route text-sage mt-1 mr-3"></i>
+                      <div>
+                        <strong>Natural Flow:</strong>
+                        <p class="text-sm text-charcoal/80">Multiple lines and responses that feel contextually appropriate</p>
+                      </div>
+                    </div>
+                    <div class="flex items-start">
+                      <i class="fas fa-eye text-sage mt-1 mr-3"></i>
+                      <div>
+                        <strong>Avoid Illusion:</strong>
+                        <p class="text-sm text-charcoal/80">Different options should lead to meaningfully different outcomes</p>
+                      </div>
+                    </div>
+                    <div class="flex items-start">
+                      <i class="fas fa-history text-sage mt-1 mr-3"></i>
+                      <div>
+                        <strong>Context Awareness:</strong>
+                        <p class="text-sm text-charcoal/80">Dialogue variations based on previous choices and character attributes</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h5 class="font-semibold text-forest mb-4">Character Consistency</h5>
+                  <div class="space-y-3">
+                    <div class="flex items-start">
+                      <i class="fas fa-map-marker-alt text-forest mt-1 mr-3"></i>
+                      <div>
+                        <strong>Checkpoint Anchoring:</strong>
+                        <p class="text-sm text-charcoal/80">Crucial growth moments experienced regardless of specific paths</p>
+                      </div>
+                    </div>
+                    <div class="flex items-start">
+                      <i class="fas fa-balance-scale text-forest mt-1 mr-3"></i>
+                      <div>
+                        <strong>Equivalent Value:</strong>
+                        <p class="text-sm text-charcoal/80">Exclusive branches should offer comparable development worth</p>
+                      </div>
+                    </div>
+                    <div class="flex items-start">
+                      <i class="fas fa-heart text-forest mt-1 mr-3"></i>
+                      <div>
+                        <strong>Organic Evolution:</strong>
+                        <p class="text-sm text-charcoal/80">Character responses to player actions remain believable</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <p class="mb-6">
+              <a href="https://johnnemann.medium.com/narrative-design-102-interactive-story-techniques-7e998208afa9" class="citation" target="_blank">New conversational options might become available based on skill thresholds or quest completion</a>, enhancing the feeling of a responsive world while maintaining character consistency.
+            </p>
+          </div>
+
+          <div id="narrative-cohesion" class="mb-12">
+            <h3 class="font-canela text-2xl font-semibold text-forest mb-6">4.3 Ensuring Narrative Cohesion and Pacing</h3>
+
+            <p class="mb-6">
+              <strong>Maintaining cohesion and effective pacing is challenging in branching narratives</strong> due to potential divergent storylines and player-driven exploration. <a href="https://www.numberanalytics.com/blog/narrative-design-patterns-for-immersive-games" class="citation" target="_blank">Techniques like "narrative anchors" provide stable frameworks</a> for consistent story flow.
+            </p>
+
+            <div class="bg-gradient-to-r from-sage/10 to-forest/10 rounded-xl p-8 mb-8">
+              <h4 class="font-canela text-xl font-semibold text-forest mb-6">Cohesion and Pacing Strategies</h4>
+
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div>
+                  <h5 class="font-semibold text-forest mb-4">Narrative Cohesion</h5>
+                  <ul class="space-y-3">
+                    <li class="flex items-start">
+                      <i class="fas fa-anchor text-sage mt-1 mr-3"></i>
+                      <div>
+                        <strong>Fixed Plot Points:</strong>
+                        <p class="text-sm text-charcoal/80">Critical story beats experienced by all players regardless of choices</p>
+                      </div>
+                    </li>
+                    <li class="flex items-start">
+                      <i class="fas fa-link text-sage mt-1 mr-3"></i>
+                      <div>
+                        <strong>Logical Consequences:</strong>
+                        <p class="text-sm text-charcoal/80">Choice outcomes consistent with game world internal logic</p>
+                      </div>
+                    </li>
+                    <li class="flex items-start">
+                      <i class="fas fa-sync text-sage mt-1 mr-3"></i>
+                      <div>
+                        <strong>State Tracking:</strong>
+                        <p class="text-sm text-charcoal/80">Information persistence across the narrative web</p>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h5 class="font-semibold text-forest mb-4">Pacing Management</h5>
+                  <ul class="space-y-3">
+                    <li class="flex items-start">
+                      <i class="fas fa-exclamation-triangle text-forest mt-1 mr-3"></i>
+                      <div>
+                        <strong>Dead End Prevention:</strong>
+                        <p class="text-sm text-charcoal/80">Avoid pacing-destroying shortcuts through careful flowcharting</p>
+                      </div>
+                    </li>
+                    <li class="flex items-start">
+                      <i class="fas fa-chart-line text-forest mt-1 mr-3"></i>
+                      <div>
+                        <strong>Rhythm Balance:</strong>
+                        <p class="text-sm text-charcoal/80">Content distribution and choice frequency management</p>
+                      </div>
+                    </li>
+                    <li class="flex items-start">
+                      <i class="fas fa-users text-forest mt-1 mr-3"></i>
+                      <div>
+                        <strong>Playtesting Validation:</strong>
+                        <p class="text-sm text-charcoal/80">Real player observation reveals pacing and cohesion issues</p>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="pull-quote">
+              "The goal is to create a story that, despite its many branches, feels like a unified whole rather than a collection of disjointed fragments, maintaining internal consistency and logical flow."
+            </div>
+          </div>
+
+          <div id="iterative-design" class="mb-12">
+            <h3 class="font-canela text-2xl font-semibold text-forest mb-6">4.4 Iterative Design and Playtesting</h3>
+
+            <p class="mb-6">
+              <strong>Iterative design and rigorous playtesting are critical for successful branching narratives</strong>. <a href="https://www.pominis.com/en/blog/branching-narratives-explained-designing-choices-that-matter" class="citation" target="_blank">The design process involves cycles of drafting, testing, analyzing feedback, and revising</a> to refine complex interactive structures.
+            </p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+              <div class="bg-white rounded-xl p-6 shadow-lg">
+                <h4 class="font-canela text-lg font-semibold text-forest mb-4">Internal Review Process</h4>
+                <div class="space-y-4">
+                  <div class="flex items-start">
+                    <div class="w-8 h-8 bg-sage/20 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                      <span class="text-sage font-semibold text-sm">1</span>
+                    </div>
+                    <div>
+                      <strong class="text-sm">Branch Walking:</strong>
+                      <p class="text-xs text-charcoal/80">Walk each branch from start to finish evaluating player experience</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start">
+                    <div class="w-8 h-8 bg-sage/20 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                      <span class="text-sage font-semibold text-sm">2</span>
+                    </div>
+                    <div>
+                      <strong class="text-sm">Emotional Assessment:</strong>
+                      <p class="text-xs text-charcoal/80">Ask "How would a player feel here?" at each decision point</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start">
+                    <div class="w-8 h-8 bg-sage/20 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                      <span class="text-sage font-semibold text-sm">3</span>
+                    </div>
+                    <div>
+                      <strong class="text-sm">Structural Evaluation:</strong>
+                      <p class="text-xs text-charcoal/80">Assess coherence, balance, and scope at flowchart stage</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start">
+                    <div class="w-8 h-8 bg-sage/20 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                      <span class="text-sage font-semibold text-sm">4</span>
+                    </div>
+                    <div>
+                      <strong class="text-sm">Pruning &amp; Enhancement:</strong>
+                      <p class="text-xs text-charcoal/80">Remove weak branches and strengthen impactful moments</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-white rounded-xl p-6 shadow-lg">
+                <h4 class="font-canela text-lg font-semibold text-forest mb-4">Playtesting Objectives</h4>
+                <div class="space-y-4">
+                  <div class="flex items-start">
+                    <i class="fas fa-search text-forest mt-1 mr-3"></i>
+                    <div>
+                      <strong class="text-sm">Navigation Observation:</strong>
+                      <p class="text-xs text-charcoal/80">Identify confusion points and unintended shortcuts</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start">
+                    <i class="fas fa-heart text-forest mt-1 mr-3"></i>
+                    <div>
+                      <strong class="text-sm">Emotional Resonance:</strong>
+                      <p class="text-xs text-charcoal/80">Assess choice meaningfulness and consequence impact</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start">
+                    <i class="fas fa-clock text-forest mt-1 mr-3"></i>
+                    <div>
+                      <strong class="text-sm">Pacing Evaluation:</strong>
+                      <p class="text-xs text-charcoal/80">Identify boredom or frustration points in narrative flow</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start">
+                    <i class="fas fa-comments text-forest mt-1 mr-3"></i>
+                    <div>
+                      <strong class="text-sm">Dialogue Clarity:</strong>
+                      <p class="text-xs text-charcoal/80">Evaluate option clarity and conversational flow</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <p class="mb-6">
+              <a href="https://medium.com/game-writing-guide/link-how-to-structure-a-quest-like-the-witcher-3-af65b951de26" class="citation" target="_blank">Playtesting reveals unintended shortcuts, dead ends, and pacing issues</a> that internal reviews cannot anticipate. This cyclical process continues until the branching narrative achieves desired engagement, coherence, and player satisfaction levels.
+            </p>
+          </div>
+        </section>
+
+        <!-- Section 5: LLM Integration -->
+        <section id="llms">
+          <h2 class="font-canela text-4xl font-bold text-forest mb-8">Leveraging Large Language Models in Branching Narratives</h2>
+
+          <div id="llm-structures" class="mb-12">
+            <h3 class="font-canela text-2xl font-semibold text-forest mb-6">5.1 LLM-Generated Narrative Structures and Beats</h3>
+
+            <p class="mb-6">
+              <strong>LLMs are increasingly used to generate narrative structures and beats</strong>, offering new approaches to creating complex branching stories. <a href="https://arxiv.org/pdf/2311.09213" class="citation" target="_blank">Systems like GENEVA and GRIM utilize LLMs to assist designers in crafting engaging narrative flows</a> with multiple branching storylines.
+            </p>
+
+            <!-- LLM Systems Comparison Table -->
+            <div class="overflow-x-auto mb-8">
+              <table class="comparison-table">
+                <thead>
+                  <tr>
+                    <th>System Name</th>
+                    <th>Core Function</th>
+                    <th>Key Mechanism</th>
+                    <th>Output Example</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="font-semibold">GENEVA</td>
+                    <td>Generate &amp; visualize branching narrative graphs</td>
+                    <td>Two-step LLM (GPT-4) prompt: 1. Textual storylines, 2. Code for graph (DAG)</td>
+                    <td>
+                      <a href="https://arxiv.org/pdf/2311.09213" class="citation" target="_blank">Frankenstein in 21st century/Minecraft</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="font-semibold">GamePlot</td>
+                    <td>Collaborative AI-designer narrative generation</td>
+                    <td>LLM-based web app, "game room" for real-time refinement, WOZ NPC control</td>
+                    <td>
+                      <a href="https://arxiv.org/pdf/2411.02714" class="citation" target="_blank">Interactive narrative design with AI assistance</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="font-semibold">WHAT-IF</td>
+                    <td>Generate coherent alternate storylines</td>
+                    <td>Meta-prompting LLM with key/alternate decisions, plot point extraction</td>
+                    <td>
+                      <a href="https://www.themoonlight.io/en/review/what-if-exploring-branching-narratives-by-meta-prompting-large-language-models" class="citation" target="_blank">Ink file for interactive storytelling</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="font-semibold">Multiverse of Greatness</td>
+                    <td>Generate story branches using "story chunks"</td>
+                    <td>LLM generates chunks with progression, events, decisions</td>
+                    <td>
+                      <a href="https://arxiv.org/html/2411.14672v1" class="citation" target="_blank">Visual novel game based on generation_config</a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="bg-white rounded-xl p-8 shadow-lg mb-8">
+              <h4 class="font-canela text-xl font-semibold text-forest mb-6">GENEVA System Workflow</h4>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                  <h5 class="font-semibold text-forest mb-4">Process Steps</h5>
+                  <div class="space-y-4">
+                    <div class="flex items-start">
+                      <div class="w-8 h-8 bg-sage/20 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                        <span class="text-sage font-semibold text-sm">1</span>
+                      </div>
+                      <div>
+                        <strong class="text-sm">Input Description:</strong>
+                        <p class="text-xs text-charcoal/80">High-level narrative description and constraints</p>
+                      </div>
+                    </div>
+                    <div class="flex items-start">
+                      <div class="w-8 h-8 bg-sage/20 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                        <span class="text-sage font-semibold text-sm">2</span>
+                      </div>
+                      <div>
+                        <strong class="text-sm">Textual Generation:</strong>
+                        <p class="text-xs text-charcoal/80">GPT-4 generates branching storylines in text format</p>
+                      </div>
+                    </div>
+                    <div class="flex items-start">
+                      <div class="w-8 h-8 bg-sage/20 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                        <span class="text-sage font-semibold text-sm">3</span>
+                      </div>
+                      <div>
+                        <strong class="text-sm">Visualization:</strong>
+                        <p class="text-xs text-charcoal/80">Second prompt outputs code for DAG rendering</p>
+                      </div>
+                    </div>
+                    <div class="flex items-start">
+                      <div class="w-8 h-8 bg-sage/20 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                        <span class="text-sage font-semibold text-sm">4</span>
+                      </div>
+                      <div>
+                        <strong class="text-sm">Designer Review:</strong>
+                        <p class="text-xs text-charcoal/80">Visual narrative graph for structure evaluation</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h5 class="font-semibold text-forest mb-4">System Capabilities</h5>
+                  <div class="space-y-3">
+                    <div class="flex items-start">
+                      <i class="fas fa-project-diagram text-forest mt-1 mr-3"></i>
+                      <span class="text-sm">Directed Acyclic Graph (DAG) visualization</span>
+                    </div>
+                    <div class="flex items-start">
+                      <i class="fas fa-exchange-alt text-forest mt-1 mr-3"></i>
+                      <span class="text-sm">Iterative expansion and pruning support</span>
+                    </div>
+                    <div class="flex items-start">
+                      <i class="fas fa-puzzle-piece text-forest mt-1 mr-3"></i>
+                      <span class="text-sm">Constraint-based narrative generation</span>
+                    </div>
+                    <div class="flex items-start">
+                      <i class="fas fa-sync text-forest mt-1 mr-3"></i>
+                      <span class="text-sm">Dynamic refinement with designer feedback</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <p class="mb-6">
+              <a href="https://arxiv.org/pdf/2411.02714" class="citation" target="_blank">GamePlot emphasizes collaborative AI-designer processes</a>, allowing iteration and refinement of generated content through gameplay testing and real-time narrative adjustment capabilities.
+            </p>
+          </div>
+
+          <div id="dynamic-dialogue" class="mb-12">
+            <h3 class="font-canela text-2xl font-semibold text-forest mb-6">5.2 Dynamic Dialogue Generation and Character Interaction</h3>
+
+            <p class="mb-6">
+              <strong>LLMs offer significant potential for dynamic dialogue generation and nuanced character interactions</strong>. Instead of relying solely on pre-authored dialogue trees, LLMs can generate contextually appropriate responses in real-time, tailored to game state, player history, and character personalities.
+            </p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+              <div class="bg-white rounded-xl p-6 shadow-lg">
+                <h4 class="font-canela text-lg font-semibold text-forest mb-4">Dynamic Dialogue Benefits</h4>
+                <div class="space-y-4">
+                  <div class="border-l-4 border-sage pl-4">
+                    <h5 class="font-semibold text-forest mb-2">Real-time Generation</h5>
+                    <p class="text-sm text-charcoal/80">Contextually appropriate responses based on current game state</p>
+                  </div>
+                  <div class="border-l-4 border-sage pl-4">
+                    <h5 class="font-semibold text-forest mb-2">Natural Interaction</h5>
+                    <p class="text-sm text-charcoal/80">NPCs react naturally to unexpected player inputs</p>
+                  </div>
+                  <div class="border-l-4 border-sage pl-4">
+                    <h5 class="font-semibold text-forest mb-2">Enhanced Immersion</h5>
+                    <p class="text-sm text-charcoal/80">Characters feel more alive and less pre-programmed</p>
+                  </div>
+                  <div class="border-l-4 border-sage pl-4">
+                    <h5 class="font-semibold text-forest mb-2">Conversational Variety</h5>
+                    <p class="text-sm text-charcoal/80">Wider range of conversational paths than manual scripting</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-white rounded-xl p-6 shadow-lg">
+                <h4 class="font-canela text-lg font-semibold text-forest mb-4">Control Mechanisms</h4>
+                <div class="space-y-4">
+                  <div class="border-l-4 border-forest pl-4">
+                    <h5 class="font-semibold text-forest mb-2">Prompt Engineering</h5>
+                    <p class="text-sm text-charcoal/80">Specific instructions and context for LLM guidance</p>
+                  </div>
+                  <div class="border-l-4 border-forest pl-4">
+                    <h5 class="font-semibold text-forest mb-2">Fine-tuning</h5>
+                    <p class="text-sm text-charcoal/80">Training on specific datasets for stylistic consistency</p>
+                  </div>
+                  <div class="border-l-4 border-forest pl-4">
+                    <h5 class="font-semibold text-forest mb-2">Context Integration</h5>
+                    <p class="text-sm text-charcoal/80">Game systems track narrative state and relationships</p>
+                  </div>
+                  <div class="border-l-4 border-forest pl-4">
+                    <h5 class="font-semibold text-forest mb-2">Authorial Control</h5>
+                    <p class="text-sm text-charcoal/80">Maintain character voice and narrative direction</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="pull-quote">
+              "The goal is to use LLMs to augment writer capabilities, allowing richer and more dynamic conversations without sacrificing authorial control over character voice and narrative direction."
+            </div>
+          </div>
+
+          <div id="advanced-llm" class="mb-12">
+            <h3 class="font-canela text-2xl font-semibold text-forest mb-6">5.3 Advanced LLM Applications for Emergent Narratives</h3>
+
+            <p class="mb-6">
+              <strong>Advanced LLM applications create dynamic and emergent narratives</strong> where stories evolve from complex interactions between characters, world, and player actions. <a href="https://arxiv.org/html/2405.13042" class="citation" target="_blank">StoryVerse exemplifies this by co-authoring dynamic plots using LLM-based character simulation and narrative planning</a>.
+            </p>
+
+            <div class="bg-white rounded-xl p-8 shadow-lg mb-8">
+              <h4 class="font-canela text-xl font-semibold text-forest mb-6">StoryVerse System Architecture</h4>
+
+              <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="bg-sage/10 rounded-lg p-6">
+                  <div class="text-sage mb-3">
+                    <i class="fas fa-layer-group text-2xl"></i>
+                  </div>
+                  <h5 class="font-semibold text-forest mb-3">Abstract Acts</h5>
+                  <p class="text-sm text-charcoal/80 mb-3">High-level plot outlines defined by writers</p>
+                  <ul class="text-xs space-y-1">
+                    <li>• Authorial intent preservation</li>
+                    <li>• Flexible implementation</li>
+                    <li>• Goal-oriented structure</li>
+                  </ul>
+                </div>
+
+                <div class="bg-forest/10 rounded-lg p-6">
+                  <div class="text-forest mb-3">
+                    <i class="fas fa-cogs text-2xl"></i>
+                  </div>
+                  <h5 class="font-semibold text-forest mb-3">Act Director</h5>
+                  <p class="text-sm text-charcoal/80 mb-3">LLM-based narrative planning component</p>
+                  <ul class="text-xs space-y-1">
+                    <li>• Game world state analysis</li>
+                    <li>• Character action sequencing</li>
+                    <li>• Narrative plan generation</li>
+                  </ul>
+                </div>
+
+                <div class="bg-stone/10 rounded-lg p-6">
+                  <div class="text-stone mb-3">
+                    <i class="fas fa-users text-2xl"></i>
+                  </div>
+                  <h5 class="font-semibold text-forest mb-3">Character Simulator</h5>
+                  <p class="text-sm text-charcoal/80 mb-3">LLM-driven character behavior simulation</p>
+                  <ul class="text-xs space-y-1">
+                    <li>• Autonomous decision making</li>
+                    <li>• Memory and experience storage</li>
+                    <li>• Believable human-like behaviors</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <p class="mb-6">
+              <a href="https://arxiv.org/html/2405.13042v2" class="citation" target="_blank">AgentVerse capabilities in multi-agent collaboration</a> enable believable human-like behaviors through LLMs, where agents store experiences, form higher-level thoughts from memories, and retrieve them for behavior planning.
+            </p>
+
+            <div class="bg-gradient-to-r from-forest/5 to-sage/5 rounded-xl p-8 mb-8">
+              <h4 class="font-canela text-xl font-semibold text-forest mb-6">Emergent Narrative Challenges</h4>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                  <h5 class="font-semibold text-forest mb-4">Technical Considerations</h5>
+                  <ul class="space-y-3">
+                    <li class="flex items-start">
+                      <i class="fas fa-cat text-sage mt-1 mr-3"></i>
+                      <div>
+                        <strong>"Herding Cats" Problem:</strong>
+                        <p class="text-sm text-charcoal/80">Fully autonomous characters may struggle with narrative coherence</p>
+                      </div>
+                    </li>
+                    <li class="flex items-start">
+                      <i class="fas fa-drafting-compass text-sage mt-1 mr-3"></i>
+                      <div>
+                        <strong>State Drift:</strong>
+                        <p class="text-sm text-charcoal/80">Narrative veering off-coherence without proper constraints</p>
+                      </div>
+                    </li>
+                    <li class="flex items-start">
+                      <i class="fas fa-user-edit text-sage mt-1 mr-3"></i>
+                      <div>
+                        <strong>Character Bleed:</strong>
+                        <p class="text-sm text-charcoal/80">Inconsistent character behavior across different scenarios</p>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h5 class="font-semibold text-forest mb-4">Design Solutions</h5>
+                  <ul class="space-y-3">
+                    <li class="flex items-start">
+                      <i class="fas fa-compass text-forest mt-1 mr-3"></i>
+                      <div>
+                        <strong>Abstract Act Framework:</strong>
+                        <p class="text-sm text-charcoal/80">High-level guidance while allowing emergent details</p>
+                      </div>
+                    </li>
+                    <li class="flex items-start">
+                      <i class="fas fa-filter text-forest mt-1 mr-3"></i>
+                      <div>
+                        <strong>Iterative Planning:</strong>
+                        <p class="text-sm text-charcoal/80">Coherency, feasibility, and motivation evaluation</p>
+                      </div>
+                    </li>
+                    <li class="flex items-start">
+                      <i class="fas fa-memory text-forest mt-1 mr-3"></i>
+                      <div>
+                        <strong>Memory Systems:</strong>
+                        <p class="text-sm text-charcoal/80">Structured storage and retrieval of character experiences</p>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="balancing-intent" class="mb-12">
+            <h3 class="font-canela text-2xl font-semibold text-forest mb-6">5.4 Balancing Authorial Intent with LLM-Driven Emergence</h3>
+
+            <p class="mb-6">
+              <strong>Balancing authorial intent with LLM-driven emergence is central to advanced narrative systems</strong>. <a href="https://www.researchgate.net/publication/380820735_StoryVerse_Towards_Co-authoring_Dynamic_Plot_with_LLM-based_Character_Simulation_via_Narrative_Planning" class="citation" target="_blank">StoryVerse addresses this through a plot creation workflow designed to mediate between these forces</a>.
+            </p>
+
+            <div class="bg-white rounded-xl p-8 shadow-lg mb-8">
+              <h4 class="font-canela text-xl font-semibold text-forest mb-6">Balance Maintenance Strategies</h4>
+
+              <div class="space-y-6">
+                <div class="border-l-4 border-sage pl-6">
+                  <h5 class="font-semibold text-forest mb-3">High-Level Author Control</h5>
+                  <p class="text-sm text-charcoal/80 mb-3">Authors define abstract acts with narrative goals and key plot points, maintaining overall story arc and thematic elements while allowing flexible implementation.</p>
+                  <div class="bg-sage/10 rounded p-3">
+                    <p class="text-xs text-charcoal/70"><strong>Example:</strong> "Character Y performs an act of kindness for Character X, who is in distress" - the specific implementation emerges from simulation.</p>
+                  </div>
+                </div>
+
+                <div class="border-l-4 border-forest pl-6">
+                  <h5 class="font-semibold text-forest mb-3">Iterative Evaluation Process</h5>
+                  <p class="text-sm text-charcoal/80 mb-3">Multiple feedback loops ensure emergent narrative elements remain plausible and consistent with established story world and character profiles.</p>
+                  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-forest/10 rounded p-3">
+                      <h6 class="font-semibold text-xs mb-1">Overall Coherency</h6>
+                      <p class="text-xs text-charcoal/70">LLM evaluates plot coherency and suggests improvements</p>
+                    </div>
+                    <div class="bg-forest/10 rounded p-3">
+                      <h6 class="font-semibold text-xs mb-1">Environment Feasibility</h6>
+                      <p class="text-xs text-charcoal/70">Simulated game environment tests action feasibility</p>
+                    </div>
+                    <div class="bg-forest/10 rounded p-3">
+                      <h6 class="font-semibold text-xs mb-1">Character Motivation</h6>
+                      <p class="text-xs text-charcoal/70">LLM role-plays characters to validate actions</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="border-l-4 border-stone pl-6">
+                  <h5 class="font-semibold text-forest mb-3">Augmented Creativity</h5>
+                  <p class="text-sm text-charcoal/80 mb-3">Systems like StoryVerse aim to augment human authors rather than replace them, enabling creation of more dynamic, responsive, and complex narratives while preserving creative vision.</p>
+                  <div class="bg-stone/10 rounded p-3">
+                    <p class="text-xs text-charcoal/70"><strong>Future Enhancement:</strong> Player modeling could incorporate persona derived from preferences and protagonist role, influencing abstract act instantiation for more immersive experiences.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="pull-quote">
+              "The goal is not to replace the human author but to augment their capabilities, enabling the creation of more dynamic, responsive, and complex narratives while maintaining the core thematic intent and emotional resonance of authored storytelling."
+            </div>
+          </div>
+        </section>
+
+        <!-- Conclusion -->
+        <section class="border-t border-stone/30 pt-12">
+          <h2 class="font-canela text-3xl font-bold text-forest mb-6">The Future of Branching Narratives</h2>
+
+          <p class="text-lg leading-relaxed mb-6">
+            The evolution of branching narratives in video games represents a convergence of traditional storytelling craft and cutting-edge technology. From established structural models and design techniques to emerging AI-powered systems, the field continues to expand possibilities for interactive storytelling.
+          </p>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+            <div class="bg-white rounded-xl p-6 shadow-lg">
+              <h3 class="font-canela text-lg font-semibold text-forest mb-4">Established Foundations</h3>
+              <ul class="space-y-2 text-sm">
+                <li class="flex items-start">
+                  <i class="fas fa-check text-sage mt-1 mr-2"></i>
+                  <span>Proven structural models (linear, branching, sculptural hypertext)</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-check text-sage mt-1 mr-2"></i>
+                  <span>Robust design techniques and flowcharting practices</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-check text-sage mt-1 mr-2"></i>
+                  <span>Specialized tools like Articy:Draft, Twine, and Inklewriter</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-check text-sage mt-1 mr-2"></i>
+                  <span>Iterative design and playtesting methodologies</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="bg-white rounded-xl p-6 shadow-lg">
+              <h3 class="font-canela text-lg font-semibold text-forest mb-4">Emerging Frontiers</h3>
+              <ul class="space-y-2 text-sm">
+                <li class="flex items-start">
+                  <i class="fas fa-arrow-right text-forest mt-1 mr-2"></i>
+                  <span>LLM-generated narrative structures and dynamic dialogue</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-arrow-right text-forest mt-1 mr-2"></i>
+                  <span>Advanced systems like StoryVerse and AgentVerse</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-arrow-right text-forest mt-1 mr-2"></i>
+                  <span>Emergent narrative possibilities</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-arrow-right text-forest mt-1 mr-2"></i>
+                  <span>Balanced authorial control with AI-driven complexity</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <p class="text-lg leading-relaxed">
+            As the industry continues to explore these technologies and techniques, the fundamental goal remains unchanged: creating compelling, emotionally resonant interactive experiences that respect player agency while maintaining narrative coherence and authorial vision. The future of branching narratives lies in the thoughtful integration of established craft with innovative technology, always serving the story and the player's experience.
+          </p>
+        </section>
+      </article>
+    </div>
+
+    <script>
+        // Mobile TOC Toggle
+        const tocToggle = document.getElementById('toc-toggle');
+        const tocFixed = document.querySelector('.toc-fixed');
+        
+        tocToggle.addEventListener('click', () => {
+            tocFixed.classList.toggle('open');
+        });
+        
+        // Close TOC when clicking outside on mobile
+        document.addEventListener('click', (e) => {
+            if (window.innerWidth <= 1024 && !tocFixed.contains(e.target) && !tocToggle.contains(e.target)) {
+                tocFixed.classList.remove('open');
+            }
+        });
+        
+        // Smooth scrolling for TOC links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    // Close mobile TOC after clicking
+                    if (window.innerWidth <= 1024) {
+                        tocFixed.classList.remove('open');
+                    }
+                }
+            });
+        });
+        
+        // Highlight current section in TOC
+        const sections = document.querySelectorAll('section[id], div[id]');
+        const tocLinks = document.querySelectorAll('.toc-fixed a[href^="#"]');
+        
+        function highlightCurrentSection() {
+            let current = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                // const sectionHeight = section.clientHeight; // Not used in this logic
+                if (pageYOffset >= sectionTop - 200) { // Adjust offset as needed
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            tocLinks.forEach(link => {
+                link.classList.remove('text-forest', 'font-semibold');
+                link.classList.add('text-stone');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.remove('text-stone');
+                    link.classList.add('text-forest', 'font-semibold');
+                }
+            });
+        }
+        
+        window.addEventListener('scroll', highlightCurrentSection);
+        highlightCurrentSection(); // Initial call
+    </script>
+  
+
+</body></html>
